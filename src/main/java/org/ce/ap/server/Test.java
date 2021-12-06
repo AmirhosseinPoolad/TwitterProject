@@ -1,27 +1,30 @@
 package main.java.org.ce.ap.server;
 
+import main.java.org.ce.ap.server.impl.AuthenticatorServiceImpl;
+
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 
 public class Test {
     public static void main(String[] args) {
-        //TODO: addUser method that checks for duplicate usernames (implement with a hashmap/hashset. shouldn't be too hard)
-        User user1 = null;
-        try {
-            user1 = new User("HDxC", "1234", "Amirhossein", "Poolad",
-                    "Some Random Feller", LocalDate.of(2000, 11, 10));
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        System.out.println(user1.isPasswordCorrect("123"));
-        System.out.println(user1.isPasswordCorrect("1234"));
-        user1.printInfo();
+        AuthenticatorService authService = new AuthenticatorServiceImpl();
+        authService.signUp("HDxC", "1234", "Amirhossein", "Poolad",
+                "Some Random Feller", LocalDate.of(2000, 11, 10));
+        System.out.println(authService.signUp("HDxC", "1234", "Amirhossein", "Poolad",
+                "Some Random Feller", LocalDate.of(2000, 11, 10)));
+        System.out.println(authService.signUp("BRRRR", "12345", "Amirhossein", "Poolad",
+                "Some Random Feller", LocalDate.of(2000, 11, 10)));
+        System.out.println(authService.logIn("hdxc", "1234"));
+        System.out.println(authService.logIn("hdxc", "124"));
+        System.out.println(authService.logIn("brrrr", "12345"));
+
+
         //TODO: store tweets in a tree like structure to support replies.
         Tweet tweet = new Tweet("hdxc", "Hello World!");
         tweet.printInfo();
         tweet.addLike("hdxc");
         tweet.printInfo();
-        tweet.addLike("hdxc");
+        tweet.addLike("brrrr");
         tweet.printInfo();
     }
 }

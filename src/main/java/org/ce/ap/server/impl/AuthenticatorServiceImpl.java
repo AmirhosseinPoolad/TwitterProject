@@ -14,6 +14,10 @@ public class AuthenticatorServiceImpl extends AuthenticatorService {
      */
     protected ConcurrentHashMap<String, User> usersMap;
 
+    public AuthenticatorServiceImpl() {
+        this.usersMap = new ConcurrentHashMap<String, User>();
+    }
+
     /**
      * signs up a new user (if it's not already signed up)
      *
@@ -23,19 +27,24 @@ public class AuthenticatorServiceImpl extends AuthenticatorService {
      * @param lastName          last name
      * @param biography         biography, maximum 256 words
      * @param birthdayDate
+     * @return 1 if success, 0 if username already exists, -1 if error.
      */
     @Override
-    public void signUp(String username, String plaintextPassword, String firstName,
-                       String lastName, String biography, LocalDate birthdayDate) {
+    public int signUp(String username, String plaintextPassword, String firstName,
+                      String lastName, String biography, LocalDate birthdayDate) {
         //only make a new user if it doesn't already exist
         if (!usersMap.containsKey(username.toLowerCase())) {
+            User user = null;
             try {
-                User user = new User(username, plaintextPassword, firstName, lastName, biography, birthdayDate);
-                usersMap.put(username.toLowerCase(), user);
+                user = new User(username, plaintextPassword, firstName, lastName, biography, birthdayDate);
             } catch (NoSuchAlgorithmException | IllegalArgumentException e) {
                 e.printStackTrace();
+                return -1;
             }
+            usersMap.put(username.toLowerCase(), user);
+            return 1;
         }
+        return 0;
     }
 
     /**
@@ -46,7 +55,7 @@ public class AuthenticatorServiceImpl extends AuthenticatorService {
      * @return 1 if user/pass pair is correct, 0 if incorrect, -1 if user does not exist.
      */
     @Override
-    public int login(String username, String password) {
+    public int logIn(String username, String password) {
         User user = usersMap.get(username.toLowerCase());
         //if user does not exist, return -1
         if (user == null)
