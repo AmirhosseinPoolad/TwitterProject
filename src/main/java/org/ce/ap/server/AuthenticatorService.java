@@ -5,11 +5,6 @@ import java.time.LocalDate;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AuthenticatorService {
-    /**
-     * A map of users. Key is lowercase username and value is the User object.
-     * Users should be unique in the map.
-     */
-    protected ConcurrentHashMap<String, User> usersMap;
 
     /**
      * signs up a new user (if it's not already signed up)
