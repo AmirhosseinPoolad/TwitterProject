@@ -1,6 +1,9 @@
 package main.java.org.ce.ap.server;
 
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.util.Locale;
 import java.util.Objects;
 
 public class User {
@@ -9,6 +12,8 @@ public class User {
     private String firstName;
     private String lastName;
     private String biography;
+    private LocalDate birthdayDate;
+    private LocalDate signUpDate;
 
     /**
      * constructs a new User object
@@ -19,14 +24,16 @@ public class User {
      * @throws IllegalArgumentException if biography is bigger than 256 characters
      * @throws NoSuchAlgorithmException if SHA-256 algorithm is not available (when does this happen?)
      */
-    public User(String username, String plaintextPassword, String firstName, String lastName, String biography) throws IllegalArgumentException, NoSuchAlgorithmException {
-        this.username = username;
+    public User(String username, String plaintextPassword, String firstName, String lastName, String biography, LocalDate birthdayDate) throws IllegalArgumentException, NoSuchAlgorithmException {
+        this.username = username.toLowerCase();
         this.passwordHash = ServerUtil.byteToString(ServerUtil.getSHA(plaintextPassword));
         if (biography.length() > 256)
             throw new IllegalArgumentException("Biography is longer than 256 characters");
         this.biography = biography;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.signUpDate = LocalDate.now(ZoneOffset.UTC);
+        this.birthdayDate = birthdayDate;
     }
 
     /**
@@ -44,12 +51,19 @@ public class User {
         }
     }
 
+    public void printInfo() {
+        System.out.println("@" + username);
+        System.out.println(firstName + " " + lastName);
+        System.out.println(biography);
+        System.out.println("Signed up at " + signUpDate + " | Birthday: " + birthdayDate);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return username.equals(user.username) && Objects.equals(biography, user.biography);
+        return username.equals(user.username);
     }
 
     @Override
