@@ -25,7 +25,7 @@ public class User {
      * @throws NoSuchAlgorithmException if SHA-256 algorithm is not available (when does this happen?)
      */
     public User(String username, String plaintextPassword, String firstName, String lastName, String biography, LocalDate birthdayDate) throws IllegalArgumentException, NoSuchAlgorithmException {
-        this.username = username.toLowerCase();
+        this.username = username;
         this.passwordHash = ServerUtil.byteToString(ServerUtil.getSHA(plaintextPassword));
         if (biography.length() > 256)
             throw new IllegalArgumentException("Biography is longer than 256 characters");
