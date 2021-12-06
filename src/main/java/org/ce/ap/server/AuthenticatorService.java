@@ -23,4 +23,13 @@ public abstract class AuthenticatorService {
      */
     public abstract void signUp(String username, String plaintextPassword, String firstName, String lastName, String biography, LocalDate birthdayDate);
 
+    /**
+     * Logs in to username with password. returns 1 if username/password pair is correct.
+     *
+     * @param username account username
+     * @param password account password (plaintext)
+     * @return 1 if user/pass pair is correct, 0 if incorrect, -1 if user does not exist.
+     */
+    public abstract int login(String username, String password);
+
 }
