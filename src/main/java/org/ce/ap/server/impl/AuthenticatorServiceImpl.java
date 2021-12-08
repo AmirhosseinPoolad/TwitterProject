@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class AuthenticatorServiceImpl extends AuthenticatorService {
+public class AuthenticatorServiceImpl implements AuthenticatorService {
     /**
      * A map of users. Key is lowercase username and value is the User object.
      * Users should be unique in the map.

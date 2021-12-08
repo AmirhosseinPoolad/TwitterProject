@@ -3,7 +3,7 @@ package main.java.org.ce.ap.server;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 
-public abstract class AuthenticatorService {
+public interface AuthenticatorService {
 
     /**
      * signs up a new user (if it's not already signed up)
