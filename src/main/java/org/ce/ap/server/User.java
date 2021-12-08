@@ -1,9 +1,10 @@
 package main.java.org.ce.ap.server;
 
+import main.java.org.ce.ap.server.util.ServerUtil;
+
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.Locale;
 import java.util.Objects;
 
 public class User {
@@ -22,9 +23,8 @@ public class User {
      * @param plaintextPassword password in plaintext, gets hashed
      * @param biography         biography of user. cannot be bigger than 256 characters
      * @throws IllegalArgumentException if biography is bigger than 256 characters
-     * @throws NoSuchAlgorithmException if SHA-256 algorithm is not available (when does this happen?)
      */
-    public User(String username, String plaintextPassword, String firstName, String lastName, String biography, LocalDate birthdayDate) throws IllegalArgumentException, NoSuchAlgorithmException {
+    public User(String username, String plaintextPassword, String firstName, String lastName, String biography, LocalDate birthdayDate) throws IllegalArgumentException{
         this.username = username;
         this.passwordHash = ServerUtil.byteToString(ServerUtil.getSHA(plaintextPassword));
         if (biography.length() > 256)
@@ -43,12 +43,7 @@ public class User {
      * @return true if password is correct
      */
     public boolean isPasswordCorrect(String password) {
-        try {
             return passwordHash.equals(ServerUtil.byteToString(ServerUtil.getSHA(password)));
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return false;
-        }
     }
 
     public void printInfo() {

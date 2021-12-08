@@ -1,4 +1,4 @@
-package main.java.org.ce.ap.server;
+package main.java.org.ce.ap.server.util;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -12,8 +12,13 @@ public class ServerUtil {
      * @param input input string to be hashed
      * @return hashed input
      */
-    public static byte[] getSHA(String input) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
+    public static byte[] getSHA(String input) {
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         return md.digest(input.getBytes(StandardCharsets.UTF_8));
 
     }

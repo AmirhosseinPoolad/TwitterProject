@@ -3,7 +3,6 @@ package main.java.org.ce.ap.server.impl;
 import main.java.org.ce.ap.server.AuthenticatorService;
 import main.java.org.ce.ap.server.User;
 
-import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -37,7 +36,7 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
             User user = null;
             try {
                 user = new User(username, plaintextPassword, firstName, lastName, biography, birthdayDate);
-            } catch (NoSuchAlgorithmException | IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) {
                 e.printStackTrace();
                 return -1;
             }

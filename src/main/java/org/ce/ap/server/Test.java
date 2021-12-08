@@ -26,5 +26,6 @@ public class Test {
         tweet.printInfo();
         tweet.addLike("brrrr");
         tweet.printInfo();
+        tweet.removeLike("brrrr");
     }
 }

@@ -1,6 +1,5 @@
 package main.java.org.ce.ap.server;
 
-import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 
 public interface AuthenticatorService {
