@@ -23,7 +23,7 @@ public class User {
      * @param biography         biography of user. cannot be bigger than 256 characters
      * @throws IllegalArgumentException if biography is bigger than 256 characters
      */
-    public User(String username, String plaintextPassword, String firstName, String lastName, String biography, LocalDate birthdayDate) throws IllegalArgumentException{
+    public User(String username, String plaintextPassword, String firstName, String lastName, String biography, LocalDate birthdayDate) throws IllegalArgumentException {
         this.username = username;
         this.passwordHash = ServerUtil.byteToString(ServerUtil.getSHA(plaintextPassword));
         if (biography.length() > 256)
@@ -42,7 +42,11 @@ public class User {
      * @return true if password is correct
      */
     public boolean isPasswordCorrect(String password) {
-            return passwordHash.equals(ServerUtil.byteToString(ServerUtil.getSHA(password)));
+        return passwordHash.equals(ServerUtil.byteToString(ServerUtil.getSHA(password)));
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public void printInfo() {

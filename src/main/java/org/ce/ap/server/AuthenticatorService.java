@@ -6,7 +6,8 @@ public interface AuthenticatorService {
 
     /**
      * signs up a new user (if it's not already signed up)
-     *  @param username          username
+     *
+     * @param username          username
      * @param plaintextPassword password
      * @param firstName         firstname
      * @param lastName          last name

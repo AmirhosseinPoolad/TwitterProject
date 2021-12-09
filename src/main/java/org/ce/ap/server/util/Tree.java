@@ -13,9 +13,9 @@ public class Tree<T> {
     private Tree<T> parent = null;
     private T data;
 
-    public Tree(T data, Tree parent) {
+    public Tree(T data) {
         this.data = data;
-        this.parent = parent;
+        this.parent = null;
     }
 
     /**
@@ -28,10 +28,27 @@ public class Tree<T> {
         if (this.data.equals(data))
             return this;
         Tree<T> result = null;
-        for(int i = 0; (result != null) && (i < leaves.size()); i++){
+        for (int i = 0; (result != null) && (i < leaves.size()); i++) {
             result = leaves.get(i).get(data);
         }
         return result;
+    }
+
+    public void addChild(Tree<T> childSubTree) {
+        leaves.add(childSubTree);
+        childSubTree.setParent(this);
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public Tree<T> getParent() {
+        return parent;
+    }
+
+    public void setParent(Tree<T> parent) {
+        this.parent = parent;
     }
 
     @Override

@@ -17,7 +17,8 @@ public class Tweet {
 
     /**
      * makes a tweet from poster with content. Automatically sets postTime to current UTC time.
-     * @param poster username of the poster
+     *
+     * @param poster  username of the poster
      * @param content content of the tweet
      */
     public Tweet(String poster, String content) {
@@ -29,6 +30,7 @@ public class Tweet {
 
     /**
      * adds a like from username
+     *
      * @param username username of likee
      */
     public void addLike(String username) {
@@ -38,6 +40,7 @@ public class Tweet {
 
     /**
      * removes a like from username
+     *
      * @param username username of dislikee
      */
     public void removeLike(String username) {
