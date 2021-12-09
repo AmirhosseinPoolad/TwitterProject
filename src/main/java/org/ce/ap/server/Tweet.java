@@ -3,6 +3,7 @@ package main.java.org.ce.ap.server;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Tweet {
     private String poster;
@@ -30,5 +31,18 @@ public class Tweet {
         System.out.println("@" + poster + ", " + postTime);
         System.out.println(content);
         System.out.println(likedUsers.size() + " likes");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tweet tweet = (Tweet) o;
+        return poster.equals(tweet.poster) && content.equals(tweet.content) && postTime.equals(tweet.postTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(poster, content, postTime);
     }
 }
