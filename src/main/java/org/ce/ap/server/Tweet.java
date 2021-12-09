@@ -6,11 +6,20 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Tweet {
+    //username of poster
     private String poster;
+    //list of users that liked the tweet
     private ArrayList<String> likedUsers;
+    //content of the tweet
     private String content;
+    //date of post. in UTC.
     private LocalDateTime postTime;
 
+    /**
+     * makes a tweet from poster with content. Automatically sets postTime to current UTC time.
+     * @param poster username of the poster
+     * @param content content of the tweet
+     */
     public Tweet(String poster, String content) {
         this.poster = poster;
         this.content = content;
@@ -18,15 +27,26 @@ public class Tweet {
         this.postTime = LocalDateTime.now(ZoneOffset.UTC);
     }
 
+    /**
+     * adds a like from username
+     * @param username username of likee
+     */
     public void addLike(String username) {
         if (!likedUsers.contains(username))
             likedUsers.add(username);
     }
 
+    /**
+     * removes a like from username
+     * @param username username of dislikee
+     */
     public void removeLike(String username) {
         likedUsers.remove(username);
     }
 
+    /**
+     * prints tweet info
+     */
     public void printInfo() {
         System.out.println("@" + poster + ", " + postTime);
         System.out.println(content);
