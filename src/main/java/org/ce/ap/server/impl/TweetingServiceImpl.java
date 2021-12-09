@@ -1,6 +1,7 @@
 package main.java.org.ce.ap.server.impl;
 
 import main.java.org.ce.ap.server.Tweet;
+import main.java.org.ce.ap.server.TweetGraph;
 import main.java.org.ce.ap.server.User;
 import main.java.org.ce.ap.server.util.Tree;
 
@@ -15,12 +16,8 @@ public class TweetingServiceImpl {
      * @param parent  set this to the parent tweet if it's a reply, null if it's not a reply
      */
     public void addTweet(String content, Tree<Tweet> parent) {
-        //TODO: Implement a singleton to hold the tweet graph
         Tweet tweet = new Tweet(user.getUsername(), content);
-        Tree<Tweet> newSubTree = new Tree<>(tweet);
-        if (parent != null) {
-            parent.addChild(newSubTree);
-        }
+        TweetGraph.getInstance().addTweet(tweet, parent);
     }
 
     /**
