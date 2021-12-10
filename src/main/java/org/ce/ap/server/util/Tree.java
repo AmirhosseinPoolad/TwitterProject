@@ -28,7 +28,7 @@ public class Tree<T> {
         if (this.data.equals(data))
             return this;
         Tree<T> result = null;
-        for (int i = 0; (result != null) && (i < leaves.size()); i++) {
+        for (int i = 0; (result == null) && (i < leaves.size()); i++) {
             result = leaves.get(i).get(data);
         }
         return result;

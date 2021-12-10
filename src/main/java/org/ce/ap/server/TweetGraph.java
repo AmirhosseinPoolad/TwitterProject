@@ -30,7 +30,7 @@ public class TweetGraph {
      */
     public Tree<Tweet> getTweet(Tweet tweet) {
         Tree<Tweet> foundTree = null;
-        for (int i = 0; (foundTree != null) && (i < tweetTree.size()); i++) {
+        for (int i = 0; (foundTree == null) && (i < tweetTree.size()); i++) {
             foundTree = tweetTree.get(i).get(tweet);
         }
         return foundTree;

@@ -18,14 +18,23 @@ public class Test {
         System.out.println(authService.logIn("hdxc", "124"));
         System.out.println(authService.logIn("brrrr", "12345"));
 
+        TweetGraph tweetGraph = TweetGraph.getInstance();
+        Tweet tweet = new Tweet("hdxc", "Hello World!");
+        Tweet tweet2 = new Tweet("hdxc", "Hello Again!");
+        Tweet tweet3 = new Tweet("brrrr", "Welcome");
+        tweetGraph.addTweet(tweet, null);
+        tweetGraph.addTweet(tweet2, null);
+        tweetGraph.addTweet(tweet3, tweetGraph.getTweet(tweet));
 
         //TODO: store tweets in a tree like structure to support replies.
-        Tweet tweet = new Tweet("hdxc", "Hello World!");
+
         tweet.printInfo();
         tweet.addLike("hdxc");
         tweet.printInfo();
         tweet.addLike("brrrr");
         tweet.printInfo();
         tweet.removeLike("brrrr");
+
+
     }
 }
