@@ -1,7 +1,10 @@
 package main.java.org.ce.ap.server.util;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Objects;
+import java.util.Spliterator;
+import java.util.function.Consumer;
 
 /**
  * Generic Tree class. Keep in mind that because each node is a subtree, nodes are also made with the Tree class.
@@ -45,6 +48,10 @@ public class Tree<T> {
 
     public Tree<T> getParent() {
         return parent;
+    }
+
+    public ArrayList<Tree<T>> getLeaves() {
+        return leaves;
     }
 
     public void setParent(Tree<T> parent) {
