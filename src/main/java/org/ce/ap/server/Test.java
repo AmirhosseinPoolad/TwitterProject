@@ -2,7 +2,6 @@ package main.java.org.ce.ap.server;
 
 import main.java.org.ce.ap.server.impl.AuthenticatorServiceImpl;
 
-import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 
 public class Test {

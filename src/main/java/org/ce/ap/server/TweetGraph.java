@@ -34,7 +34,7 @@ public class TweetGraph {
             TreeIterator<Tweet> it = new TreeIterator<>(treeHead);
             while (it.hasNext()) {
                 Tree<Tweet> next = it.nextTree();
-                if (next.equals(tweet)) {
+                if (next.getData().equals(tweet)) {
                     return next;
                 }
             }
