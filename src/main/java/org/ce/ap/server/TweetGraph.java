@@ -1,6 +1,7 @@
 package main.java.org.ce.ap.server;
 
 import main.java.org.ce.ap.server.util.Tree;
+import main.java.org.ce.ap.server.util.TreeIterator;
 
 import java.util.ArrayList;
 
@@ -29,11 +30,16 @@ public class TweetGraph {
      * @return subtree that has tweet as head
      */
     public Tree<Tweet> getTweet(Tweet tweet) {
-        Tree<Tweet> foundTree = null;
-        for (int i = 0; (foundTree == null) && (i < tweetTree.size()); i++) {
-            foundTree = tweetTree.get(i).get(tweet);
+        for (Tree<Tweet> treeHead : tweetTree) {
+            TreeIterator<Tweet> it = new TreeIterator<>(treeHead);
+            while (it.hasNext()) {
+                Tree<Tweet> next = it.nextTree();
+                if (next.equals(tweet)) {
+                    return next;
+                }
+            }
         }
-        return foundTree;
+        return null;
     }
 
     public void addTweet(Tweet tweet, Tree<Tweet> parent) {

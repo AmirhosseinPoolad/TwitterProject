@@ -28,13 +28,13 @@ public class Tree<T> {
      * @return Tree with data if found, null if not found.
      */
     public Tree<T> get(T data) {
-        if (this.data.equals(data))
-            return this;
-        Tree<T> result = null;
-        for (int i = 0; (result == null) && (i < leaves.size()); i++) {
-            result = leaves.get(i).get(data);
+        TreeIterator it = new TreeIterator(this);
+        while (it.hasNext()) {
+            Tree<T> next = it.nextTree();
+            if (next.getData().equals(data))
+                return next;
         }
-        return result;
+        return null;
     }
 
     public void addChild(Tree<T> childSubTree) {

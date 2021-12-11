@@ -22,10 +22,14 @@ public class TreeIterator<T> implements Iterator<T> {
 
     @Override
     public T next() {
+        return nextTree().getData();
+    }
+
+    public Tree<T> nextTree() {
         Tree<T> top = treeStack.pop();
         for (Tree<T> subtree : top.getLeaves()) {
             treeStack.push(subtree);
         }
-        return top.getData();
+        return top;
     }
 }
