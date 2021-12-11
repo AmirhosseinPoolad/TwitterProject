@@ -1,6 +1,7 @@
 package main.java.org.ce.ap.server;
 
 import main.java.org.ce.ap.server.impl.AuthenticatorServiceImpl;
+import main.java.org.ce.ap.server.services.AuthenticatorService;
 
 import java.time.LocalDate;
 

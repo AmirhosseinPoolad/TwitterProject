@@ -37,4 +37,23 @@ public class TweetingServiceImpl {
     public void dislikeTweet(Tweet tweet) {
         tweet.removeLike(user.getUsername());
     }
+
+    /**
+     * retweets the tweet
+     *
+     * @param tweet tweet to be retweeted
+     */
+    public void retweetTweet(Tweet tweet) {
+        tweet.addRetweet(user.getUsername());
+    }
+
+    /**
+     * removes retweet from tweet
+     *
+     * @param tweet tweet to unretweet
+     */
+    public void unretweetTweet(Tweet tweet) {
+        tweet.removeRetweet(user.getUsername());
+    }
+
 }

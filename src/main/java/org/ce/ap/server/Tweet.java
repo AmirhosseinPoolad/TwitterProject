@@ -10,6 +10,8 @@ public class Tweet {
     private String poster;
     //list of users that liked the tweet
     private ArrayList<String> likedUsers;
+    //list of users that retweeted the tweet
+    private ArrayList<String> retweetedUsers;
     //content of the tweet
     private String content;
     //date of post. in UTC.
@@ -25,6 +27,7 @@ public class Tweet {
         this.poster = poster;
         this.content = content;
         this.likedUsers = new ArrayList<String>();
+        this.retweetedUsers = new ArrayList<String>();
         this.postTime = LocalDateTime.now(ZoneOffset.UTC);
     }
 
@@ -45,6 +48,25 @@ public class Tweet {
      */
     public void removeLike(String username) {
         likedUsers.remove(username);
+    }
+
+    /**
+     * adds a retweet from username
+     *
+     * @param username username of retweeter
+     */
+    public void addRetweet(String username) {
+        if (!retweetedUsers.contains(username))
+            retweetedUsers.add(username);
+    }
+
+    /**
+     * removes a retweet from username
+     *
+     * @param username username of unretweeter
+     */
+    public void removeRetweet(String username) {
+        retweetedUsers.remove(username);
     }
 
     /**

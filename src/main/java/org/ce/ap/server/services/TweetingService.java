@@ -1,5 +1,6 @@
-package main.java.org.ce.ap.server;
+package main.java.org.ce.ap.server.services;
 
+import main.java.org.ce.ap.server.Tweet;
 import main.java.org.ce.ap.server.util.Tree;
 
 public interface TweetingService {
@@ -24,4 +25,18 @@ public interface TweetingService {
      * @param tweet tweet to be disliked
      */
     public void dislikeTweet(Tweet tweet);
+
+    /**
+     * retweets the tweet
+     *
+     * @param tweet tweet to be retweeted
+     */
+    public void retweetTweet(Tweet tweet);
+
+    /**
+     * removes retweet from tweet
+     *
+     * @param tweet tweet to unretweet
+     */
+    public void unretweetTweet(Tweet tweet);
 }
