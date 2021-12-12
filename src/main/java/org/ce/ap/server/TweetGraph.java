@@ -17,6 +17,7 @@ public class TweetGraph {
     public static synchronized TweetGraph getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new TweetGraph();
+            INSTANCE.read();
         }
         return INSTANCE;
     }
@@ -52,6 +53,7 @@ public class TweetGraph {
             parent.addChild(newTree);
             newTree.setParent(parent);
         }
+        save();
     }
 
     public synchronized void addTweet(Tweet tweet, Tweet parent) {
