@@ -1,5 +1,6 @@
 package main.java.org.ce.ap.server.util;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Objects;
@@ -11,7 +12,7 @@ import java.util.function.Consumer;
  *
  * @param <T> Type of each Tree node
  */
-public class Tree<T> {
+public class Tree<T> implements Serializable {
     private ArrayList<Tree<T>> leaves = new ArrayList<Tree<T>>();
     private Tree<T> parent = null;
     private T data;

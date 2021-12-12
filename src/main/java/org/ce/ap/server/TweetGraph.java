@@ -1,8 +1,10 @@
 package main.java.org.ce.ap.server;
 
 import main.java.org.ce.ap.server.util.Tree;
+import main.java.org.ce.ap.server.util.TreeIO;
 import main.java.org.ce.ap.server.util.TreeIterator;
 
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -49,6 +51,33 @@ public class TweetGraph {
         } else {
             parent.addChild(newTree);
             newTree.setParent(parent);
+        }
+    }
+
+    public void save() {
+        try (BufferedWriter outputStream = new BufferedWriter(new FileWriter("files/model/tweets/tweetGraph.txt"))) {
+            TreeIO<Tweet> tweetTreeIO = new TreeIO<>();
+            for (Tree<Tweet> subTree : tweetTree) {
+                tweetTreeIO.writeTree(subTree, outputStream);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void read() {
+        BufferedReader inputStream = null;
+        try (BufferedReader in = new BufferedReader(new FileReader("files/model/tweets/tweetGraph.txt"))) {
+            TreeIO<Tweet> tweetTreeIO = new TreeIO<>();
+            String firstLine;
+            do {
+                firstLine = in.readLine();
+                if (firstLine == null)
+                    break;
+                tweetTree.add(tweetTreeIO.readTree(in, firstLine));
+            } while (firstLine != null);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

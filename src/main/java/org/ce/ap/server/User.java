@@ -4,6 +4,8 @@ import main.java.org.ce.ap.server.util.ServerUtil;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
 
 public class User {
@@ -14,6 +16,8 @@ public class User {
     private String biography;
     private LocalDate birthdayDate;
     private LocalDate signUpDate;
+    private HashSet<String> followings;
+    private HashSet<String> followers;
 
     /**
      * constructs a new User object
@@ -54,6 +58,18 @@ public class User {
         System.out.println(firstName + " " + lastName);
         System.out.println(biography);
         System.out.println("Signed up at " + signUpDate + " | Birthday: " + birthdayDate);
+    }
+
+    public boolean isFollowing(String username) {
+        return followings.contains(username);
+    }
+
+    public void addFollowing(String username) {
+        followings.add(username);
+    }
+
+    public void addFollower(String username) {
+        followers.add(username);
     }
 
     @Override

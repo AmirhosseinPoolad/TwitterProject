@@ -1,11 +1,17 @@
 package main.java.org.ce.ap.server;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.Scanner;
 
-public class Tweet {
+public class Tweet implements ByteSerializable{
     //username of poster
     private String poster;
     //list of users that liked the tweet
@@ -89,5 +95,77 @@ public class Tweet {
     @Override
     public int hashCode() {
         return Objects.hash(poster, content, postTime);
+    }
+
+    @Override
+    public byte[] getBytes() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(poster);
+        sb.append('\n');
+        sb.append(likedUsers);
+        sb.append('\n');
+        sb.append(retweetedUsers);
+        sb.append('\n');
+        sb.append(content);
+        sb.append('\n');
+        sb.append(postTime);
+        sb.append('\n');
+        return sb.toString().getBytes();
+    }
+
+    @Override
+    public void fromBytes(byte[] bytes) {
+        Scanner sc = new Scanner(bytes.toString());
+        String posterString = sc.nextLine();
+        this.poster = posterString;
+        String likedString = sc.nextLine();
+        likedString = likedString.replace("[", "");
+        likedString = likedString.replace("]", "");
+        this.likedUsers = new ArrayList<String>(Arrays.asList(likedString.split(", ")));
+        String retweetedString = sc.nextLine();
+        retweetedString = retweetedString.replace("[", "");
+        retweetedString = retweetedString.replace("]", "");
+        this.likedUsers = new ArrayList<String>(Arrays.asList(retweetedString.split(", ")));
+        String contentString = sc.nextLine();
+        this.content = contentString;
+        String dateString = sc.nextLine();
+        this.postTime = LocalDateTime.parse(dateString);
+    }
+
+    @Override
+    public void writeToFile(BufferedWriter out) {
+        try {
+            out.write(poster);
+            out.newLine();
+            out.write(Arrays.toString(likedUsers.toArray()).replace("[", "").replace("]", ""));
+            out.newLine();
+            out.write(Arrays.toString(retweetedUsers.toArray()).replace("[", "").replace("]", ""));
+            out.newLine();
+            out.write(content);
+            out.newLine();
+            out.write(postTime.toString());
+            out.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public ByteSerializable readFromFile(BufferedReader in, String firstLine) {
+        Tweet newTweet = new Tweet(null, null);
+        try {
+            newTweet.poster = firstLine;
+            String likedString = in.readLine();
+            newTweet.likedUsers = new ArrayList<String>(Arrays.asList(likedString.split(", ")));
+            String retweetedString = in.readLine();
+            newTweet.likedUsers = new ArrayList<String>(Arrays.asList(retweetedString.split(", ")));
+            String contentString = in.readLine();
+            newTweet.content = contentString;
+            String dateString = in.readLine();
+            newTweet.postTime = LocalDateTime.parse(dateString);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return newTweet;
     }
 }
