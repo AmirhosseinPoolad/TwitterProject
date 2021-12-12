@@ -31,7 +31,7 @@ public class TweetGraph {
      * @param tweet tweet to search for
      * @return subtree that has tweet as head
      */
-    public Tree<Tweet> getTweet(Tweet tweet) {
+    public synchronized Tree<Tweet> getTweet(Tweet tweet) {
         for (Tree<Tweet> treeHead : tweetTree) {
             TreeIterator<Tweet> it = new TreeIterator<>(treeHead);
             while (it.hasNext()) {
@@ -44,7 +44,7 @@ public class TweetGraph {
         return null;
     }
 
-    public void addTweet(Tweet tweet, Tree<Tweet> parent) {
+    public synchronized void addTweet(Tweet tweet, Tree<Tweet> parent) {
         Tree<Tweet> newTree = new Tree<>(tweet);
         if (parent == null) {
             tweetTree.add(newTree);
@@ -54,7 +54,12 @@ public class TweetGraph {
         }
     }
 
-    public void save() {
+    public synchronized void addTweet(Tweet tweet, Tweet parent) {
+        Tree<Tweet> parentTree = getTweet(parent);
+        addTweet(tweet, parentTree);
+    }
+
+    public synchronized void save() {
         try (BufferedWriter outputStream = new BufferedWriter(new FileWriter("files/model/tweets/tweetGraph.txt"))) {
             TreeIO<Tweet> tweetTreeIO = new TreeIO<>();
             for (Tree<Tweet> subTree : tweetTree) {
@@ -65,7 +70,7 @@ public class TweetGraph {
         }
     }
 
-    public void read() {
+    public synchronized void read() {
         BufferedReader inputStream = null;
         try (BufferedReader in = new BufferedReader(new FileReader("files/model/tweets/tweetGraph.txt"))) {
             TreeIO<Tweet> tweetTreeIO = new TreeIO<>();

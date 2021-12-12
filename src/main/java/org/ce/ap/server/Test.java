@@ -37,6 +37,5 @@ public class Test {
         //tweet.removeLike("brrrr");
         tweetGraph.read();
         System.out.println();
-
     }
 }

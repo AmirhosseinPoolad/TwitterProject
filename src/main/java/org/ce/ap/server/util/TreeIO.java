@@ -14,16 +14,6 @@ public class TreeIO<T extends ByteSerializable> {
      */
     public void writeTree(Tree<T> tree, BufferedWriter out) {
         try {
-            /*out.write(tree.getData().getBytes());
-            out.write((tree.getLeaves().size()));
-            for (Tree<T> leaves : tree.getLeaves()) {
-                writeTree(leaves, out);*/
-            /*out.writeObject(tree);
-            out.writeObject(3);
-            for (Tree<T> leaves : tree.getLeaves()) {
-                writeTree(leaves, out);
-            }
-            out.writeObject("___ENDOFSTREAM___");*/
             tree.getData().writeToFile(out);
             out.write(String.valueOf(tree.getLeaves().size()));
             out.newLine();
@@ -42,21 +32,6 @@ public class TreeIO<T extends ByteSerializable> {
      * @return tree object
      */
     public Tree<T> readTree(BufferedReader in, String firstLine) {
-        /*Tree<T> head = null;
-        try {
-            Object obj = in.readObject();
-            if (obj instanceof String && ((String) obj).equals("___ENDOFSTREAM___")) {
-                return head;
-            }
-            head = (Tree<T>) obj;
-            Integer childCount = (Integer) in.readObject();
-            for (int i = 0; i < childCount; i++) {
-                head.addChild(readTree(in));
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return head;*/
         Tree<T> head = null;
         Tweet t = new Tweet(null,null);
         try {

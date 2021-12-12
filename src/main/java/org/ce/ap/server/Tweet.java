@@ -89,47 +89,12 @@ public class Tweet implements ByteSerializable{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Tweet tweet = (Tweet) o;
-        return poster.equals(tweet.poster) && content.equals(tweet.content) && postTime.equals(tweet.postTime);
+        return poster.equals(tweet.poster) && content.equals(tweet.content);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(poster, content, postTime);
-    }
-
-    @Override
-    public byte[] getBytes() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(poster);
-        sb.append('\n');
-        sb.append(likedUsers);
-        sb.append('\n');
-        sb.append(retweetedUsers);
-        sb.append('\n');
-        sb.append(content);
-        sb.append('\n');
-        sb.append(postTime);
-        sb.append('\n');
-        return sb.toString().getBytes();
-    }
-
-    @Override
-    public void fromBytes(byte[] bytes) {
-        Scanner sc = new Scanner(bytes.toString());
-        String posterString = sc.nextLine();
-        this.poster = posterString;
-        String likedString = sc.nextLine();
-        likedString = likedString.replace("[", "");
-        likedString = likedString.replace("]", "");
-        this.likedUsers = new ArrayList<String>(Arrays.asList(likedString.split(", ")));
-        String retweetedString = sc.nextLine();
-        retweetedString = retweetedString.replace("[", "");
-        retweetedString = retweetedString.replace("]", "");
-        this.likedUsers = new ArrayList<String>(Arrays.asList(retweetedString.split(", ")));
-        String contentString = sc.nextLine();
-        this.content = contentString;
-        String dateString = sc.nextLine();
-        this.postTime = LocalDateTime.parse(dateString);
     }
 
     @Override
