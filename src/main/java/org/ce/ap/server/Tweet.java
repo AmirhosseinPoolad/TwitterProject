@@ -84,6 +84,10 @@ public class Tweet implements ByteSerializable{
         System.out.println(likedUsers.size() + " likes");
     }
 
+    public String getPoster() {
+        return poster;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

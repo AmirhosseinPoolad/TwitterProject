@@ -1,7 +1,9 @@
 package main.java.org.ce.ap.server;
 
 import main.java.org.ce.ap.server.impl.AuthenticatorServiceImpl;
+import main.java.org.ce.ap.server.impl.ObserverServiceImpl;
 import main.java.org.ce.ap.server.services.AuthenticatorService;
+import main.java.org.ce.ap.server.util.Tree;
 
 import java.time.LocalDate;
 
@@ -17,11 +19,9 @@ public class Test {
         System.out.println(authService.logIn("hdxc", "1234"));
         System.out.println(authService.logIn("hdxc", "124"));
         System.out.println(authService.logIn("brrrr", "12345"));*/
-
+        Tweet t = new Tweet("brrrr", "hello from the other siiiiiiiiiiiiiiiide");
         TweetGraph tweetGraph = TweetGraph.getInstance();
-        Tweet tweet1 = new Tweet("hdxc", "Hello Again!");
-        Tweet tweet2 = new Tweet("brrrr", "ayyy bro!");
-        tweetGraph.addTweet(tweet2, tweet1);
+        ObserverServiceImpl observerService = ObserverServiceImpl.getInstance();
         System.out.println();
     }
 }

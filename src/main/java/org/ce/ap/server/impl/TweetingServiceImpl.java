@@ -3,11 +3,14 @@ package main.java.org.ce.ap.server.impl;
 import main.java.org.ce.ap.server.Tweet;
 import main.java.org.ce.ap.server.TweetGraph;
 import main.java.org.ce.ap.server.User;
+import main.java.org.ce.ap.server.observer.Subject;
 import main.java.org.ce.ap.server.util.Tree;
 
 public class TweetingServiceImpl {
     //the user that's using the service
     User user;
+
+    ObserverServiceImpl observerService;
 
     /**
      * adds a new tweet to the tweet graph
@@ -17,7 +20,8 @@ public class TweetingServiceImpl {
      */
     public void addTweet(String content, Tree<Tweet> parent) {
         Tweet tweet = new Tweet(user.getUsername(), content);
-        TweetGraph.getInstance().addTweet(tweet, parent);
+        Tree<Tweet> newTree = TweetGraph.getInstance().addTweet(tweet, parent);
+        observerService.update(newTree);
     }
 
     /**

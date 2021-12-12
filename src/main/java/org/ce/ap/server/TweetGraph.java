@@ -17,13 +17,13 @@ public class TweetGraph {
     public static synchronized TweetGraph getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new TweetGraph();
-            INSTANCE.read();
         }
         return INSTANCE;
     }
 
     private TweetGraph() {
         tweetTree = new ArrayList<>();
+        this.read();
     }
 
     /**
@@ -45,7 +45,11 @@ public class TweetGraph {
         return null;
     }
 
-    public synchronized void addTweet(Tweet tweet, Tree<Tweet> parent) {
+    public ArrayList<Tree<Tweet>> getTweetTree() {
+        return tweetTree;
+    }
+
+    public synchronized Tree<Tweet> addTweet(Tweet tweet, Tree<Tweet> parent) {
         Tree<Tweet> newTree = new Tree<>(tweet);
         if (parent == null) {
             tweetTree.add(newTree);
@@ -54,6 +58,7 @@ public class TweetGraph {
             newTree.setParent(parent);
         }
         save();
+        return newTree;
     }
 
     public synchronized void addTweet(Tweet tweet, Tweet parent) {

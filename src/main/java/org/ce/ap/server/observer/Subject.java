@@ -1,6 +1,7 @@
 package main.java.org.ce.ap.server.observer;
 
 import main.java.org.ce.ap.server.Tweet;
+import main.java.org.ce.ap.server.util.Tree;
 
 import java.util.ArrayList;
 
@@ -16,7 +17,7 @@ public class Subject {
         observerCollection.remove(observer);
     }
 
-    public void notifyObservers(Tweet Tweet) {
+    public void notifyObservers(Tree<Tweet> Tweet) {
         for (Observer observer : observerCollection) {
             observer.update(Tweet);
         }

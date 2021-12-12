@@ -6,7 +6,7 @@ import main.java.org.ce.ap.server.User;
 import java.util.ArrayList;
 
 /**
- * Handles the timeline. Exists per server.
+ * Handles the timeline. Exists per user.
  */
 public interface TimelineService {
     /**

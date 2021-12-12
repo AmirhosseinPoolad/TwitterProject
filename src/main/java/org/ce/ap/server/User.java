@@ -68,8 +68,16 @@ public class User {
         followings.add(username);
     }
 
+    public void removeFollowing(String username) {
+        followings.remove(username);
+    }
+
     public void addFollower(String username) {
         followers.add(username);
+    }
+
+    public void removeFollower(String username) {
+        followers.remove(username);
     }
 
     @Override
