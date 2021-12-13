@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ObserverServiceImpl extends Observer implements ObserverService {
-    HashMap<String, ArrayList<Tree<Tweet>>> followersMap;
+    //map of following users to their tweets
+    private HashMap<String, ArrayList<Tree<Tweet>>> followersMap;
 
     private static ObserverServiceImpl INSTANCE = null;
 
@@ -22,6 +23,9 @@ public class ObserverServiceImpl extends Observer implements ObserverService {
         return INSTANCE;
     }
 
+    /**
+     * constructs a new observer service. iterates through all top level tweets and adds them to the map
+     */
     private ObserverServiceImpl() {
         TweetGraph graph = TweetGraph.getInstance();
         followersMap = new HashMap<String, ArrayList<Tree<Tweet>>>();
@@ -34,12 +38,23 @@ public class ObserverServiceImpl extends Observer implements ObserverService {
         System.out.println();
     }
 
+    /**
+     * updates the map and adds the tweet to the map if it's a top level tweet.
+     *
+     * @param tweet tweet to be added
+     */
     @Override
     public void update(Tree<Tweet> tweet) {
         if (tweet.getParent() == null)
             followersMap.get(tweet.getData().getPoster()).add(tweet);
     }
 
+    /**
+     * adds user2 to user1 followers and user1 to user2 followings and updates files/model/users/users.txt
+     *
+     * @param user1 User to be followed
+     * @param user2 User that is following
+     */
     @Override
     public void follow(User user1, User user2) {
         user2.addFollowing(user1.getUsername());
@@ -47,6 +62,12 @@ public class ObserverServiceImpl extends Observer implements ObserverService {
         AuthenticatorServiceImpl.getInstance().save();
     }
 
+    /**
+     * removes user2 from user1 followers and user1 from user2 followings and updates files/model/users/users.txt
+     *
+     * @param user1 User to be unfollowed
+     * @param user2 User that is unfollowing
+     */
     @Override
     public void unfollow(User user1, User user2) {
         user2.removeFollowing(user1.getUsername());
@@ -54,6 +75,12 @@ public class ObserverServiceImpl extends Observer implements ObserverService {
         AuthenticatorServiceImpl.getInstance().save();
     }
 
+    /**
+     * gets all tweets from user
+     *
+     * @param user User to get tweets of
+     * @return arraylist containing top level tweets from user
+     */
     @Override
     public ArrayList<Tree<Tweet>> getUserTweets(User user) {
         return followersMap.get(user.getUsername());

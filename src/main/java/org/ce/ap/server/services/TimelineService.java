@@ -13,8 +13,7 @@ public interface TimelineService {
     /**
      * Gets all of the tweets from all following users and returns them in an ArrayList.
      *
-     * @param user User to get timeline of
      * @return Timeline of user
      */
-    ArrayList<Tree<Tweet>> getTimeline(User user);
+    ArrayList<Tree<Tweet>> getTimeline();
 }

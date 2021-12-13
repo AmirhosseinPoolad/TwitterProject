@@ -33,7 +33,7 @@ public class TreeIO<T extends ByteSerializable> {
      */
     public Tree<T> readTree(BufferedReader in, String firstLine) {
         Tree<T> head = null;
-        Tweet t = new Tweet(null,null);
+        Tweet t = new Tweet(null, null);
         try {
             String line;
             line = firstLine;

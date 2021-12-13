@@ -47,6 +47,9 @@ public class User {
         this.followers = new HashSet<>();
     }
 
+    /**
+     * private constructor, used only when deserializing a user from file
+     */
     private User(String username, String passwordHash, String firstName, String lastName, String biography, LocalDate birthdayDate, LocalDate signUpDate, HashSet<String> followings, HashSet<String> followers) {
         this.username = username;
         this.passwordHash = passwordHash;
@@ -113,6 +116,11 @@ public class User {
         return Objects.hash(username);
     }
 
+    /**
+     * serializes and writes user info to out BufferedWriter
+     *
+     * @param out output BufferedWriter
+     */
     public void writeToFile(BufferedWriter out) {
         try {
             out.write(username);
@@ -139,6 +147,13 @@ public class User {
         }
     }
 
+    /**
+     * parses user info from in BufferedReader
+     *
+     * @param in        input BufferedReader
+     * @param firstLine read a line before calling this function to see if there's more in the file, then pass it to this function
+     * @return User parsed from file
+     */
     public static User readFromFile(BufferedReader in, String firstLine) {
         User newUser = null;
         try {

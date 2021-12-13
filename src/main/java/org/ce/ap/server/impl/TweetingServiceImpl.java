@@ -3,13 +3,24 @@ package main.java.org.ce.ap.server.impl;
 import main.java.org.ce.ap.server.entity.Tweet;
 import main.java.org.ce.ap.server.entity.TweetGraph;
 import main.java.org.ce.ap.server.entity.User;
+import main.java.org.ce.ap.server.services.TweetingService;
 import main.java.org.ce.ap.server.util.Tree;
 
-public class TweetingServiceImpl {
+public class TweetingServiceImpl implements TweetingService {
     //the user that's using the service
     User user;
-
+    //observer service that is notified of any new tweets
     ObserverServiceImpl observerService;
+
+    /**
+     * constructs a new tweeting service for user
+     *
+     * @param user user that's using the service
+     */
+    public TweetingServiceImpl(User user) {
+        this.user = user;
+        this.observerService = ObserverServiceImpl.getInstance();
+    }
 
     /**
      * adds a new tweet to the tweet graph

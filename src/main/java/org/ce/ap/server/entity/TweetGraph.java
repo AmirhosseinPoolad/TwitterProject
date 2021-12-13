@@ -12,6 +12,7 @@ import java.util.ArrayList;
  */
 public class TweetGraph {
     private static TweetGraph INSTANCE = null;
+    //list of top level tweets
     public ArrayList<Tree<Tweet>> tweetTree;
 
     public static synchronized TweetGraph getInstance() {
@@ -49,6 +50,13 @@ public class TweetGraph {
         return tweetTree;
     }
 
+    /**
+     * adds a tweet to the tweet graph.
+     *
+     * @param tweet  tweet to be added
+     * @param parent parent of the tweet as a tree
+     * @return added tweet, as a tree/subtree in the tweet graph
+     */
     public synchronized Tree<Tweet> addTweet(Tweet tweet, Tree<Tweet> parent) {
         Tree<Tweet> newTree = new Tree<>(tweet);
         if (parent == null) {
@@ -61,11 +69,20 @@ public class TweetGraph {
         return newTree;
     }
 
+    /**
+     * adds a tweet to the tweet graph.
+     *
+     * @param tweet  tweet to be added
+     * @param parent parent of the tree
+     */
     public synchronized void addTweet(Tweet tweet, Tweet parent) {
         Tree<Tweet> parentTree = getTweet(parent);
         addTweet(tweet, parentTree);
     }
 
+    /**
+     * serializes and saves the tweet graph to files/model/tweets/tweetGraph.txt
+     */
     public synchronized void save() {
         try (BufferedWriter outputStream = new BufferedWriter(new FileWriter("files/model/tweets/tweetGraph.txt"))) {
             TreeIO<Tweet> tweetTreeIO = new TreeIO<>();
@@ -77,6 +94,9 @@ public class TweetGraph {
         }
     }
 
+    /**
+     * parses and reconstructs the tweet graph from files/model/tweets/tweetGraph.txt
+     */
     public synchronized void read() {
         BufferedReader inputStream = null;
         try (BufferedReader in = new BufferedReader(new FileReader("files/model/tweets/tweetGraph.txt"))) {

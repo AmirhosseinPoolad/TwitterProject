@@ -2,10 +2,7 @@ package main.java.org.ce.ap.server.util;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Objects;
-import java.util.Spliterator;
-import java.util.function.Consumer;
 
 /**
  * Generic Tree class. Keep in mind that because each node is a subtree, nodes are also made with the Tree class.
@@ -13,10 +10,18 @@ import java.util.function.Consumer;
  * @param <T> Type of each Tree node
  */
 public class Tree<T> implements Serializable {
+    //leaves of the tree
     private ArrayList<Tree<T>> leaves = new ArrayList<Tree<T>>();
+    //parent of the tree
     private Tree<T> parent = null;
+    //data of the tree
     private T data;
 
+    /**
+     * constructs a new tree object with data
+     *
+     * @param data data of new tree
+     */
     public Tree(T data) {
         this.data = data;
         this.parent = null;
@@ -38,23 +43,48 @@ public class Tree<T> implements Serializable {
         return null;
     }
 
+    /**
+     * add child tree to this tree
+     *
+     * @param childSubTree tree to be added as leaf
+     */
     public void addChild(Tree<T> childSubTree) {
         leaves.add(childSubTree);
         childSubTree.setParent(this);
     }
 
+    /**
+     * getter method for data of the tree
+     *
+     * @return data of the tree
+     */
     public T getData() {
         return data;
     }
 
+    /**
+     * getter method for parent of the tree
+     *
+     * @return parent of the tree
+     */
     public Tree<T> getParent() {
         return parent;
     }
 
+    /**
+     * getter function for tree leaves
+     *
+     * @return leaves of the tree
+     */
     public ArrayList<Tree<T>> getLeaves() {
         return leaves;
     }
 
+    /**
+     * setter function for tree parent
+     *
+     * @param parent new parent of tree
+     */
     public void setParent(Tree<T> parent) {
         this.parent = parent;
     }

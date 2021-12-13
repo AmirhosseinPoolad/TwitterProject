@@ -29,6 +29,9 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
         return INSTANCE;
     }
 
+    /**
+     * reads user data from files/model/users/users.txt and constructs usersMap from it
+     */
     private void read() {
         BufferedReader inputStream = null;
         try (BufferedReader in = new BufferedReader(new FileReader("files/model/users/users.txt"))) {
@@ -100,10 +103,19 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
         }
     }
 
+    /**
+     * checks if user exists in usersMap
+     *
+     * @param username username to be checked
+     * @return true if user exists
+     */
     public boolean userExists(String username) {
         return usersMap.containsKey(username.toLowerCase());
     }
 
+    /**
+     * serializes and saves user data from usersMap to "files/model/users/users.txt"
+     */
     public synchronized void save() {
         try (BufferedWriter outputStream = new BufferedWriter(new FileWriter("files/model/users/users.txt"));) {
             for (Map.Entry<String, User> entry : usersMap.entrySet()) {

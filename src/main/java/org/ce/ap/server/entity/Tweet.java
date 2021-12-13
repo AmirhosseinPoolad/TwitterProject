@@ -84,6 +84,11 @@ public class Tweet implements ByteSerializable {
         System.out.println(likedUsers.size() + " likes");
     }
 
+    /**
+     * poster getter function
+     *
+     * @return poster of tweet
+     */
     public String getPoster() {
         return poster;
     }
@@ -101,6 +106,11 @@ public class Tweet implements ByteSerializable {
         return Objects.hash(poster, content, postTime);
     }
 
+    /**
+     * serializes and writes tweet info to a BufferedWriter
+     *
+     * @param out output BufferedWriter
+     */
     @Override
     public void writeToFile(BufferedWriter out) {
         try {
@@ -119,6 +129,13 @@ public class Tweet implements ByteSerializable {
         }
     }
 
+    /**
+     * parse tweet info from BufferedReader and
+     *
+     * @param in        input BufferedReader
+     * @param firstLine read a line before calling this function to see if there's more in the file, then pass it to this function
+     * @return Tweet parsed from file
+     */
     @Override
     public ByteSerializable readFromFile(BufferedReader in, String firstLine) {
         Tweet newTweet = new Tweet(null, null);
