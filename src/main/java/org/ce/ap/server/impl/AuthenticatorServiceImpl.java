@@ -3,7 +3,9 @@ package main.java.org.ce.ap.server.impl;
 import main.java.org.ce.ap.server.services.AuthenticatorService;
 import main.java.org.ce.ap.server.entity.User;
 
+import java.io.*;
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class AuthenticatorServiceImpl implements AuthenticatorService {
@@ -13,8 +15,34 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
      */
     protected ConcurrentHashMap<String, User> usersMap;
 
-    public AuthenticatorServiceImpl() {
+    private AuthenticatorServiceImpl() {
         this.usersMap = new ConcurrentHashMap<String, User>();
+        read();
+    }
+
+    private static AuthenticatorServiceImpl INSTANCE = null;
+
+    public static synchronized AuthenticatorServiceImpl getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new AuthenticatorServiceImpl();
+        }
+        return INSTANCE;
+    }
+
+    private void read() {
+        BufferedReader inputStream = null;
+        try (BufferedReader in = new BufferedReader(new FileReader("files/model/users/users.txt"))) {
+            String firstLine;
+            do {
+                firstLine = in.readLine();
+                if (firstLine == null)
+                    break;
+                User newUser = User.readFromFile(in, firstLine);
+                usersMap.put(newUser.getUsername().toLowerCase(), newUser);
+            } while (firstLine != null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -26,11 +54,11 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
      * @param lastName          last name
      * @param biography         biography, maximum 256 words
      * @param birthdayDate
-     * @return 1 if success, 0 if username already exists, -1 if error.
+     * @return newly made user if success, null if username exists or error happened.
      */
     @Override
-    public int signUp(String username, String plaintextPassword, String firstName,
-                      String lastName, String biography, LocalDate birthdayDate) {
+    public User signUp(String username, String plaintextPassword, String firstName,
+                       String lastName, String biography, LocalDate birthdayDate) {
         //only make a new user if it doesn't already exist
         if (!usersMap.containsKey(username.toLowerCase())) {
             User user = null;
@@ -38,12 +66,17 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
                 user = new User(username, plaintextPassword, firstName, lastName, biography, birthdayDate);
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
-                return -1;
+                return null;
             }
             usersMap.put(username.toLowerCase(), user);
-            return 1;
+            try (BufferedWriter outputStream = new BufferedWriter(new FileWriter("files/model/users/users.txt", true));) {
+                user.writeToFile(outputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return user;
         }
-        return 0;
+        return null;
     }
 
     /**
@@ -51,15 +84,33 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
      *
      * @param username account username
      * @param password account password (plaintext)
-     * @return 1 if user/pass pair is correct, 0 if incorrect, -1 if user does not exist.
+     * @return user if user/pass pair is correct, null if incorrect or does not exist.
      */
     @Override
-    public int logIn(String username, String password) {
+    public User logIn(String username, String password) {
         User user = usersMap.get(username.toLowerCase());
-        //if user does not exist, return -1
+        //if user does not exist, return null
         if (user == null)
-            return -1;
-            //else check if password is correct
-        else return user.isPasswordCorrect(password) ? 1 : 0;
+            return null;
+        //else check if password is correct
+        if (user.isPasswordCorrect(password)) {
+            return user;
+        } else {
+            return null;
+        }
+    }
+
+    public boolean userExists(String username) {
+        return usersMap.containsKey(username.toLowerCase());
+    }
+
+    public synchronized void save() {
+        try (BufferedWriter outputStream = new BufferedWriter(new FileWriter("files/model/users/users.txt"));) {
+            for (Map.Entry<String, User> entry : usersMap.entrySet()) {
+                entry.getValue().writeToFile(outputStream);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

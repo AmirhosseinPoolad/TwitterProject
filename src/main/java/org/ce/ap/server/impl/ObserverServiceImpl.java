@@ -44,12 +44,14 @@ public class ObserverServiceImpl extends Observer implements ObserverService {
     public void follow(User user1, User user2) {
         user2.addFollowing(user1.getUsername());
         user1.addFollower(user2.getUsername());
+        AuthenticatorServiceImpl.getInstance().save();
     }
 
     @Override
     public void unfollow(User user1, User user2) {
         user2.removeFollowing(user1.getUsername());
         user1.removeFollower(user2.getUsername());
+        AuthenticatorServiceImpl.getInstance().save();
     }
 
     @Override
