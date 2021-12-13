@@ -1,7 +1,7 @@
 package main.java.org.ce.ap.server.util;
 
-import main.java.org.ce.ap.server.ByteSerializable;
-import main.java.org.ce.ap.server.Tweet;
+import main.java.org.ce.ap.server.services.ByteSerializable;
+import main.java.org.ce.ap.server.entity.Tweet;
 
 import java.io.*;
 

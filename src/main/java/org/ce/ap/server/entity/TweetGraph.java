@@ -1,4 +1,4 @@
-package main.java.org.ce.ap.server;
+package main.java.org.ce.ap.server.entity;
 
 import main.java.org.ce.ap.server.util.Tree;
 import main.java.org.ce.ap.server.util.TreeIO;

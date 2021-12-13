@@ -1,7 +1,7 @@
 package main.java.org.ce.ap.server.impl;
 
 import main.java.org.ce.ap.server.services.AuthenticatorService;
-import main.java.org.ce.ap.server.User;
+import main.java.org.ce.ap.server.entity.User;
 
 import java.time.LocalDate;
 import java.util.concurrent.ConcurrentHashMap;

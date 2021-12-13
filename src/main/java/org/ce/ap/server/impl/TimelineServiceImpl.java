@@ -1,8 +1,8 @@
 package main.java.org.ce.ap.server.impl;
 
-import main.java.org.ce.ap.server.Tweet;
-import main.java.org.ce.ap.server.TweetGraph;
-import main.java.org.ce.ap.server.User;
+import main.java.org.ce.ap.server.entity.Tweet;
+import main.java.org.ce.ap.server.entity.TweetGraph;
+import main.java.org.ce.ap.server.entity.User;
 import main.java.org.ce.ap.server.services.TimelineService;
 import main.java.org.ce.ap.server.util.Tree;
 

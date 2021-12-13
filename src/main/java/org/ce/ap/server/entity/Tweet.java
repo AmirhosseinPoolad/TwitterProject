@@ -1,17 +1,17 @@
-package main.java.org.ce.ap.server;
+package main.java.org.ce.ap.server.entity;
+
+import main.java.org.ce.ap.server.services.ByteSerializable;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.Scanner;
 
-public class Tweet implements ByteSerializable{
+public class Tweet implements ByteSerializable {
     //username of poster
     private String poster;
     //list of users that liked the tweet

@@ -1,4 +1,4 @@
-package main.java.org.ce.ap.server;
+package main.java.org.ce.ap.server.services;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

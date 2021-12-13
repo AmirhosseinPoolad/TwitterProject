@@ -1,11 +1,8 @@
 package main.java.org.ce.ap.server;
 
-import main.java.org.ce.ap.server.impl.AuthenticatorServiceImpl;
+import main.java.org.ce.ap.server.entity.Tweet;
+import main.java.org.ce.ap.server.entity.TweetGraph;
 import main.java.org.ce.ap.server.impl.ObserverServiceImpl;
-import main.java.org.ce.ap.server.services.AuthenticatorService;
-import main.java.org.ce.ap.server.util.Tree;
-
-import java.time.LocalDate;
 
 public class Test {
     public static void main(String[] args) {

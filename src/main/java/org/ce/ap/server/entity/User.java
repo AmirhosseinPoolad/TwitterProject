@@ -1,10 +1,9 @@
-package main.java.org.ce.ap.server;
+package main.java.org.ce.ap.server.entity;
 
 import main.java.org.ce.ap.server.util.ServerUtil;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
 
