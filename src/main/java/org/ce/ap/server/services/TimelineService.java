@@ -2,6 +2,7 @@ package main.java.org.ce.ap.server.services;
 
 import main.java.org.ce.ap.server.Tweet;
 import main.java.org.ce.ap.server.User;
+import main.java.org.ce.ap.server.util.Tree;
 
 import java.util.ArrayList;
 
@@ -15,5 +16,5 @@ public interface TimelineService {
      * @param user User to get timeline of
      * @return Timeline of user
      */
-    ArrayList<Tweet> getTimeline(User user);
+    ArrayList<Tree<Tweet>> getTimeline(User user);
 }
