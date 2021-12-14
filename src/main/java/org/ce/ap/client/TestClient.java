@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class TestClient {
@@ -13,11 +12,10 @@ public class TestClient {
             OutputStream out = client.getOutputStream();
             InputStream in = client.getInputStream();
             Scanner sc = new Scanner(System.in);
-            String username = sc.nextLine();
-            String password = sc.nextLine();
-            out.write(username.getBytes());
-            out.write(password.getBytes());
-
+            while (true) {
+                String command = sc.nextLine();
+                out.write(command.getBytes());
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
