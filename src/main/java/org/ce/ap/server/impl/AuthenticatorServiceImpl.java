@@ -103,6 +103,11 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
         }
     }
 
+    @Override
+    public User fromUsername(String username) {
+        return usersMap.get(username);
+    }
+
     /**
      * checks if user exists in usersMap
      *

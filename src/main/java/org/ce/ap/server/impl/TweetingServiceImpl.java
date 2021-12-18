@@ -29,9 +29,14 @@ public class TweetingServiceImpl implements TweetingService {
      * @param parent  set this to the parent tweet if it's a reply, null if it's not a reply
      */
     public void addTweet(String content, Tree<Tweet> parent) {
-        Tweet tweet = new Tweet(user.getUsername(), content);
+        Tweet tweet = new Tweet(user.getUsername(), content, TweetGraph.getInstance().getTweetCount());
         Tree<Tweet> newTree = TweetGraph.getInstance().addTweet(tweet, parent);
         observerService.update(newTree);
+    }
+
+    @Override
+    public void addTweet(String content, int parentId) {
+
     }
 
     /**
@@ -43,6 +48,11 @@ public class TweetingServiceImpl implements TweetingService {
         tweet.addLike(user.getUsername());
     }
 
+    @Override
+    public void likeTweet(int tweetId) {
+        TweetGraph.getInstance().getTweet(tweetId).getData().addLike(user.getUsername());
+    }
+
     /**
      * dislikes the tweet
      *
@@ -50,6 +60,11 @@ public class TweetingServiceImpl implements TweetingService {
      */
     public void dislikeTweet(Tweet tweet) {
         tweet.removeLike(user.getUsername());
+    }
+
+    @Override
+    public void dislikeTweet(int tweetId) {
+        TweetGraph.getInstance().getTweet(tweetId).getData().removeLike(user.getUsername());
     }
 
     /**
@@ -61,6 +76,11 @@ public class TweetingServiceImpl implements TweetingService {
         tweet.addRetweet(user.getUsername());
     }
 
+    @Override
+    public void retweetTweet(int tweetId) {
+        TweetGraph.getInstance().getTweet(tweetId).getData().addRetweet(user.getUsername());
+    }
+
     /**
      * removes retweet from tweet
      *
@@ -68,6 +88,11 @@ public class TweetingServiceImpl implements TweetingService {
      */
     public void unretweetTweet(Tweet tweet) {
         tweet.removeRetweet(user.getUsername());
+    }
+
+    @Override
+    public void unretweetTweet(int tweetId) {
+        TweetGraph.getInstance().getTweet(tweetId).getData().removeRetweet(user.getUsername());
     }
 
 }

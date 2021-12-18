@@ -14,6 +14,7 @@ import java.util.Objects;
 
 public class Tweet implements ByteSerializable {
     //username of poster
+    @JsonProperty
     private String poster;
     //list of users that liked the tweet
     @JsonProperty
@@ -27,6 +28,8 @@ public class Tweet implements ByteSerializable {
     //date of post. in UTC.
     @JsonProperty
     private LocalDateTime postTime;
+    @JsonProperty
+    private int tweetId;
 
     /**
      * makes a tweet from poster with content. Automatically sets postTime to current UTC time.
@@ -34,12 +37,22 @@ public class Tweet implements ByteSerializable {
      * @param poster  username of the poster
      * @param content content of the tweet
      */
-    public Tweet(String poster, String content) {
+    public Tweet(String poster, String content, int tweetId) {
         this.poster = poster;
         this.content = content;
+        this.tweetId = tweetId;
         this.likedUsers = new ArrayList<String>();
         this.retweetedUsers = new ArrayList<String>();
         this.postTime = LocalDateTime.now(ZoneOffset.UTC);
+    }
+
+    private Tweet(String poster, ArrayList<String> likedUsers, ArrayList<String> retweetedUsers, String content, LocalDateTime postTime, int tweetId) {
+        this.poster = poster;
+        this.likedUsers = likedUsers;
+        this.retweetedUsers = retweetedUsers;
+        this.content = content;
+        this.postTime = postTime;
+        this.tweetId = tweetId;
     }
 
     /**
@@ -98,7 +111,9 @@ public class Tweet implements ByteSerializable {
         return poster;
     }
 
-
+    public int getTweetId() {
+        return tweetId;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -145,17 +160,18 @@ public class Tweet implements ByteSerializable {
      */
     @Override
     public ByteSerializable readFromFile(BufferedReader in, String firstLine) {
-        Tweet newTweet = new Tweet(null, null);
+        Tweet newTweet = new Tweet(null, null, 0);
         try {
-            newTweet.poster = firstLine;
+            String poster = firstLine;
             String likedString = in.readLine();
-            newTweet.likedUsers = new ArrayList<String>(Arrays.asList(likedString.split(", ")));
+            ArrayList<String> likedUsers = new ArrayList<String>(Arrays.asList(likedString.split(", ")));
             String retweetedString = in.readLine();
-            newTweet.likedUsers = new ArrayList<String>(Arrays.asList(retweetedString.split(", ")));
-            String contentString = in.readLine();
-            newTweet.content = contentString;
+            ArrayList<String> retweetedUsers = new ArrayList<String>(Arrays.asList(retweetedString.split(", ")));
+            String content = in.readLine();
             String dateString = in.readLine();
-            newTweet.postTime = LocalDateTime.parse(dateString);
+            LocalDateTime postTime = LocalDateTime.parse(dateString);
+            int tweetId = Integer.parseInt(in.readLine());
+            return new Tweet(poster, likedUsers, retweetedUsers, content, postTime, tweetId);
         } catch (IOException e) {
             e.printStackTrace();
         }

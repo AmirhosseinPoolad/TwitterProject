@@ -23,6 +23,15 @@ public class User {
     private LocalDate birthdayDate;
     private LocalDate signUpDate;
     private HashSet<String> followings;
+
+    public ArrayList<String> getFollowings() {
+        return new ArrayList<String>(followings);
+    }
+
+    public ArrayList<String> getFollowers() {
+        return new ArrayList<String>(followers);
+    }
+
     private HashSet<String> followers;
 
     /**

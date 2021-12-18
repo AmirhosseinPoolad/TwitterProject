@@ -15,6 +15,8 @@ public class TweetGraph {
     //list of top level tweets
     public ArrayList<Tree<Tweet>> tweetTree;
 
+    private int tweetCount;
+
     public static synchronized TweetGraph getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new TweetGraph();
@@ -25,6 +27,7 @@ public class TweetGraph {
     private TweetGraph() {
         tweetTree = new ArrayList<>();
         this.read();
+        this.tweetCount = countTweets();
     }
 
     /**
@@ -39,6 +42,25 @@ public class TweetGraph {
             while (it.hasNext()) {
                 Tree<Tweet> next = it.nextTree();
                 if (next.getData().equals(tweet)) {
+                    return next;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * searchs for the subtree that has tweet as head
+     *
+     * @param tweetId tweetId to search for
+     * @return subtree that has tweet as head
+     */
+    public synchronized Tree<Tweet> getTweet(int tweetId) {
+        for (Tree<Tweet> treeHead : tweetTree) {
+            TreeIterator<Tweet> it = new TreeIterator<>(treeHead);
+            while (it.hasNext()) {
+                Tree<Tweet> next = it.nextTree();
+                if (next.getData().getTweetId() == tweetId) {
                     return next;
                 }
             }
@@ -66,6 +88,7 @@ public class TweetGraph {
             newTree.setParent(parent);
         }
         save();
+        this.tweetCount++;
         return newTree;
     }
 
@@ -111,5 +134,21 @@ public class TweetGraph {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getTweetCount() {
+        return tweetCount;
+    }
+
+    private int countTweets() {
+        int count = 0;
+        for (Tree<Tweet> treeHead : tweetTree) {
+            TreeIterator<Tweet> it = new TreeIterator<>(treeHead);
+            while (it.hasNext()) {
+                Tree<Tweet> next = it.nextTree();
+                count++;
+            }
+        }
+        return count;
     }
 }

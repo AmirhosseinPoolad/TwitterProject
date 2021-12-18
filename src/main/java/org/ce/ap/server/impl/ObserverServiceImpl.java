@@ -84,6 +84,10 @@ public class ObserverServiceImpl extends Observer implements ObserverService {
     @Override
     public ArrayList<Tree<Tweet>> getUserTweets(User user) {
         return followersMap.get(user.getUsername());
+    }
 
+    @Override
+    public ArrayList<Tree<Tweet>> getUserTweets(String username) {
+        return followersMap.get(username);
     }
 }

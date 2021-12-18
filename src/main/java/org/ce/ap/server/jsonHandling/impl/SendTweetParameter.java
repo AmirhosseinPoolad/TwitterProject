@@ -4,6 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import main.java.org.ce.ap.server.jsonHandling.Parameter;
 
 public class SendTweetParameter extends Parameter {
-    @JsonProperty
     String content;
+    int parentId;
+
+    public String getContent() {
+        return content;
+    }
+
+    public int getParentId() {
+        return parentId;
+    }
 }

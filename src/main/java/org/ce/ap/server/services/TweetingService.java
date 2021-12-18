@@ -12,12 +12,21 @@ public interface TweetingService {
      */
     public void addTweet(String content, Tree<Tweet> parent);
 
+    public void addTweet(String content, int parentId);
+
     /**
      * like the tweet
      *
      * @param tweet tweet to be liked
      */
     public void likeTweet(Tweet tweet);
+
+    /**
+     * like the tweet
+     *
+     * @param tweetId Id of the tweet to be liked
+     */
+    public void likeTweet(int tweetId);
 
     /**
      * dislikes the tweet
@@ -29,9 +38,24 @@ public interface TweetingService {
     /**
      * retweets the tweet
      *
+     * @param tweetId tweet to be retweeted
+     */
+
+    public void dislikeTweet(int tweetId);
+
+    /**
+     * retweets the tweet
+     *
      * @param tweet tweet to be retweeted
      */
     public void retweetTweet(Tweet tweet);
+
+    /**
+     * retweets the tweet
+     *
+     * @param tweetId tweet to be retweeted
+     */
+    public void retweetTweet(int tweetId);
 
     /**
      * removes retweet from tweet
@@ -39,4 +63,11 @@ public interface TweetingService {
      * @param tweet tweet to unretweet
      */
     public void unretweetTweet(Tweet tweet);
+
+    /**
+     * removes retweet from tweet
+     *
+     * @param tweetId tweet to unretweet
+     */
+    public void unretweetTweet(int tweetId);
 }

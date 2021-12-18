@@ -28,4 +28,6 @@ public interface AuthenticatorService {
      */
     public abstract User logIn(String username, String password);
 
+    public User fromUsername(String username);
+
 }

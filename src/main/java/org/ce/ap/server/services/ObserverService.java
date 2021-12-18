@@ -31,4 +31,10 @@ public interface ObserverService {
      */
     ArrayList<Tree<Tweet>> getUserTweets(User user);
 
+    /**
+     * Gets all tweets from users and returns them in an ArrayList
+     * @param username User to get tweets of
+     * @return All tweets from user
+     */
+    ArrayList<Tree<Tweet>> getUserTweets(String username);
 }
