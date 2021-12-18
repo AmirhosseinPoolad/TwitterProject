@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import main.java.org.ce.ap.server.entity.TweetGraph;
 import main.java.org.ce.ap.server.impl.AuthenticatorServiceImpl;
+import main.java.org.ce.ap.server.jsonHandling.MapperSingleton;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,10 +20,9 @@ public class Server {
                 "Boolad", "Not So Random dude", LocalDate.of(2000, 11, 10));*/
         /*authenticatorService.signUp("HDxC", "1234", "Amirhossein",
                 "Poolad", "Random dude", LocalDate.of(2000, 10, 11));*/
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
+        ObjectMapper objectMapper = MapperSingleton.getObjectMapper();
         try {
-            objectMapper.writeValue(new File("test.json"),TweetGraph.getInstance().getTweetTree());
+            objectMapper.writeValue(new File("test.json"), TweetGraph.getInstance().getTweetTree());
         } catch (IOException e) {
             e.printStackTrace();
         }
