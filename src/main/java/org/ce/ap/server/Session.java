@@ -50,13 +50,18 @@ public class Session implements Runnable {
                             inputList[4], inputList[5], LocalDate.parse(inputList[6]));
                     System.out.println("REGISTERED");
                 } else if (inputList[0].equals("-SignIn")) {
-                    if (signIn(inputList[1], inputList[2]) == 1)
+                    if (signIn(inputList[1], inputList[2]) == 1) {
                         System.out.println("SIGNED IN");
-
+                        signedInRun();
+                    }
                 }
             } while (!(command.equals("-ClientExit")));
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void signedInRun() {
+
     }
 }

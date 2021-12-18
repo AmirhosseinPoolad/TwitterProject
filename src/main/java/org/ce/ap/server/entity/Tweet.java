@@ -1,5 +1,6 @@
 package main.java.org.ce.ap.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import main.java.org.ce.ap.server.services.ByteSerializable;
 
 import java.io.BufferedReader;
@@ -15,12 +16,16 @@ public class Tweet implements ByteSerializable {
     //username of poster
     private String poster;
     //list of users that liked the tweet
+    @JsonProperty
     private ArrayList<String> likedUsers;
     //list of users that retweeted the tweet
+    @JsonProperty
     private ArrayList<String> retweetedUsers;
     //content of the tweet
+    @JsonProperty
     private String content;
     //date of post. in UTC.
+    @JsonProperty
     private LocalDateTime postTime;
 
     /**
@@ -92,6 +97,8 @@ public class Tweet implements ByteSerializable {
     public String getPoster() {
         return poster;
     }
+
+
 
     @Override
     public boolean equals(Object o) {

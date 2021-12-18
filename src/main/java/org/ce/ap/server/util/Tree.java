@@ -1,5 +1,9 @@
 package main.java.org.ce.ap.server.util;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -11,10 +15,13 @@ import java.util.Objects;
  */
 public class Tree<T> implements Serializable {
     //leaves of the tree
+    @JsonManagedReference
     private ArrayList<Tree<T>> leaves = new ArrayList<Tree<T>>();
     //parent of the tree
+    @JsonBackReference
     private Tree<T> parent = null;
     //data of the tree
+    @JsonProperty
     private T data;
 
     /**
