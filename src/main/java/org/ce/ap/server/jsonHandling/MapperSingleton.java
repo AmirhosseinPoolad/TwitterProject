@@ -2,7 +2,6 @@ package main.java.org.ce.ap.server.jsonHandling;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import main.java.org.ce.ap.server.entity.TweetGraph;
 
 public class MapperSingleton {
     private ObjectMapper objectMapper;

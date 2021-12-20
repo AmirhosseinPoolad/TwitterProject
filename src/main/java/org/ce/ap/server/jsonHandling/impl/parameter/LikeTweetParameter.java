@@ -1,4 +1,4 @@
-package main.java.org.ce.ap.server.jsonHandling.impl;
+package main.java.org.ce.ap.server.jsonHandling.impl.parameter;
 
 import main.java.org.ce.ap.server.jsonHandling.Parameter;
 

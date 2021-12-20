@@ -1,4 +1,4 @@
-package main.java.org.ce.ap.server.impl;
+package main.java.org.ce.ap.server.services.impl;
 
 import main.java.org.ce.ap.server.entity.Tweet;
 import main.java.org.ce.ap.server.entity.TweetGraph;

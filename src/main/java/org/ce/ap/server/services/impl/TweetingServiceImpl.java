@@ -1,4 +1,4 @@
-package main.java.org.ce.ap.server.impl;
+package main.java.org.ce.ap.server.services.impl;
 
 import main.java.org.ce.ap.server.entity.Tweet;
 import main.java.org.ce.ap.server.entity.TweetGraph;
@@ -28,15 +28,16 @@ public class TweetingServiceImpl implements TweetingService {
      * @param content content of the tweet to be added
      * @param parent  set this to the parent tweet if it's a reply, null if it's not a reply
      */
-    public void addTweet(String content, Tree<Tweet> parent) {
+    public Tree<Tweet> addTweet(String content, Tree<Tweet> parent) {
         Tweet tweet = new Tweet(user.getUsername(), content, TweetGraph.getInstance().getTweetCount());
         Tree<Tweet> newTree = TweetGraph.getInstance().addTweet(tweet, parent);
         observerService.update(newTree);
+        return newTree;
     }
 
     @Override
-    public void addTweet(String content, int parentId) {
-
+    public Tree<Tweet> addTweet(String content, int parentId) {
+        return addTweet(content, TweetGraph.getInstance().getTweet(parentId));
     }
 
     /**
@@ -44,13 +45,15 @@ public class TweetingServiceImpl implements TweetingService {
      *
      * @param tweet tweet to be liked
      */
-    public void likeTweet(Tweet tweet) {
+    public Tree<Tweet> likeTweet(Tweet tweet) {
         tweet.addLike(user.getUsername());
+        return TweetGraph.getInstance().getTweet(tweet);
     }
 
     @Override
-    public void likeTweet(int tweetId) {
+    public Tree<Tweet> likeTweet(int tweetId) {
         TweetGraph.getInstance().getTweet(tweetId).getData().addLike(user.getUsername());
+        return TweetGraph.getInstance().getTweet(tweetId);
     }
 
     /**
@@ -58,13 +61,15 @@ public class TweetingServiceImpl implements TweetingService {
      *
      * @param tweet tweet to be disliked
      */
-    public void dislikeTweet(Tweet tweet) {
+    public Tree<Tweet> dislikeTweet(Tweet tweet) {
         tweet.removeLike(user.getUsername());
+        return TweetGraph.getInstance().getTweet(tweet);
     }
 
     @Override
-    public void dislikeTweet(int tweetId) {
+    public Tree<Tweet> dislikeTweet(int tweetId) {
         TweetGraph.getInstance().getTweet(tweetId).getData().removeLike(user.getUsername());
+        return TweetGraph.getInstance().getTweet(tweetId);
     }
 
     /**
@@ -72,13 +77,15 @@ public class TweetingServiceImpl implements TweetingService {
      *
      * @param tweet tweet to be retweeted
      */
-    public void retweetTweet(Tweet tweet) {
+    public Tree<Tweet> retweetTweet(Tweet tweet) {
         tweet.addRetweet(user.getUsername());
+        return TweetGraph.getInstance().getTweet(tweet);
     }
 
     @Override
-    public void retweetTweet(int tweetId) {
+    public Tree<Tweet> retweetTweet(int tweetId) {
         TweetGraph.getInstance().getTweet(tweetId).getData().addRetweet(user.getUsername());
+        return TweetGraph.getInstance().getTweet(tweetId);
     }
 
     /**
@@ -86,13 +93,15 @@ public class TweetingServiceImpl implements TweetingService {
      *
      * @param tweet tweet to unretweet
      */
-    public void unretweetTweet(Tweet tweet) {
+    public Tree<Tweet> unretweetTweet(Tweet tweet) {
         tweet.removeRetweet(user.getUsername());
+        return TweetGraph.getInstance().getTweet(tweet);
     }
 
     @Override
-    public void unretweetTweet(int tweetId) {
+    public Tree<Tweet> unretweetTweet(int tweetId) {
         TweetGraph.getInstance().getTweet(tweetId).getData().removeRetweet(user.getUsername());
+        return TweetGraph.getInstance().getTweet(tweetId);
     }
 
 }

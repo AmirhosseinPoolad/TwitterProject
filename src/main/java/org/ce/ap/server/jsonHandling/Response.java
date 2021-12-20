@@ -10,5 +10,11 @@ public class Response {
     @JsonProperty
     private int errorCode;
     @JsonProperty
-    private ArrayList<Object> results;
+    private Result results;
+
+    public Response(boolean hasError, int errorCode, Result results) {
+        this.hasError = hasError;
+        this.errorCode = errorCode;
+        this.results = results;
+    }
 }

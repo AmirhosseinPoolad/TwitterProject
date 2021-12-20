@@ -32,6 +32,26 @@ public class User {
         return new ArrayList<String>(followers);
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getBiography() {
+        return biography;
+    }
+
+    public LocalDate getBirthdayDate() {
+        return birthdayDate;
+    }
+
+    public LocalDate getSignUpDate() {
+        return signUpDate;
+    }
+
     private HashSet<String> followers;
 
     /**

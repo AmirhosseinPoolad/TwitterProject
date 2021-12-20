@@ -2,7 +2,7 @@ package main.java.org.ce.ap.server;
 
 import main.java.org.ce.ap.server.entity.Tweet;
 import main.java.org.ce.ap.server.entity.TweetGraph;
-import main.java.org.ce.ap.server.impl.ObserverServiceImpl;
+import main.java.org.ce.ap.server.services.impl.ObserverServiceImpl;
 
 public class Test {
     public static void main(String[] args) {
