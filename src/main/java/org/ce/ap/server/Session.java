@@ -1,22 +1,18 @@
 package main.java.org.ce.ap.server;
 
 import main.java.org.ce.ap.server.entity.Tweet;
-import main.java.org.ce.ap.server.entity.TweetGraph;
 import main.java.org.ce.ap.server.entity.User;
 import main.java.org.ce.ap.server.jsonHandling.Response;
 import main.java.org.ce.ap.server.jsonHandling.Result;
 import main.java.org.ce.ap.server.jsonHandling.impl.result.*;
-import main.java.org.ce.ap.server.services.impl.AuthenticatorServiceImpl;
-import main.java.org.ce.ap.server.services.impl.ObserverServiceImpl;
-import main.java.org.ce.ap.server.services.impl.TimelineServiceImpl;
-import main.java.org.ce.ap.server.services.impl.TweetingServiceImpl;
+import main.java.org.ce.ap.server.services.LoggingService;
+import main.java.org.ce.ap.server.services.impl.*;
 import main.java.org.ce.ap.server.jsonHandling.MapperSingleton;
 import main.java.org.ce.ap.server.jsonHandling.Request;
 import main.java.org.ce.ap.server.jsonHandling.impl.parameter.*;
 import main.java.org.ce.ap.server.services.TimelineService;
 import main.java.org.ce.ap.server.services.TweetingService;
 import main.java.org.ce.ap.server.util.Tree;
-import main.java.org.ce.ap.server.util.TreeIterator;
 
 import java.io.*;
 import java.net.Socket;
@@ -29,12 +25,15 @@ public class Session implements Runnable {
     private InputStream in;
     private TimelineService timelineService;
     private TweetingService tweetingService;
+    private LoggingService loggingService;
 
     public Session(Socket connectionSocket) {
         this.connectionSocket = connectionSocket;
+        this.loggingService = LoggingServiceImpl.getInstance();
         try {
             out = connectionSocket.getOutputStream();
             in = connectionSocket.getInputStream();
+            loggingService.log( Thread.currentThread().getName() + "Succesfully connected");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,14 +66,14 @@ public class Session implements Runnable {
                         Result result = new UserResult(res);
                         Response response = new Response(true, 1, result);
                         sendResponse(response);
+                        loggingService.log("ERROR: COULD NOT REGISTER USER " + param.getUsername());
                         //TODO:LOG ERROR
                     } else {
                         signIn(user.getUsername(), param.getPassword());
                         Result result = new UserResult(res);
                         Response response = new Response(false, 0, result);
                         sendResponse(response);
-                        //TODO: LOG
-                        System.out.println("REGISTERED AND SIGNED IN");
+                        loggingService.log("User " + param.getUsername() + " Successfully registered");
                         signedInRun();
                         return;
                     }
@@ -84,15 +83,13 @@ public class Session implements Runnable {
                     if (res == 0) {
                         Result result = new UserResult(user);
                         Response response = new Response(true, 1, result);
-                        sendResponse(response);
-                        //TODO:LOG ERROR
+                        loggingService.log("ERROR: COULD NOT SIGN IN USER " + param.getUsername());
                     } else {
                         signIn(user.getUsername(), param.getPassword());
                         Result result = new UserResult(user);
                         Response response = new Response(false, 0, result);
                         sendResponse(response);
-                        //TODO: LOG
-                        System.out.println("SIGNED IN");
+                        loggingService.log("User" + param.getUsername() + " Successfully logged in");
                         signedInRun();
                         return;
                     }
@@ -100,7 +97,7 @@ public class Session implements Runnable {
                     Result result = new EmptyResult();
                     Response response = new Response(false, 0, result);
                     sendResponse(response);
-                    //TODO: LOG
+                    loggingService.log(Thread.currentThread().getName() + " Quit");
                     return;
                 }
 
@@ -122,7 +119,7 @@ public class Session implements Runnable {
                     Result result = new EmptyResult();
                     Response response = new Response(false, 0, result);
                     sendResponse(response);
-                    //TODO: LOG
+                    loggingService.log(Thread.currentThread().getName() + " Quit");
                     return;
                 } else if (req.getMethod().equals("SendTweet")) {
                     SendTweetParameter param = (SendTweetParameter) req.getParameterValues();
@@ -134,7 +131,7 @@ public class Session implements Runnable {
                     Result result = new TweetResult(topTree);
                     Response response = new Response(false, 0, result);
                     sendResponse(response);
-                    //TODO: LOG
+                    loggingService.log("User" + user.getUsername() + " sent tweet. ID: " + tweetTree.getData().getTweetId());
                 } else if (req.getMethod().equals("LikeTweet")) {
                     LikeTweetParameter param = (LikeTweetParameter) req.getParameterValues();
                     Tree<Tweet> tweetTree = tweetingService.likeTweet(param.getTweetId());
@@ -145,7 +142,7 @@ public class Session implements Runnable {
                     Result result = new TweetResult(topTree);
                     Response response = new Response(false, 0, result);
                     sendResponse(response);
-                    //TODO: LOG
+                    loggingService.log("User" + user.getUsername() + " liked tweet. ID: " + tweetTree.getData().getTweetId());
                 } else if (req.getMethod().equals("DislikeTweet")) {
                     LikeTweetParameter param = (LikeTweetParameter) req.getParameterValues();
                     Tree<Tweet> tweetTree = tweetingService.dislikeTweet(param.getTweetId());
@@ -156,7 +153,7 @@ public class Session implements Runnable {
                     Result result = new TweetResult(topTree);
                     Response response = new Response(false, 0, result);
                     sendResponse(response);
-                    //TODO: LOG
+                    loggingService.log("User" + user.getUsername() + " unliked tweet. ID: " + tweetTree.getData().getTweetId());
                 } else if (req.getMethod().equals("RetweetTweet")) {
                     LikeTweetParameter param = (LikeTweetParameter) req.getParameterValues();
                     Tree<Tweet> tweetTree = tweetingService.retweetTweet(param.getTweetId());
@@ -167,7 +164,7 @@ public class Session implements Runnable {
                     Result result = new TweetResult(topTree);
                     Response response = new Response(false, 0, result);
                     sendResponse(response);
-                    //TODO: LOG
+                    loggingService.log("User" + user.getUsername() + " retweeted tweet. ID: " + tweetTree.getData().getTweetId());
                 } else if (req.getMethod().equals("UnretweetTweet")) {
                     LikeTweetParameter param = (LikeTweetParameter) req.getParameterValues();
                     Tree<Tweet> tweetTree = tweetingService.unretweetTweet(param.getTweetId());
@@ -178,20 +175,20 @@ public class Session implements Runnable {
                     Result result = new TweetResult(topTree);
                     Response response = new Response(false, 0, result);
                     sendResponse(response);
-                    //TODO: LOG
+                    loggingService.log("User" + user.getUsername() + " unretweeted tweet. ID: " + tweetTree.getData().getTweetId());
                 } else if (req.getMethod().equals("GetProfile")) {
                     GetProfileParameter param = (GetProfileParameter) req.getParameterValues();
                     ArrayList<Tree<Tweet>> tweets = ObserverServiceImpl.getInstance().getUserTweets(param.getUsername());
-                    Result result = new GetProfileResult(AuthenticatorServiceImpl.getInstance().fromUsername(param.getUsername()),tweets);
+                    Result result = new GetProfileResult(AuthenticatorServiceImpl.getInstance().fromUsername(param.getUsername()), tweets);
                     Response response = new Response(false, 0, result);
                     sendResponse(response);
-                    //TODO: LOG
+                    loggingService.log("User" + user.getUsername() + " requested " + param.getUsername() + "'s profile");
                 } else if (req.getMethod().equals("GetTimeline")) {
                     ArrayList<Tree<Tweet>> tweets = timelineService.getTimeline();
                     Result result = new GetTimelineResult(tweets);
                     Response response = new Response(false, 0, result);
                     sendResponse(response);
-                    //TODO: LOG
+                    loggingService.log("User" + user.getUsername() + " requested timeline");
                 } else if (req.getMethod().equals("Follow")) {
                     GetProfileParameter param = (GetProfileParameter) req.getParameterValues();
                     User user1 = AuthenticatorServiceImpl.getInstance().fromUsername(param.getUsername());
@@ -200,7 +197,7 @@ public class Session implements Runnable {
                     Result result = new UserResult(user);
                     Response response = new Response(false, 0, result);
                     sendResponse(response);
-                    //TODO: LOG
+                    loggingService.log("User" + user.getUsername() + " followed " + user1.getUsername());
                 } else if (req.getMethod().equals("Unfollow")) {
                     GetProfileParameter param = (GetProfileParameter) req.getParameterValues();
                     User user1 = AuthenticatorServiceImpl.getInstance().fromUsername(param.getUsername());
@@ -209,17 +206,17 @@ public class Session implements Runnable {
                     Result result = new UserResult(user);
                     Response response = new Response(false, 0, result);
                     sendResponse(response);
-                    //TODO: LOG
+                    loggingService.log("User" + user.getUsername() + " unfollowed " + user1.getUsername());
                 } else if (req.getMethod().equals("GetFolowers")) {
                     Result result = new UserlistResult(user.getFollowers());
                     Response response = new Response(false, 0, result);
                     sendResponse(response);
-                    //TODO: LOG
+                    loggingService.log("User" + user.getUsername() + " requested their followers");
                 } else if (req.getMethod().equals("GetFollowings")) {
                     Result result = new UserlistResult(user.getFollowings());
                     Response response = new Response(false, 0, result);
                     sendResponse(response);
-                    //TODO: LOG
+                    loggingService.log("User" + user.getUsername() + " requested their followings");
                 }
             }
         } catch (IOException e) {
