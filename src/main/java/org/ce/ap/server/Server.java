@@ -1,11 +1,10 @@
 package main.java.org.ce.ap.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import main.java.org.ce.ap.server.entity.TweetGraph;
 import main.java.org.ce.ap.server.services.impl.AuthenticatorServiceImpl;
 import main.java.org.ce.ap.server.jsonHandling.MapperSingleton;
+import main.java.org.ce.ap.server.services.impl.PropertyServiceImpl;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -20,13 +19,10 @@ public class Server {
         /*authenticatorService.signUp("HDxC", "1234", "Amirhossein",
                 "Poolad", "Random dude", LocalDate.of(2000, 10, 11));*/
         ObjectMapper objectMapper = MapperSingleton.getObjectMapper();
-        try {
-            objectMapper.writeValue(new File("test.json"), TweetGraph.getInstance().getTweetTree());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        PropertyServiceImpl propertyService = PropertyServiceImpl.getInstance();
+        int port = Integer.parseInt(propertyService.getProperty("server.port"));
         ExecutorService pool = Executors.newCachedThreadPool();
-        try (ServerSocket welcomingSocket = new ServerSocket(7660)) {
+        try (ServerSocket welcomingSocket = new ServerSocket(port)) {
             while (true) {
                 Socket connectionSocket = welcomingSocket.accept();
                 pool.execute(new Session(connectionSocket));

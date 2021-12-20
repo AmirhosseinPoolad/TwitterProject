@@ -1,5 +1,6 @@
 package main.java.org.ce.ap.server.entity;
 
+import main.java.org.ce.ap.server.services.impl.PropertyServiceImpl;
 import main.java.org.ce.ap.server.util.Tree;
 import main.java.org.ce.ap.server.util.TreeIO;
 import main.java.org.ce.ap.server.util.TreeIterator;
@@ -107,7 +108,8 @@ public class TweetGraph {
      * serializes and saves the tweet graph to files/model/tweets/tweetGraph.txt
      */
     public synchronized void save() {
-        try (BufferedWriter outputStream = new BufferedWriter(new FileWriter("files/model/tweets/tweetGraph.txt"))) {
+        String tweetsFolder = PropertyServiceImpl.getInstance().getProperty("server.tweets.file");
+        try (BufferedWriter outputStream = new BufferedWriter(new FileWriter(tweetsFolder + "/tweetGraph.txt"))) {
             TreeIO<Tweet> tweetTreeIO = new TreeIO<>();
             for (Tree<Tweet> subTree : tweetTree) {
                 tweetTreeIO.writeTree(subTree, outputStream);
@@ -122,7 +124,8 @@ public class TweetGraph {
      */
     public synchronized void read() {
         BufferedReader inputStream = null;
-        try (BufferedReader in = new BufferedReader(new FileReader("files/model/tweets/tweetGraph.txt"))) {
+        String tweetsFolder = PropertyServiceImpl.getInstance().getProperty("server.tweets.file");
+        try (BufferedReader in = new BufferedReader(new FileReader(tweetsFolder + "/tweetGraph.txt"))) {
             TreeIO<Tweet> tweetTreeIO = new TreeIO<>();
             String firstLine;
             do {

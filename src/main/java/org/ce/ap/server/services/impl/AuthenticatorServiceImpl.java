@@ -33,8 +33,9 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
      * reads user data from files/model/users/users.txt and constructs usersMap from it
      */
     private void read() {
+        String userFolder = PropertyServiceImpl.getInstance().getProperty("server.users.file");
         BufferedReader inputStream = null;
-        try (BufferedReader in = new BufferedReader(new FileReader("files/model/users/users.txt"))) {
+        try (BufferedReader in = new BufferedReader(new FileReader(userFolder + "/users.txt"))) {
             String firstLine;
             do {
                 firstLine = in.readLine();
@@ -122,7 +123,8 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
      * serializes and saves user data from usersMap to "files/model/users/users.txt"
      */
     public synchronized void save() {
-        try (BufferedWriter outputStream = new BufferedWriter(new FileWriter("files/model/users/users.txt"));) {
+        String userFolder = PropertyServiceImpl.getInstance().getProperty("server.users.file");
+        try (BufferedWriter outputStream = new BufferedWriter(new FileWriter(userFolder + "/users.txt"));) {
             for (Map.Entry<String, User> entry : usersMap.entrySet()) {
                 entry.getValue().writeToFile(outputStream);
             }
