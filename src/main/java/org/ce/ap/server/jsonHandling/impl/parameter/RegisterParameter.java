@@ -19,6 +19,15 @@ public class RegisterParameter extends Parameter {
     @JsonProperty
     LocalDate birthdayDate;
 
+    public RegisterParameter(String username, String password, String firstName, String lastName, String biography, LocalDate birthdayDate) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.biography = biography;
+        this.birthdayDate = birthdayDate;
+    }
+
     public String getUsername() {
         return username;
     }

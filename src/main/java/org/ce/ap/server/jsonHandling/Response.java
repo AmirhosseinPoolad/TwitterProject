@@ -17,4 +17,17 @@ public class Response {
         this.errorCode = errorCode;
         this.results = results;
     }
+
+    public boolean isHasError() {
+        return hasError;
+    }
+
+    public int getErrorCode() {
+        return errorCode;
+    }
+
+    public Result getResults() {
+        return results;
+    }
+
 }

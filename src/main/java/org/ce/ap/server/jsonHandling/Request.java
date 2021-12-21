@@ -10,6 +10,12 @@ public class Request {
     @JsonProperty
     private Parameter parameterValues;
 
+    public Request(String method, String description, Parameter parameterValues) {
+        this.method = method;
+        this.description = description;
+        this.parameterValues = parameterValues;
+    }
+
     public String getMethod() {
         return method;
     }
