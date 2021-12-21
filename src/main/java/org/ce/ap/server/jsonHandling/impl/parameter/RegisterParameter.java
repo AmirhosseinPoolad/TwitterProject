@@ -28,6 +28,9 @@ public class RegisterParameter extends Parameter {
         this.birthdayDate = birthdayDate;
     }
 
+    public RegisterParameter() {
+    }
+
     public String getUsername() {
         return username;
     }

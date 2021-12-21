@@ -1,7 +1,10 @@
 package main.java.org.ce.ap.server.jsonHandling;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public class Request {
     @JsonProperty
     private String method;
@@ -14,6 +17,10 @@ public class Request {
         this.method = method;
         this.description = description;
         this.parameterValues = parameterValues;
+    }
+
+    public Request() {
+
     }
 
     public String getMethod() {

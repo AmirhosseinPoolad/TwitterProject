@@ -22,8 +22,8 @@ public class PropertyServiceImpl implements PropertiesService {
 
     private PropertyServiceImpl() {
         try (InputStream in = new FileInputStream("src/main/resources/server-application.properties")) {
-            Properties prop = new Properties();
-            prop.load(in);
+            properties = new Properties();
+            properties.load(in);
         } catch (IOException e) {
             e.printStackTrace();
         }

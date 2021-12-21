@@ -18,6 +18,7 @@ public class Server {
                 "Boolad", "Not So Random dude", LocalDate.of(2000, 11, 10));*/
         /*authenticatorService.signUp("HDxC", "1234", "Amirhossein",
                 "Poolad", "Random dude", LocalDate.of(2000, 10, 11));*/
+        //amirhdxc 5678
         ObjectMapper objectMapper = MapperSingleton.getObjectMapper();
         PropertyServiceImpl propertyService = PropertyServiceImpl.getInstance();
         int port = Integer.parseInt(propertyService.getProperty("server.port"));

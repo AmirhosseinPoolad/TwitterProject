@@ -7,6 +7,9 @@ public class SendTweetParameter extends Parameter {
     String content;
     int parentId;
 
+    public SendTweetParameter() {
+    }
+
     public SendTweetParameter(String content, int parentId) {
         this.content = content;
         this.parentId = parentId;

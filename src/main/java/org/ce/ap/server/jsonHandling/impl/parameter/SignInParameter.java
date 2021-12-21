@@ -6,6 +6,9 @@ public class SignInParameter extends Parameter {
     private String username;
     private String password;
 
+    public SignInParameter() {
+    }
+
     public SignInParameter(String username, String password) {
         this.username = username;
         this.password = password;

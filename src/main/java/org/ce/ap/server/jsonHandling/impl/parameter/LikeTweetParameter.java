@@ -5,6 +5,9 @@ import main.java.org.ce.ap.server.jsonHandling.Parameter;
 public class LikeTweetParameter extends Parameter {
     int tweetId;
 
+    public LikeTweetParameter() {
+    }
+
     public LikeTweetParameter(int tweetId) {
         this.tweetId = tweetId;
     }

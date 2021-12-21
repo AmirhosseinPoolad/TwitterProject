@@ -69,7 +69,7 @@ public class Session implements Runnable {
                         loggingService.log("ERROR: COULD NOT REGISTER USER " + param.getUsername());
                         //TODO:LOG ERROR
                     } else {
-                        signIn(user.getUsername(), param.getPassword());
+                        signIn(res.getUsername(), param.getPassword());
                         Result result = new UserResult(res);
                         Response response = new Response(false, 0, result);
                         sendResponse(response);
@@ -79,13 +79,14 @@ public class Session implements Runnable {
                     }
                 } else if (req.getMethod().equals("SignIn")) {
                     SignInParameter param = (SignInParameter) req.getParameterValues();
-                    int res = signIn(param.getUsername(), param.getPassword());
-                    if (res == 0) {
+                    boolean res = AuthenticatorServiceImpl.getInstance().fromUsername(param.getUsername()).isPasswordCorrect(param.getPassword());//signIn(param.getUsername(), param.getPassword());
+                    if (!res) {
                         Result result = new UserResult(user);
                         Response response = new Response(true, 1, result);
+                        sendResponse(response);
                         loggingService.log("ERROR: COULD NOT SIGN IN USER " + param.getUsername());
                     } else {
-                        signIn(user.getUsername(), param.getPassword());
+                        signIn(param.getUsername(), param.getPassword());
                         Result result = new UserResult(user);
                         Response response = new Response(false, 0, result);
                         sendResponse(response);

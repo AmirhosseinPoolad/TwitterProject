@@ -5,6 +5,9 @@ import main.java.org.ce.ap.server.jsonHandling.Parameter;
 public class GetProfileParameter extends Parameter {
     private String username;
 
+    public GetProfileParameter() {
+    }
+
     public GetProfileParameter(String username) {
         this.username = username;
     }

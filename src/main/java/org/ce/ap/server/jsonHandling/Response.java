@@ -18,6 +18,9 @@ public class Response {
         this.results = results;
     }
 
+    public Response() {
+    }
+
     public boolean isHasError() {
         return hasError;
     }

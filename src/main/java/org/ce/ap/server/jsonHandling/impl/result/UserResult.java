@@ -10,6 +10,9 @@ public class UserResult extends Result {
         this.user = user;
     }
 
+    public UserResult() {
+    }
+
     public User getUser() {
         return user;
     }
