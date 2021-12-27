@@ -37,6 +37,9 @@ public class TweetingServiceImpl implements TweetingService {
 
     @Override
     public Tree<Tweet> addTweet(String content, int parentId) {
+        if(parentId == -1){
+            return addTweet(content, null);
+        }
         return addTweet(content, TweetGraph.getInstance().getTweet(parentId));
     }
 

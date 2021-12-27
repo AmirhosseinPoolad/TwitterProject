@@ -5,5 +5,12 @@ public enum MenuStatus {
     REGISTER,
     LOGIN,
     TIMELINE,
-    PROFILE
+    SEND_TWEET,
+    LIKE,
+    DISLIKE,
+    RETWEET,
+    UNRETWEET,
+    LIST_PROFILES,
+    VIEW_PROFILE,
+    LOGOFF
 }

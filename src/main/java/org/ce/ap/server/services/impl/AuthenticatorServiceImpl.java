@@ -47,7 +47,7 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
                 ArrayList<User> users = MapperSingleton.getObjectMapper().readValue(resString, new TypeReference<ArrayList<User>>() {
                 });
                 for (User user : users) {
-                    usersMap.put(user.getUsername(), user);
+                    usersMap.put(user.getUsername().toLowerCase(), user);
                 }
             }
         } catch (IOException e) {

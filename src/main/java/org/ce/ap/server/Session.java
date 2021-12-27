@@ -33,7 +33,7 @@ public class Session implements Runnable {
         try {
             out = connectionSocket.getOutputStream();
             in = connectionSocket.getInputStream();
-            loggingService.log( Thread.currentThread().getName() + "Succesfully connected");
+            loggingService.log(Thread.currentThread().getId() + " Succesfully connected");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -124,8 +124,9 @@ public class Session implements Runnable {
                     return;
                 } else if (req.getMethod().equals("SendTweet")) {
                     SendTweetParameter param = (SendTweetParameter) req.getParameterValues();
+                    int parentID = param.getParentId();
                     Tree<Tweet> tweetTree = tweetingService.addTweet(param.getContent(), param.getParentId());
-                    Tree<Tweet> topTree = tweetTree.getParent();
+                    Tree<Tweet> topTree = tweetTree;
                     while (topTree.getParent() != null) {
                         topTree = topTree.getParent();
                     }

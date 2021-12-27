@@ -12,6 +12,7 @@ import java.util.Objects;
 
 public class User {
     private String username;
+    @JsonProperty
     private String passwordHash;
     private String firstName;
     private String lastName;
@@ -19,35 +20,6 @@ public class User {
     private LocalDate birthdayDate;
     private LocalDate signUpDate;
     private HashSet<String> followings;
-
-    public ArrayList<String> getFollowings() {
-        return new ArrayList<String>(followings);
-    }
-
-    public ArrayList<String> getFollowers() {
-        return new ArrayList<String>(followers);
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getBiography() {
-        return biography;
-    }
-
-    public LocalDate getBirthdayDate() {
-        return birthdayDate;
-    }
-
-    public LocalDate getSignUpDate() {
-        return signUpDate;
-    }
-
     private HashSet<String> followers;
 
     /**
@@ -104,6 +76,34 @@ public class User {
 
     public String getUsername() {
         return username;
+    }
+
+    public ArrayList<String> getFollowings() {
+        return new ArrayList<String>(followings);
+    }
+
+    public ArrayList<String> getFollowers() {
+        return new ArrayList<String>(followers);
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getBiography() {
+        return biography;
+    }
+
+    public LocalDate getBirthdayDate() {
+        return birthdayDate;
+    }
+
+    public LocalDate getSignUpDate() {
+        return signUpDate;
     }
 
     public void printInfo() {
