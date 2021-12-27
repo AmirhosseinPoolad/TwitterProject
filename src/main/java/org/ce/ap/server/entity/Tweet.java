@@ -1,18 +1,13 @@
 package main.java.org.ce.ap.server.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import main.java.org.ce.ap.server.services.ByteSerializable;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
-public class Tweet implements ByteSerializable {
+public class Tweet{
     //username of poster
     @JsonProperty
     private String poster;
@@ -53,6 +48,10 @@ public class Tweet implements ByteSerializable {
         this.content = content;
         this.postTime = postTime;
         this.tweetId = tweetId;
+    }
+
+    public Tweet() {
+
     }
 
     /**
@@ -126,55 +125,5 @@ public class Tweet implements ByteSerializable {
     @Override
     public int hashCode() {
         return Objects.hash(poster, content, postTime);
-    }
-
-    /**
-     * serializes and writes tweet info to a BufferedWriter
-     *
-     * @param out output BufferedWriter
-     */
-    @Override
-    public void writeToFile(BufferedWriter out) {
-        try {
-            out.write(poster);
-            out.newLine();
-            out.write(Arrays.toString(likedUsers.toArray()).replace("[", "").replace("]", ""));
-            out.newLine();
-            out.write(Arrays.toString(retweetedUsers.toArray()).replace("[", "").replace("]", ""));
-            out.newLine();
-            out.write(content);
-            out.newLine();
-            out.write(postTime.toString());
-            out.newLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * parse tweet info from BufferedReader and
-     *
-     * @param in        input BufferedReader
-     * @param firstLine read a line before calling this function to see if there's more in the file, then pass it to this function
-     * @return Tweet parsed from file
-     */
-    @Override
-    public ByteSerializable readFromFile(BufferedReader in, String firstLine) {
-        Tweet newTweet = new Tweet(null, null, 0);
-        try {
-            String poster = firstLine;
-            String likedString = in.readLine();
-            ArrayList<String> likedUsers = new ArrayList<String>(Arrays.asList(likedString.split(", ")));
-            String retweetedString = in.readLine();
-            ArrayList<String> retweetedUsers = new ArrayList<String>(Arrays.asList(retweetedString.split(", ")));
-            String content = in.readLine();
-            String dateString = in.readLine();
-            LocalDateTime postTime = LocalDateTime.parse(dateString);
-            int tweetId = Integer.parseInt(in.readLine());
-            return new Tweet(poster, likedUsers, retweetedUsers, content, postTime, tweetId);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return newTweet;
     }
 }

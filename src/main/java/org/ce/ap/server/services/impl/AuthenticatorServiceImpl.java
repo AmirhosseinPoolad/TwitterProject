@@ -1,10 +1,14 @@
 package main.java.org.ce.ap.server.services.impl;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import main.java.org.ce.ap.server.jsonHandling.MapperSingleton;
 import main.java.org.ce.ap.server.services.AuthenticatorService;
 import main.java.org.ce.ap.server.entity.User;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -33,17 +37,19 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
      * reads user data from files/model/users/users.txt and constructs usersMap from it
      */
     private void read() {
-        String userFolder = PropertyServiceImpl.getInstance().getProperty("server.users.file");
-        BufferedReader inputStream = null;
-        try (BufferedReader in = new BufferedReader(new FileReader(userFolder + "/users.txt"))) {
-            String firstLine;
-            do {
-                firstLine = in.readLine();
-                if (firstLine == null)
-                    break;
-                User newUser = User.readFromFile(in, firstLine);
-                usersMap.put(newUser.getUsername().toLowerCase(), newUser);
-            } while (firstLine != null);
+        String userFile = PropertyServiceImpl.getInstance().getProperty("server.users.file") + "/users.txt";
+        try (InputStream in = new FileInputStream(userFile)) {
+            byte[] buffer = new byte[1 << 20]; //1 megabyte buffer
+            String resString;
+            int read = in.read(buffer);
+            if (read != -1) {
+                resString = new String(buffer, 0, read);
+                ArrayList<User> users = MapperSingleton.getObjectMapper().readValue(resString, new TypeReference<ArrayList<User>>() {
+                });
+                for (User user : users) {
+                    usersMap.put(user.getUsername(), user);
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -73,11 +79,7 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
                 return null;
             }
             usersMap.put(username.toLowerCase(), user);
-            try (BufferedWriter outputStream = new BufferedWriter(new FileWriter("files/model/users/users.txt", true));) {
-                user.writeToFile(outputStream);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            save();
             return user;
         }
         return null;
@@ -123,11 +125,10 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
      * serializes and saves user data from usersMap to "files/model/users/users.txt"
      */
     public synchronized void save() {
-        String userFolder = PropertyServiceImpl.getInstance().getProperty("server.users.file");
-        try (BufferedWriter outputStream = new BufferedWriter(new FileWriter(userFolder + "/users.txt"));) {
-            for (Map.Entry<String, User> entry : usersMap.entrySet()) {
-                entry.getValue().writeToFile(outputStream);
-            }
+        String userFile = PropertyServiceImpl.getInstance().getProperty("server.users.file") + "/users.txt";
+        try (OutputStream outputStream = new FileOutputStream(userFile);) {
+            ArrayList<User> users = new ArrayList<>(usersMap.values());
+            MapperSingleton.getObjectMapper().writeValue(outputStream, users);
         } catch (IOException e) {
             e.printStackTrace();
         }

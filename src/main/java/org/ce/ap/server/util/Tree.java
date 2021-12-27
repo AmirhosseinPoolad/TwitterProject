@@ -34,6 +34,9 @@ public class Tree<T> implements Serializable {
         this.parent = null;
     }
 
+    public Tree() {
+    }
+
     /**
      * search for data in the current Tree object
      *

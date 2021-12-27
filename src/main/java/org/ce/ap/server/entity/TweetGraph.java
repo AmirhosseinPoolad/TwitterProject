@@ -1,8 +1,10 @@
 package main.java.org.ce.ap.server.entity;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import main.java.org.ce.ap.server.jsonHandling.MapperSingleton;
 import main.java.org.ce.ap.server.services.impl.PropertyServiceImpl;
 import main.java.org.ce.ap.server.util.Tree;
-import main.java.org.ce.ap.server.util.TreeIO;
 import main.java.org.ce.ap.server.util.TreeIterator;
 
 import java.io.*;
@@ -108,12 +110,9 @@ public class TweetGraph {
      * serializes and saves the tweet graph to files/model/tweets/tweetGraph.txt
      */
     public synchronized void save() {
-        String tweetsFolder = PropertyServiceImpl.getInstance().getProperty("server.tweets.file");
-        try (BufferedWriter outputStream = new BufferedWriter(new FileWriter(tweetsFolder + "/tweetGraph.txt"))) {
-            TreeIO<Tweet> tweetTreeIO = new TreeIO<>();
-            for (Tree<Tweet> subTree : tweetTree) {
-                tweetTreeIO.writeTree(subTree, outputStream);
-            }
+        String tweetsFile = PropertyServiceImpl.getInstance().getProperty("server.tweets.file") + "/tweetGraph.txt";
+        try (OutputStream outputStream = new FileOutputStream(tweetsFile)) {
+            MapperSingleton.getObjectMapper().writeValue(outputStream, this.tweetTree);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -123,17 +122,19 @@ public class TweetGraph {
      * parses and reconstructs the tweet graph from files/model/tweets/tweetGraph.txt
      */
     public synchronized void read() {
-        BufferedReader inputStream = null;
-        String tweetsFolder = PropertyServiceImpl.getInstance().getProperty("server.tweets.file");
-        try (BufferedReader in = new BufferedReader(new FileReader(tweetsFolder + "/tweetGraph.txt"))) {
-            TreeIO<Tweet> tweetTreeIO = new TreeIO<>();
-            String firstLine;
-            do {
-                firstLine = in.readLine();
-                if (firstLine == null)
-                    break;
-                tweetTree.add(tweetTreeIO.readTree(in, firstLine));
-            } while (firstLine != null);
+        String tweetsFile = PropertyServiceImpl.getInstance().getProperty("server.tweets.file") + "/tweetGraph.txt";
+        try (InputStream in = new FileInputStream(tweetsFile)) {
+            byte[] buffer = new byte[1 << 20]; //1 megabyte buffer
+            String resString;
+            int read = in.read(buffer);
+            if (read != -1) {
+                resString = new String(buffer, 0, read);
+                ObjectMapper mapper = MapperSingleton.getObjectMapper();
+                ArrayList<Tree<Tweet>> tree = mapper.readValue(resString, new TypeReference<ArrayList<Tree<Tweet>>>() {
+                });
+                this.tweetTree = tree;
+                this.tweetCount = countTweets();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
