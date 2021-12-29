@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import main.java.org.ce.ap.server.jsonHandling.MapperSingleton;
 import main.java.org.ce.ap.server.services.AuthenticatorService;
 import main.java.org.ce.ap.server.entity.User;
+import main.java.org.ce.ap.server.services.ObserverService;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -78,6 +79,7 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
                 e.printStackTrace();
                 return null;
             }
+            ObserverServiceImpl.getInstance().follow(user, user);
             usersMap.put(username.toLowerCase(), user);
             save();
             return user;
@@ -108,7 +110,7 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
 
     @Override
     public User fromUsername(String username) {
-        return usersMap.get(username);
+        return usersMap.get(username.toLowerCase());
     }
 
     /**

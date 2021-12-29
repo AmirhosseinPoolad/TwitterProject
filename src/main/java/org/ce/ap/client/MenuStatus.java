@@ -10,7 +10,8 @@ public enum MenuStatus {
     DISLIKE,
     RETWEET,
     UNRETWEET,
-    LIST_PROFILES,
+    LIST_FOLLOWERS,
+    LIST_FOLLOWINGS,
     VIEW_PROFILE,
     LOGOFF
 }

@@ -30,10 +30,11 @@ public class ObserverServiceImpl extends Observer implements ObserverService {
         TweetGraph graph = TweetGraph.getInstance();
         followersMap = new HashMap<String, ArrayList<Tree<Tweet>>>();
         for (Tree<Tweet> tweet : graph.getTweetTree()) {
-            if (!followersMap.containsKey(tweet.getData().getPoster())) {
-                followersMap.put(tweet.getData().getPoster(), new ArrayList<Tree<Tweet>>());
+            String username = tweet.getData().getPoster().toLowerCase();
+            if (!followersMap.containsKey(username)) {
+                followersMap.put(username, new ArrayList<Tree<Tweet>>());
             }
-            followersMap.get(tweet.getData().getPoster()).add(tweet);
+            followersMap.get(username).add(tweet);
         }
         System.out.println();
     }
@@ -46,7 +47,7 @@ public class ObserverServiceImpl extends Observer implements ObserverService {
     @Override
     public void update(Tree<Tweet> tweet) {
         if (tweet.getParent() == null)
-            followersMap.get(tweet.getData().getPoster()).add(tweet);
+            followersMap.get(tweet.getData().getPoster().toLowerCase()).add(tweet);
     }
 
     /**
@@ -83,11 +84,11 @@ public class ObserverServiceImpl extends Observer implements ObserverService {
      */
     @Override
     public ArrayList<Tree<Tweet>> getUserTweets(User user) {
-        return followersMap.get(user.getUsername());
+        return followersMap.get(user.getUsername().toLowerCase());
     }
 
     @Override
     public ArrayList<Tree<Tweet>> getUserTweets(String username) {
-        return followersMap.get(username);
+        return followersMap.get(username.toLowerCase());
     }
 }

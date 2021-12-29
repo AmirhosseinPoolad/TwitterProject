@@ -1,8 +1,13 @@
 package main.java.org.ce.ap.client.services;
 
-import main.java.org.ce.ap.client.MenuStatus;
-import main.java.org.ce.ap.server.jsonHandling.Response;
+import main.java.org.ce.ap.server.entity.Tweet;
+import main.java.org.ce.ap.server.entity.User;
+import main.java.org.ce.ap.server.util.Tree;
+
+import java.util.ArrayList;
 
 public interface ConsoleViewService {
-    void showResponse(MenuStatus status, Response response);
+    void showTweetTree(ArrayList<Tree<Tweet>> tweetTree);
+    void showUserList(ArrayList<String> userList);
+    void showUserInfo(User user);
 }

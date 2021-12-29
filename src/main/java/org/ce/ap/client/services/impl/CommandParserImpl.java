@@ -12,6 +12,7 @@ import main.java.org.ce.ap.server.jsonHandling.impl.parameter.*;
 import main.java.org.ce.ap.server.jsonHandling.impl.result.GetProfileResult;
 import main.java.org.ce.ap.server.jsonHandling.impl.result.GetTimelineResult;
 import main.java.org.ce.ap.server.jsonHandling.impl.result.TweetResult;
+import main.java.org.ce.ap.server.jsonHandling.impl.result.UserlistResult;
 import main.java.org.ce.ap.server.util.Tree;
 
 import java.io.InputStream;
@@ -32,6 +33,7 @@ public class CommandParserImpl implements CommandParser {
     public CommandParserImpl(OutputStream out, InputStream in) {
         sc = new Scanner(System.in);
         connectionService = new ConnectionServiceImpl(out, in);
+        consoleViewService = new ConsoleViewServiceImpl();
         //TODO: construct consoleviewerservice
     }
 
@@ -43,7 +45,6 @@ public class CommandParserImpl implements CommandParser {
     public int handleInput() throws IllegalArgumentException {
         switch (menuStatus) {
             case MAIN: {
-                //TODO: Use console view
                 System.out.println("Enter 1 to Login, 2 to Register");
                 int input = sc.nextInt();
                 sc.nextLine(); //so that we discard the newline character
@@ -57,7 +58,6 @@ public class CommandParserImpl implements CommandParser {
                 break;
             }
             case REGISTER: {
-                //TODO: Use console view
                 System.out.println("Enter your username, password, firstname, lastname, biography and birthday date in that order.");
                 String username = sc.nextLine();
                 String password = sc.nextLine();
@@ -98,7 +98,7 @@ public class CommandParserImpl implements CommandParser {
             case TIMELINE: {
                 System.out.print("\033[H\033[2J"); //clears the screen
                 System.out.flush();
-                //TODO: Render timeline using ConsoleViewService
+                consoleViewService.showTweetTree(tweetTree);
                 System.out.println("1 to send new tweet, 2 to like tweet, 3 to dislike tweet, 4 to retweet," +
                         " 5 to unretweet, 6 to view profile, 7 to log off");
                 int input = sc.nextInt();
@@ -265,10 +265,32 @@ public class CommandParserImpl implements CommandParser {
                     break;
                 }
                 GetProfileResult res = (GetProfileResult) serverResponse.getResults();
-                //TODO: Use ConsoleViewService to render user profile
+                consoleViewService.showUserInfo(res.getUser());
+                consoleViewService.showTweetTree(res.getTweets());
                 System.out.println("Press enter to go back to timeline");
                 sc.nextLine();
                 menuStatus = MenuStatus.TIMELINE;
+                break;
+            }
+            case LIST_FOLLOWERS: {
+                Request req = new Request("GetFollowers", "Gets followers of specified user", null);
+                Response serverResponse = connectionService.sendToServer(req);
+                UserlistResult res = (UserlistResult) serverResponse.getResults();
+                consoleViewService.showUserList(res.getUsers());
+                System.out.println("Press enter to go back to timeline");
+                sc.nextLine();
+                menuStatus = MenuStatus.TIMELINE;
+                break;
+            }
+            case LIST_FOLLOWINGS: {
+                Request req = new Request("GetFollowings", "Gets followings of specified user", null);
+                Response serverResponse = connectionService.sendToServer(req);
+                UserlistResult res = (UserlistResult) serverResponse.getResults();
+                consoleViewService.showUserList(res.getUsers());
+                System.out.println("Press enter to go back to timeline");
+                sc.nextLine();
+                menuStatus = MenuStatus.TIMELINE;
+                break;
             }
             case LOGOFF: {
                 return 1;

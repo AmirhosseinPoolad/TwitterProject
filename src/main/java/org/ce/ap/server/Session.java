@@ -114,6 +114,8 @@ public class Session implements Runnable {
             String readString;
             while (true) {
                 int read = in.read(buffer);
+                if (read == -1)
+                    continue;
                 readString = new String(buffer, 0, read);
                 Request req = MapperSingleton.getObjectMapper().readValue(readString, Request.class);
                 if (req.getMethod().equals("Quit")) {
@@ -209,7 +211,7 @@ public class Session implements Runnable {
                     Response response = new Response(false, 0, result);
                     sendResponse(response);
                     loggingService.log("User" + user.getUsername() + " unfollowed " + user1.getUsername());
-                } else if (req.getMethod().equals("GetFolowers")) {
+                } else if (req.getMethod().equals("GetFollowers")) {
                     Result result = new UserlistResult(user.getFollowers());
                     Response response = new Response(false, 0, result);
                     sendResponse(response);

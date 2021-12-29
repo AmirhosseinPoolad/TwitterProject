@@ -5,6 +5,7 @@ import main.java.org.ce.ap.server.entity.Tweet;
 import main.java.org.ce.ap.server.entity.TweetGraph;
 import main.java.org.ce.ap.server.services.impl.AuthenticatorServiceImpl;
 import main.java.org.ce.ap.server.jsonHandling.MapperSingleton;
+import main.java.org.ce.ap.server.services.impl.ObserverServiceImpl;
 import main.java.org.ce.ap.server.services.impl.PropertyServiceImpl;
 import main.java.org.ce.ap.server.util.Tree;
 
@@ -17,6 +18,10 @@ import java.util.concurrent.Executors;
 
 public class Server {
     public static void main(String[] args) {
+        //TODO: Follow/Unfollow functionality
+        //TODO: Error Handling
+        //TODO: What's the server's IP?
+        //TODO: Last thing you do (after phase four, even): Duplicate server classes in client package
         AuthenticatorServiceImpl authenticatorService = AuthenticatorServiceImpl.getInstance();
         /*authenticatorService.signUp("Brrrr", "12345", "Amir",
                 "Boolad", "Not So Random dude", LocalDate.of(2000, 11, 10));

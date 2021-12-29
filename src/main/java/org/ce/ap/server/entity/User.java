@@ -48,10 +48,10 @@ public class User {
      * private constructor, used only when deserializing a user from file
      */
     @JsonCreator
-    private User(@JsonProperty("username") String username,@JsonProperty("passwordHash") String passwordHash,
-                 @JsonProperty("firstName") String firstName,@JsonProperty("lastName") String lastName,
-                 @JsonProperty("biography") String biography,@JsonProperty("birthdayDate") LocalDate birthdayDate,
-                 @JsonProperty("signUpDate") LocalDate signUpDate,@JsonProperty("followings") HashSet<String> followings,
+    private User(@JsonProperty("username") String username, @JsonProperty("passwordHash") String passwordHash,
+                 @JsonProperty("firstName") String firstName, @JsonProperty("lastName") String lastName,
+                 @JsonProperty("biography") String biography, @JsonProperty("birthdayDate") LocalDate birthdayDate,
+                 @JsonProperty("signUpDate") LocalDate signUpDate, @JsonProperty("followings") HashSet<String> followings,
                  @JsonProperty("followers") HashSet<String> followers) {
         this.username = username;
         this.passwordHash = passwordHash;
@@ -111,6 +111,7 @@ public class User {
         System.out.println(firstName + " " + lastName);
         System.out.println(biography);
         System.out.println("Signed up at " + signUpDate + " | Birthday: " + birthdayDate);
+        System.out.println(followers.size() + " Followers, " + followings.size() + " Followings");
     }
 
     public boolean isFollowing(String username) {

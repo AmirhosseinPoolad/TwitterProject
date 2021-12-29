@@ -114,6 +114,22 @@ public class Tweet{
         return tweetId;
     }
 
+    public ArrayList<String> getLikedUsers() {
+        return likedUsers;
+    }
+
+    public ArrayList<String> getRetweetedUsers() {
+        return retweetedUsers;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public LocalDateTime getPostTime() {
+        return postTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
