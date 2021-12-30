@@ -58,48 +58,53 @@ public class Session implements Runnable {
                 int read = in.read(buffer);
                 readString = new String(buffer, 0, read);
                 Request req = MapperSingleton.getObjectMapper().readValue(readString, Request.class);
-                if (req.getMethod().equals("Register")) {
-                    RegisterParameter param = (RegisterParameter) req.getParameterValues();
-                    User res = AuthenticatorServiceImpl.getInstance().signUp(param.getUsername(), param.getPassword(),
-                            param.getFirstName(), param.getLastName(), param.getBiography(), param.getBirthdayDate());
-                    if (res == null) {
-                        Result result = new UserResult(res);
-                        Response response = new Response(true, 1, result);
-                        sendResponse(response);
-                        loggingService.log("ERROR: COULD NOT REGISTER USER " + param.getUsername());
-                        //TODO:LOG ERROR
-                    } else {
-                        signIn(res.getUsername(), param.getPassword());
-                        Result result = new UserResult(res);
+                switch (req.getMethod()) {
+                    case "Register" -> {
+                        RegisterParameter param = (RegisterParameter) req.getParameterValues();
+                        try {
+                            User res = AuthenticatorServiceImpl.getInstance().signUp(param.getUsername(), param.getPassword(),
+                                    param.getFirstName(), param.getLastName(), param.getBiography(), param.getBirthdayDate());
+                            signIn(res.getUsername(), param.getPassword());
+                            Result result = new UserResult(res);
+                            Response response = new Response(false, 0, result);
+                            sendResponse(response);
+                            loggingService.log("User " + param.getUsername() + " Successfully registered");
+                            signedInRun();
+                            return;
+                        } catch (IllegalArgumentException e) {
+                            e.printStackTrace();
+                            Result result = new UserResult(null);
+                            Response response = new Response(true, 1, result);
+                            sendResponse(response);
+                            loggingService.log("ERROR: COULD NOT REGISTER USER " + param.getUsername());
+                        }
+                    }
+                    case "SignIn" -> {
+                        SignInParameter param = (SignInParameter) req.getParameterValues();
+                        try {
+                            boolean res = AuthenticatorServiceImpl.getInstance().fromUsername(param.getUsername()).isPasswordCorrect(param.getPassword());//signIn(param.getUsername(), param.getPassword());
+                            signIn(param.getUsername(), param.getPassword());
+                            Result result = new UserResult(user);
+                            Response response = new Response(false, 0, result);
+                            sendResponse(response);
+                            loggingService.log("User " + param.getUsername() + " Successfully logged in");
+                            signedInRun();
+                            return;
+                        } catch (IllegalArgumentException e) {
+                            e.printStackTrace();
+                            Result result = new UserResult(user);
+                            Response response = new Response(true, 1, result);
+                            sendResponse(response);
+                            loggingService.log("ERROR: COULD NOT SIGN IN USER " + param.getUsername());
+                        }
+                    }
+                    case "Quit" -> {
+                        Result result = new EmptyResult();
                         Response response = new Response(false, 0, result);
                         sendResponse(response);
-                        loggingService.log("User " + param.getUsername() + " Successfully registered");
-                        signedInRun();
+                        loggingService.log(Thread.currentThread().getName() + " Quit");
                         return;
                     }
-                } else if (req.getMethod().equals("SignIn")) {
-                    SignInParameter param = (SignInParameter) req.getParameterValues();
-                    boolean res = AuthenticatorServiceImpl.getInstance().fromUsername(param.getUsername()).isPasswordCorrect(param.getPassword());//signIn(param.getUsername(), param.getPassword());
-                    if (!res) {
-                        Result result = new UserResult(user);
-                        Response response = new Response(true, 1, result);
-                        sendResponse(response);
-                        loggingService.log("ERROR: COULD NOT SIGN IN USER " + param.getUsername());
-                    } else {
-                        signIn(param.getUsername(), param.getPassword());
-                        Result result = new UserResult(user);
-                        Response response = new Response(false, 0, result);
-                        sendResponse(response);
-                        loggingService.log("User" + param.getUsername() + " Successfully logged in");
-                        signedInRun();
-                        return;
-                    }
-                } else if (req.getMethod().equals("Quit")) {
-                    Result result = new EmptyResult();
-                    Response response = new Response(false, 0, result);
-                    sendResponse(response);
-                    loggingService.log(Thread.currentThread().getName() + " Quit");
-                    return;
                 }
 
             }
@@ -118,109 +123,188 @@ public class Session implements Runnable {
                     continue;
                 readString = new String(buffer, 0, read);
                 Request req = MapperSingleton.getObjectMapper().readValue(readString, Request.class);
-                if (req.getMethod().equals("Quit")) {
-                    Result result = new EmptyResult();
-                    Response response = new Response(false, 0, result);
-                    sendResponse(response);
-                    loggingService.log(Thread.currentThread().getName() + " Quit");
-                    return;
-                } else if (req.getMethod().equals("SendTweet")) {
-                    SendTweetParameter param = (SendTweetParameter) req.getParameterValues();
-                    int parentID = param.getParentId();
-                    Tree<Tweet> tweetTree = tweetingService.addTweet(param.getContent(), param.getParentId());
-                    Tree<Tweet> topTree = tweetTree;
-                    while (topTree.getParent() != null) {
-                        topTree = topTree.getParent();
+                switch (req.getMethod()) {
+                    case "Quit" -> {
+                        Result result = new EmptyResult();
+                        Response response = new Response(false, 0, result);
+                        sendResponse(response);
+                        loggingService.log(Thread.currentThread().getName() + " Quit");
+                        return;
                     }
-                    Result result = new TweetResult(topTree);
-                    Response response = new Response(false, 0, result);
-                    sendResponse(response);
-                    loggingService.log("User" + user.getUsername() + " sent tweet. ID: " + tweetTree.getData().getTweetId());
-                } else if (req.getMethod().equals("LikeTweet")) {
-                    LikeTweetParameter param = (LikeTweetParameter) req.getParameterValues();
-                    Tree<Tweet> tweetTree = tweetingService.likeTweet(param.getTweetId());
-                    Tree<Tweet> topTree = tweetTree;
-                    while (topTree.getParent() != null) {
-                        topTree = topTree.getParent();
+                    case "SendTweet" -> {
+                        SendTweetParameter param = (SendTweetParameter) req.getParameterValues();
+                        try {
+                            int parentID = param.getParentId();
+                            Tree<Tweet> tweetTree = tweetingService.addTweet(param.getContent(), param.getParentId());
+                            Tree<Tweet> topTree = tweetTree;
+                            while (topTree.getParent() != null) {
+                                topTree = topTree.getParent();
+                            }
+                            Result result = new TweetResult(topTree);
+                            Response response = new Response(false, 0, result);
+                            sendResponse(response);
+                            loggingService.log("User " + user.getUsername() + " sent tweet. ID: " + tweetTree.getData().getTweetId());
+                        } catch (IOException e) {
+                            Result result = new UserResult(user);
+                            Response response = new Response(true, 1, result);
+                            sendResponse(response);
+                            loggingService.log("ERROR: User " + user.getUsername() + " could not tweet. " + e.getLocalizedMessage());
+                            e.printStackTrace();
+                        }
                     }
-                    Result result = new TweetResult(topTree);
-                    Response response = new Response(false, 0, result);
-                    sendResponse(response);
-                    loggingService.log("User" + user.getUsername() + " liked tweet. ID: " + tweetTree.getData().getTweetId());
-                } else if (req.getMethod().equals("DislikeTweet")) {
-                    LikeTweetParameter param = (LikeTweetParameter) req.getParameterValues();
-                    Tree<Tweet> tweetTree = tweetingService.dislikeTweet(param.getTweetId());
-                    Tree<Tweet> topTree = tweetTree;
-                    while (topTree.getParent() != null) {
-                        topTree = topTree.getParent();
+                    case "LikeTweet" -> {
+                        LikeTweetParameter param = (LikeTweetParameter) req.getParameterValues();
+                        try {
+                            Tree<Tweet> tweetTree = tweetingService.likeTweet(param.getTweetId());
+                            Tree<Tweet> topTree = tweetTree;
+                            while (topTree.getParent() != null) {
+                                topTree = topTree.getParent();
+                            }
+                            Result result = new TweetResult(topTree);
+                            Response response = new Response(false, 0, result);
+                            sendResponse(response);
+                            loggingService.log("User " + user.getUsername() + " liked tweet. ID: " + tweetTree.getData().getTweetId());
+                        } catch (IOException e) {
+                            Result result = new UserResult(user);
+                            Response response = new Response(true, 1, result);
+                            sendResponse(response);
+                            loggingService.log("ERROR: User " + user.getUsername() + " could not like tweet ID = " + param.getTweetId() + ". " + e.getLocalizedMessage());
+                            e.printStackTrace();
+                        }
                     }
-                    Result result = new TweetResult(topTree);
-                    Response response = new Response(false, 0, result);
-                    sendResponse(response);
-                    loggingService.log("User" + user.getUsername() + " unliked tweet. ID: " + tweetTree.getData().getTweetId());
-                } else if (req.getMethod().equals("RetweetTweet")) {
-                    LikeTweetParameter param = (LikeTweetParameter) req.getParameterValues();
-                    Tree<Tweet> tweetTree = tweetingService.retweetTweet(param.getTweetId());
-                    Tree<Tweet> topTree = tweetTree;
-                    while (topTree.getParent() != null) {
-                        topTree = topTree.getParent();
+                    case "DislikeTweet" -> {
+                        LikeTweetParameter param = (LikeTweetParameter) req.getParameterValues();
+                        try {
+                            Tree<Tweet> tweetTree = tweetingService.dislikeTweet(param.getTweetId());
+                            Tree<Tweet> topTree = tweetTree;
+                            while (topTree.getParent() != null) {
+                                topTree = topTree.getParent();
+                            }
+                            Result result = new TweetResult(topTree);
+                            Response response = new Response(false, 0, result);
+                            sendResponse(response);
+                            loggingService.log("User " + user.getUsername() + " unliked tweet. ID: " + tweetTree.getData().getTweetId());
+                        } catch (IOException e) {
+                            Result result = new UserResult(user);
+                            Response response = new Response(true, 1, result);
+                            sendResponse(response);
+                            loggingService.log("ERROR: User " + user.getUsername() + " could not dislike tweet ID = " + param.getTweetId() + ". " + e.getLocalizedMessage());
+                            e.printStackTrace();
+                        }
                     }
-                    Result result = new TweetResult(topTree);
-                    Response response = new Response(false, 0, result);
-                    sendResponse(response);
-                    loggingService.log("User" + user.getUsername() + " retweeted tweet. ID: " + tweetTree.getData().getTweetId());
-                } else if (req.getMethod().equals("UnretweetTweet")) {
-                    LikeTweetParameter param = (LikeTweetParameter) req.getParameterValues();
-                    Tree<Tweet> tweetTree = tweetingService.unretweetTweet(param.getTweetId());
-                    Tree<Tweet> topTree = tweetTree;
-                    while (topTree.getParent() != null) {
-                        topTree = topTree.getParent();
+                    case "RetweetTweet" -> {
+                        LikeTweetParameter param = (LikeTweetParameter) req.getParameterValues();
+                        try {
+                            Tree<Tweet> tweetTree = tweetingService.retweetTweet(param.getTweetId());
+                            Tree<Tweet> topTree = tweetTree;
+                            while (topTree.getParent() != null) {
+                                topTree = topTree.getParent();
+                            }
+                            Result result = new TweetResult(topTree);
+                            Response response = new Response(false, 0, result);
+                            sendResponse(response);
+                            loggingService.log("User " + user.getUsername() + " retweeted tweet. ID: " + tweetTree.getData().getTweetId());
+                        } catch (IOException e) {
+                            Result result = new UserResult(user);
+                            Response response = new Response(true, 1, result);
+                            sendResponse(response);
+                            loggingService.log("ERROR: User " + user.getUsername() + " could not retweet tweet ID = " + param.getTweetId() + ". " + e.getLocalizedMessage());
+                            e.printStackTrace();
+                        }
                     }
-                    Result result = new TweetResult(topTree);
-                    Response response = new Response(false, 0, result);
-                    sendResponse(response);
-                    loggingService.log("User" + user.getUsername() + " unretweeted tweet. ID: " + tweetTree.getData().getTweetId());
-                } else if (req.getMethod().equals("GetProfile")) {
-                    GetProfileParameter param = (GetProfileParameter) req.getParameterValues();
-                    ArrayList<Tree<Tweet>> tweets = ObserverServiceImpl.getInstance().getUserTweets(param.getUsername());
-                    Result result = new GetProfileResult(AuthenticatorServiceImpl.getInstance().fromUsername(param.getUsername()), tweets);
-                    Response response = new Response(false, 0, result);
-                    sendResponse(response);
-                    loggingService.log("User" + user.getUsername() + " requested " + param.getUsername() + "'s profile");
-                } else if (req.getMethod().equals("GetTimeline")) {
-                    ArrayList<Tree<Tweet>> tweets = timelineService.getTimeline();
-                    Result result = new GetTimelineResult(tweets);
-                    Response response = new Response(false, 0, result);
-                    sendResponse(response);
-                    loggingService.log("User" + user.getUsername() + " requested timeline");
-                } else if (req.getMethod().equals("Follow")) {
-                    GetProfileParameter param = (GetProfileParameter) req.getParameterValues();
-                    User user1 = AuthenticatorServiceImpl.getInstance().fromUsername(param.getUsername());
-                    User user2 = user;
-                    ObserverServiceImpl.getInstance().follow(user1, user2);
-                    Result result = new UserResult(user);
-                    Response response = new Response(false, 0, result);
-                    sendResponse(response);
-                    loggingService.log("User" + user.getUsername() + " followed " + user1.getUsername());
-                } else if (req.getMethod().equals("Unfollow")) {
-                    GetProfileParameter param = (GetProfileParameter) req.getParameterValues();
-                    User user1 = AuthenticatorServiceImpl.getInstance().fromUsername(param.getUsername());
-                    User user2 = user;
-                    ObserverServiceImpl.getInstance().unfollow(user1, user2);
-                    Result result = new UserResult(user);
-                    Response response = new Response(false, 0, result);
-                    sendResponse(response);
-                    loggingService.log("User" + user.getUsername() + " unfollowed " + user1.getUsername());
-                } else if (req.getMethod().equals("GetFollowers")) {
-                    Result result = new UserlistResult(user.getFollowers());
-                    Response response = new Response(false, 0, result);
-                    sendResponse(response);
-                    loggingService.log("User" + user.getUsername() + " requested their followers");
-                } else if (req.getMethod().equals("GetFollowings")) {
-                    Result result = new UserlistResult(user.getFollowings());
-                    Response response = new Response(false, 0, result);
-                    sendResponse(response);
-                    loggingService.log("User" + user.getUsername() + " requested their followings");
+                    case "UnretweetTweet" -> {
+                        LikeTweetParameter param = (LikeTweetParameter) req.getParameterValues();
+                        try {
+                            Tree<Tweet> tweetTree = tweetingService.unretweetTweet(param.getTweetId());
+                            Tree<Tweet> topTree = tweetTree;
+                            while (topTree.getParent() != null) {
+                                topTree = topTree.getParent();
+                            }
+                            Result result = new TweetResult(topTree);
+                            Response response = new Response(false, 0, result);
+                            sendResponse(response);
+                            loggingService.log("User " + user.getUsername() + " unretweeted tweet. ID: " + tweetTree.getData().getTweetId());
+                        } catch (IOException e) {
+                            Result result = new UserResult(user);
+                            Response response = new Response(true, 1, result);
+                            sendResponse(response);
+                            loggingService.log("ERROR: User " + user.getUsername() + " could not unretweet tweet ID = " + param.getTweetId() + ". " + e.getLocalizedMessage());
+                            e.printStackTrace();
+                        }
+                    }
+                    case "GetProfile" -> {
+                        GetProfileParameter param = (GetProfileParameter) req.getParameterValues();
+                        try {
+
+                            ArrayList<Tree<Tweet>> tweets = ObserverServiceImpl.getInstance().getUserTweets(param.getUsername());
+                            Result result = new GetProfileResult(AuthenticatorServiceImpl.getInstance().fromUsername(param.getUsername()), tweets);
+                            Response response = new Response(false, 0, result);
+                            sendResponse(response);
+                            loggingService.log("User " + user.getUsername() + " requested " + param.getUsername() + "'s profile");
+                        } catch (IllegalArgumentException e) {
+                            Result result = new UserResult(user);
+                            Response response = new Response(true, 1, result);
+                            sendResponse(response);
+                            loggingService.log("ERROR: User " + user.getUsername() + " could not get profile username = " + param.getUsername() + ". " + e.getLocalizedMessage());
+                            e.printStackTrace();
+                        }
+                    }
+                    case "GetTimeline" -> {
+                        ArrayList<Tree<Tweet>> tweets = timelineService.getTimeline();
+                        Result result = new GetTimelineResult(tweets);
+                        Response response = new Response(false, 0, result);
+                        sendResponse(response);
+                        loggingService.log("User " + user.getUsername() + " requested timeline");
+                    }
+                    case "Follow" -> {
+                        GetProfileParameter param = (GetProfileParameter) req.getParameterValues();
+                        try {
+
+                            User user1 = AuthenticatorServiceImpl.getInstance().fromUsername(param.getUsername());
+                            User user2 = user;
+                            ObserverServiceImpl.getInstance().follow(user1, user2);
+                            Result result = new UserResult(user);
+                            Response response = new Response(false, 0, result);
+                            sendResponse(response);
+                            loggingService.log("User " + user.getUsername() + " followed " + user1.getUsername());
+                        } catch (IllegalArgumentException e) {
+                            Result result = new UserResult(user);
+                            Response response = new Response(true, 1, result);
+                            sendResponse(response);
+                            loggingService.log("ERROR: User " + user.getUsername() + " could not follow username = " + param.getUsername() + ". " + e.getLocalizedMessage());
+                            e.printStackTrace();
+                        }
+                    }
+                    case "Unfollow" -> {
+                        GetProfileParameter param = (GetProfileParameter) req.getParameterValues();
+                        try {
+                            User user1 = AuthenticatorServiceImpl.getInstance().fromUsername(param.getUsername());
+                            User user2 = user;
+                            ObserverServiceImpl.getInstance().unfollow(user1, user2);
+                            Result result = new UserResult(user);
+                            Response response = new Response(false, 0, result);
+                            sendResponse(response);
+                            loggingService.log("User " + user.getUsername() + " unfollowed " + user1.getUsername());
+                        } catch (IllegalArgumentException e) {
+                            Result result = new UserResult(user);
+                            Response response = new Response(true, 1, result);
+                            sendResponse(response);
+                            loggingService.log("ERROR: User " + user.getUsername() + " could not unfollow username = " + param.getUsername() + ". " + e.getLocalizedMessage());
+                            e.printStackTrace();
+                        }
+                    }
+                    case "GetFollowers" -> {
+                        Result result = new UserlistResult(user.getFollowers());
+                        Response response = new Response(false, 0, result);
+                        sendResponse(response);
+                        loggingService.log("User " + user.getUsername() + " requested their followers");
+                    }
+                    case "GetFollowings" -> {
+                        Result result = new UserlistResult(user.getFollowings());
+                        Response response = new Response(false, 0, result);
+                        sendResponse(response);
+                        loggingService.log("User " + user.getUsername() + " requested their followings");
+                    }
                 }
             }
         } catch (IOException e) {

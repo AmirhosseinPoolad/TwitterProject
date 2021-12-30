@@ -83,12 +83,15 @@ public class ObserverServiceImpl extends Observer implements ObserverService {
      * @return arraylist containing top level tweets from user
      */
     @Override
-    public ArrayList<Tree<Tweet>> getUserTweets(User user) {
-        return followersMap.get(user.getUsername().toLowerCase());
+    public ArrayList<Tree<Tweet>> getUserTweets(User user) throws IllegalArgumentException {
+        return getUserTweets(user.getUsername());
     }
 
     @Override
-    public ArrayList<Tree<Tweet>> getUserTweets(String username) {
+    public ArrayList<Tree<Tweet>> getUserTweets(String username) throws IllegalArgumentException {
+        if (!followersMap.containsKey(username.toLowerCase())) {
+            throw new IllegalArgumentException("Username doesn't exist");
+        }
         return followersMap.get(username.toLowerCase());
     }
 }

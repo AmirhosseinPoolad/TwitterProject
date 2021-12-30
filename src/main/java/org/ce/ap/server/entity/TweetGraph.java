@@ -58,7 +58,7 @@ public class TweetGraph {
      * @param tweetId tweetId to search for
      * @return subtree that has tweet as head
      */
-    public synchronized Tree<Tweet> getTweet(int tweetId) {
+    public synchronized Tree<Tweet> getTweet(int tweetId) throws IllegalArgumentException {
         for (Tree<Tweet> treeHead : tweetTree) {
             TreeIterator<Tweet> it = new TreeIterator<>(treeHead);
             while (it.hasNext()) {
@@ -68,7 +68,7 @@ public class TweetGraph {
                 }
             }
         }
-        return null;
+        throw new IllegalArgumentException("tweet id doesn't exist");
     }
 
     public ArrayList<Tree<Tweet>> getTweetTree() {

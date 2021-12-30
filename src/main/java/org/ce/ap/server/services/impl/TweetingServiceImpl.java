@@ -28,7 +28,9 @@ public class TweetingServiceImpl implements TweetingService {
      * @param content content of the tweet to be added
      * @param parent  set this to the parent tweet if it's a reply, null if it's not a reply
      */
-    public Tree<Tweet> addTweet(String content, Tree<Tweet> parent) {
+    public Tree<Tweet> addTweet(String content, Tree<Tweet> parent) throws IllegalArgumentException {
+        if (content == null || content.equals(""))
+            throw new IllegalArgumentException("Content empty");
         Tweet tweet = new Tweet(user.getUsername(), content, TweetGraph.getInstance().getTweetCount());
         Tree<Tweet> newTree = TweetGraph.getInstance().addTweet(tweet, parent);
         observerService.update(newTree);
@@ -36,7 +38,7 @@ public class TweetingServiceImpl implements TweetingService {
     }
 
     @Override
-    public Tree<Tweet> addTweet(String content, int parentId) {
+    public Tree<Tweet> addTweet(String content, int parentId) throws IllegalArgumentException {
         if(parentId == -1){
             return addTweet(content, null);
         }
@@ -54,7 +56,7 @@ public class TweetingServiceImpl implements TweetingService {
     }
 
     @Override
-    public Tree<Tweet> likeTweet(int tweetId) {
+    public Tree<Tweet> likeTweet(int tweetId) throws IllegalArgumentException {
         TweetGraph.getInstance().getTweet(tweetId).getData().addLike(user.getUsername());
         return TweetGraph.getInstance().getTweet(tweetId);
     }
@@ -70,7 +72,7 @@ public class TweetingServiceImpl implements TweetingService {
     }
 
     @Override
-    public Tree<Tweet> dislikeTweet(int tweetId) {
+    public Tree<Tweet> dislikeTweet(int tweetId) throws IllegalArgumentException  {
         TweetGraph.getInstance().getTweet(tweetId).getData().removeLike(user.getUsername());
         return TweetGraph.getInstance().getTweet(tweetId);
     }
@@ -86,7 +88,7 @@ public class TweetingServiceImpl implements TweetingService {
     }
 
     @Override
-    public Tree<Tweet> retweetTweet(int tweetId) {
+    public Tree<Tweet> retweetTweet(int tweetId) throws IllegalArgumentException {
         TweetGraph.getInstance().getTweet(tweetId).getData().addRetweet(user.getUsername());
         return TweetGraph.getInstance().getTweet(tweetId);
     }
@@ -102,7 +104,7 @@ public class TweetingServiceImpl implements TweetingService {
     }
 
     @Override
-    public Tree<Tweet> unretweetTweet(int tweetId) {
+    public Tree<Tweet> unretweetTweet(int tweetId) throws IllegalArgumentException {
         TweetGraph.getInstance().getTweet(tweetId).getData().removeRetweet(user.getUsername());
         return TweetGraph.getInstance().getTweet(tweetId);
     }

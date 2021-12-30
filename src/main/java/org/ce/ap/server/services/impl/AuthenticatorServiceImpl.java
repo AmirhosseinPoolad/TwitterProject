@@ -69,22 +69,17 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
      */
     @Override
     public User signUp(String username, String plaintextPassword, String firstName,
-                       String lastName, String biography, LocalDate birthdayDate) {
+                       String lastName, String biography, LocalDate birthdayDate) throws IllegalArgumentException {
         //only make a new user if it doesn't already exist
         if (!usersMap.containsKey(username.toLowerCase())) {
             User user = null;
-            try {
-                user = new User(username, plaintextPassword, firstName, lastName, biography, birthdayDate);
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-                return null;
-            }
+            user = new User(username, plaintextPassword, firstName, lastName, biography, birthdayDate);
             ObserverServiceImpl.getInstance().follow(user, user);
             usersMap.put(username.toLowerCase(), user);
             save();
             return user;
         }
-        return null;
+        throw new IllegalArgumentException("User Already Exists");
     }
 
     /**
@@ -109,7 +104,10 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
     }
 
     @Override
-    public User fromUsername(String username) {
+    public User fromUsername(String username) throws IllegalArgumentException {
+        User res = usersMap.get(username.toLowerCase());
+        if (res == null)
+            throw new IllegalArgumentException("User does not exist");
         return usersMap.get(username.toLowerCase());
     }
 

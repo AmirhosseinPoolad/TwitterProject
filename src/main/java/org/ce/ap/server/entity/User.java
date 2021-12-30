@@ -31,15 +31,35 @@ public class User {
      * @throws IllegalArgumentException if biography is bigger than 256 characters
      */
     public User(String username, String plaintextPassword, String firstName, String lastName, String biography, LocalDate birthdayDate) throws IllegalArgumentException {
+
+        if (username == null || username.equals(""))
+            throw new IllegalArgumentException("Empty username");
         this.username = username;
+
+        if (plaintextPassword == null || plaintextPassword.equals(""))
+            throw new IllegalArgumentException("Empty password");
         this.passwordHash = ServerUtil.byteToString(ServerUtil.getSHA(plaintextPassword));
+
+        if (biography == null || biography.equals(""))
+            throw new IllegalArgumentException("Empty biography");
         if (biography.length() > 256)
             throw new IllegalArgumentException("Biography is longer than 256 characters");
         this.biography = biography;
+
+        if (firstName == null || firstName.equals(""))
+            throw new IllegalArgumentException("Empty first name");
         this.firstName = firstName;
+
+        if (lastName == null || lastName.equals(""))
+            throw new IllegalArgumentException("Empty last name");
         this.lastName = lastName;
+
         this.signUpDate = LocalDate.now(ZoneOffset.UTC);
+
+        if (birthdayDate == null)
+            throw new IllegalArgumentException("Empty birthday date");
         this.birthdayDate = birthdayDate;
+
         this.followings = new HashSet<>();
         this.followers = new HashSet<>();
     }
