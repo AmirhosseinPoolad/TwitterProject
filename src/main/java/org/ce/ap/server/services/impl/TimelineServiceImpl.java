@@ -36,12 +36,12 @@ public class TimelineServiceImpl implements TimelineService {
      */
     @Override
     public ArrayList<Tree<Tweet>> getTimeline() {
-
-        for (int i = searchedIndex; i < TweetGraph.getInstance().getTweetTree().size(); i++) {
+        timeline = new ArrayList<>();
+        for (int i = 0; i < TweetGraph.getInstance().getTweetTree().size(); i++) {
             if (user.isFollowing(TweetGraph.getInstance().getTweetTree().get(i).getData().getPoster())) {
                 timeline.add(TweetGraph.getInstance().getTweetTree().get(i));
             }
-            searchedIndex++;
+            //searchedIndex++;
         }
         return timeline;
     }

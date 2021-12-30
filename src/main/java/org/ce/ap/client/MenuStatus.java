@@ -13,5 +13,8 @@ public enum MenuStatus {
     LIST_FOLLOWERS,
     LIST_FOLLOWINGS,
     VIEW_PROFILE,
+    FOLLOW,
+    UNFOLLOW,
+    REFRESH,
     LOGOFF
 }

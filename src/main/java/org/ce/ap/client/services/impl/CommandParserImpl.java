@@ -9,10 +9,7 @@ import main.java.org.ce.ap.server.jsonHandling.Parameter;
 import main.java.org.ce.ap.server.jsonHandling.Request;
 import main.java.org.ce.ap.server.jsonHandling.Response;
 import main.java.org.ce.ap.server.jsonHandling.impl.parameter.*;
-import main.java.org.ce.ap.server.jsonHandling.impl.result.GetProfileResult;
-import main.java.org.ce.ap.server.jsonHandling.impl.result.GetTimelineResult;
-import main.java.org.ce.ap.server.jsonHandling.impl.result.TweetResult;
-import main.java.org.ce.ap.server.jsonHandling.impl.result.UserlistResult;
+import main.java.org.ce.ap.server.jsonHandling.impl.result.*;
 import main.java.org.ce.ap.server.util.Tree;
 
 import java.io.InputStream;
@@ -34,7 +31,6 @@ public class CommandParserImpl implements CommandParser {
         sc = new Scanner(System.in);
         connectionService = new ConnectionServiceImpl(out, in);
         consoleViewService = new ConsoleViewServiceImpl();
-        //TODO: construct consoleviewerservice
     }
 
     public MenuStatus getMenuStatus() {
@@ -100,31 +96,20 @@ public class CommandParserImpl implements CommandParser {
                 System.out.flush();
                 consoleViewService.showTweetTree(tweetTree);
                 System.out.println("1 to send new tweet, 2 to like tweet, 3 to dislike tweet, 4 to retweet," +
-                        " 5 to unretweet, 6 to view profile, 7 to log off");
+                        " 5 to unretweet, 6 to view profile, 7 to follow, 8 to unfollow, 9 to refresh, 10 to log off");
                 int input = sc.nextInt();
                 sc.nextLine(); //to eat the newline in the input buffer
                 switch (input) {
-                    case 1:
-                        menuStatus = MenuStatus.SEND_TWEET;
-                        break;
-                    case 2:
-                        menuStatus = MenuStatus.LIKE;
-                        break;
-                    case 3:
-                        menuStatus = MenuStatus.DISLIKE;
-                        break;
-                    case 4:
-                        menuStatus = MenuStatus.RETWEET;
-                        break;
-                    case 5:
-                        menuStatus = MenuStatus.UNRETWEET;
-                        break;
-                    case 6:
-                        menuStatus = MenuStatus.VIEW_PROFILE;
-                        break;
-                    case 7:
-                        menuStatus = MenuStatus.LOGOFF;
-                        break;
+                    case 1 -> menuStatus = MenuStatus.SEND_TWEET;
+                    case 2 -> menuStatus = MenuStatus.LIKE;
+                    case 3 -> menuStatus = MenuStatus.DISLIKE;
+                    case 4 -> menuStatus = MenuStatus.RETWEET;
+                    case 5 -> menuStatus = MenuStatus.UNRETWEET;
+                    case 6 -> menuStatus = MenuStatus.VIEW_PROFILE;
+                    case 7 -> menuStatus = MenuStatus.FOLLOW;
+                    case 8 -> menuStatus = MenuStatus.UNFOLLOW;
+                    case 9 -> menuStatus = MenuStatus.REFRESH;
+                    case 10 -> menuStatus = MenuStatus.LOGOFF;
                 }
                 break;
 
@@ -289,6 +274,39 @@ public class CommandParserImpl implements CommandParser {
                 consoleViewService.showUserList(res.getUsers());
                 System.out.println("Press enter to go back to timeline");
                 sc.nextLine();
+                menuStatus = MenuStatus.TIMELINE;
+                break;
+            }
+            case FOLLOW: {
+                System.out.println("Enter username to follow");
+                String username = sc.nextLine();
+                Parameter param = new GetProfileParameter(username);
+                Request req = new Request("Follow", "Follows specified user", param);
+                Response serverResponse = connectionService.sendToServer(req);
+                //TODO: Server side error handling
+                if (serverResponse.getErrorCode() != 0) {
+                    System.out.println("Error: Could not follow user");
+                }
+                getTimeline();
+                menuStatus = MenuStatus.TIMELINE;
+                break;
+            }
+            case UNFOLLOW: {
+                System.out.println("Enter username to unfollow");
+                String username = sc.nextLine();
+                Parameter param = new GetProfileParameter(username);
+                Request req = new Request("Unfollow", "Unfollows specified user", param);
+                Response serverResponse = connectionService.sendToServer(req);
+                //TODO: Server side error handling
+                if (serverResponse.getErrorCode() != 0) {
+                    System.out.println("Error: Could not unfollow user");
+                }
+                getTimeline();
+                menuStatus = MenuStatus.TIMELINE;
+                break;
+            }
+            case REFRESH: {
+                getTimeline();
                 menuStatus = MenuStatus.TIMELINE;
                 break;
             }

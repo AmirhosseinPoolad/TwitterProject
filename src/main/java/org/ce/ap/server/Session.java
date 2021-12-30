@@ -139,7 +139,7 @@ public class Session implements Runnable {
                 } else if (req.getMethod().equals("LikeTweet")) {
                     LikeTweetParameter param = (LikeTweetParameter) req.getParameterValues();
                     Tree<Tweet> tweetTree = tweetingService.likeTweet(param.getTweetId());
-                    Tree<Tweet> topTree = tweetTree.getParent();
+                    Tree<Tweet> topTree = tweetTree;
                     while (topTree.getParent() != null) {
                         topTree = topTree.getParent();
                     }
@@ -150,7 +150,7 @@ public class Session implements Runnable {
                 } else if (req.getMethod().equals("DislikeTweet")) {
                     LikeTweetParameter param = (LikeTweetParameter) req.getParameterValues();
                     Tree<Tweet> tweetTree = tweetingService.dislikeTweet(param.getTweetId());
-                    Tree<Tweet> topTree = tweetTree.getParent();
+                    Tree<Tweet> topTree = tweetTree;
                     while (topTree.getParent() != null) {
                         topTree = topTree.getParent();
                     }
@@ -161,7 +161,7 @@ public class Session implements Runnable {
                 } else if (req.getMethod().equals("RetweetTweet")) {
                     LikeTweetParameter param = (LikeTweetParameter) req.getParameterValues();
                     Tree<Tweet> tweetTree = tweetingService.retweetTweet(param.getTweetId());
-                    Tree<Tweet> topTree = tweetTree.getParent();
+                    Tree<Tweet> topTree = tweetTree;
                     while (topTree.getParent() != null) {
                         topTree = topTree.getParent();
                     }
@@ -172,7 +172,7 @@ public class Session implements Runnable {
                 } else if (req.getMethod().equals("UnretweetTweet")) {
                     LikeTweetParameter param = (LikeTweetParameter) req.getParameterValues();
                     Tree<Tweet> tweetTree = tweetingService.unretweetTweet(param.getTweetId());
-                    Tree<Tweet> topTree = tweetTree.getParent();
+                    Tree<Tweet> topTree = tweetTree;
                     while (topTree.getParent() != null) {
                         topTree = topTree.getParent();
                     }

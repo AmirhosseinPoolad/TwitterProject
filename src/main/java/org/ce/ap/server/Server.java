@@ -18,7 +18,6 @@ import java.util.concurrent.Executors;
 
 public class Server {
     public static void main(String[] args) {
-        //TODO: Follow/Unfollow functionality
         //TODO: Error Handling
         //TODO: What's the server's IP?
         //TODO: Last thing you do (after phase four, even): Duplicate server classes in client package
