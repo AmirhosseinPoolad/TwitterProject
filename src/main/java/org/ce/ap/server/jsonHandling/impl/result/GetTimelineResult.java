@@ -7,6 +7,9 @@ import main.java.org.ce.ap.server.util.Tree;
 
 import java.util.ArrayList;
 
+/**
+ * results containing a list of tweets
+ */
 public class GetTimelineResult extends Result {
     private ArrayList<Tree<Tweet>> timeline;
 

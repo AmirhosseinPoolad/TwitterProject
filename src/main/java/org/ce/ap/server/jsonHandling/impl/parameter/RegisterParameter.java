@@ -5,6 +5,9 @@ import main.java.org.ce.ap.server.jsonHandling.Parameter;
 
 import java.time.LocalDate;
 
+/**
+ * request parameter containing registration info
+ */
 public class RegisterParameter extends Parameter {
     @JsonProperty
     String username;

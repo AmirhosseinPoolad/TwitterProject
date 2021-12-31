@@ -23,6 +23,7 @@ public class Tweet{
     //date of post. in UTC.
     @JsonProperty
     private LocalDateTime postTime;
+    //unique id of tweet
     @JsonProperty
     private int tweetId;
 
@@ -41,15 +42,7 @@ public class Tweet{
         this.postTime = LocalDateTime.now(ZoneOffset.UTC);
     }
 
-    private Tweet(String poster, ArrayList<String> likedUsers, ArrayList<String> retweetedUsers, String content, LocalDateTime postTime, int tweetId) {
-        this.poster = poster;
-        this.likedUsers = likedUsers;
-        this.retweetedUsers = retweetedUsers;
-        this.content = content;
-        this.postTime = postTime;
-        this.tweetId = tweetId;
-    }
-
+    //used for json handling
     public Tweet() {
 
     }

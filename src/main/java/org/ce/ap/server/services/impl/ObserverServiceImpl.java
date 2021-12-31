@@ -87,6 +87,12 @@ public class ObserverServiceImpl extends Observer implements ObserverService {
         return getUserTweets(user.getUsername());
     }
 
+    /**
+     * Gets all tweets from users and returns them in an ArrayList
+     *
+     * @param username User to get tweets of
+     * @return All tweets from user
+     */
     @Override
     public ArrayList<Tree<Tweet>> getUserTweets(String username) throws IllegalArgumentException {
         if (!followersMap.containsKey(username.toLowerCase())) {

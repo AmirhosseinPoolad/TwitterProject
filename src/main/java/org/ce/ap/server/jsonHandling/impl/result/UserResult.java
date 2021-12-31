@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import main.java.org.ce.ap.server.entity.User;
 import main.java.org.ce.ap.server.jsonHandling.Result;
 
+/**
+ * results containing a user
+ */
 public class UserResult extends Result {
     private User user;
 

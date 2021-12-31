@@ -18,6 +18,7 @@ public class TweetGraph {
     //list of top level tweets
     public ArrayList<Tree<Tweet>> tweetTree;
 
+    //count of tweets currently in graph. used for determining tweet ID
     private int tweetCount;
 
     public static synchronized TweetGraph getInstance() {
@@ -144,6 +145,10 @@ public class TweetGraph {
         return tweetCount;
     }
 
+    /**
+     * private function used to count tweets (in the constructor)
+     * @return number of tweets currently in graph
+     */
     private int countTweets() {
         int count = 0;
         for (Tree<Tweet> treeHead : tweetTree) {

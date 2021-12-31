@@ -48,6 +48,10 @@ public class TreeIterator<T> implements Iterator<T> {
         return depthStack.peek();
     }
 
+    /**
+     * gets the next tree object in iterator
+     * @return next tree object
+     */
     public Tree<T> nextTree() {
         Tree<T> top = treeStack.pop();
         int lastDepth = depthStack.pop();

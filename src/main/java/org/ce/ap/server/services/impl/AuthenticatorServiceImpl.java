@@ -103,6 +103,13 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
         }
     }
 
+    /**
+     * gets User object from string username
+     *
+     * @param username username of User
+     * @return requested User
+     * @throws if user does not exist
+     */
     @Override
     public User fromUsername(String username) throws IllegalArgumentException {
         User res = usersMap.get(username.toLowerCase());

@@ -18,8 +18,6 @@ import java.util.concurrent.Executors;
 
 public class Server {
     public static void main(String[] args) {
-        //TODO: Error Handling
-        //TODO: What's the server's IP?
         //TODO: Last thing you do (after phase four, even): Duplicate server classes in client package
         AuthenticatorServiceImpl authenticatorService = AuthenticatorServiceImpl.getInstance();
         /*authenticatorService.signUp("Brrrr", "12345", "Amir",

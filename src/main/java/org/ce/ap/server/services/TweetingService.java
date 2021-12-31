@@ -12,6 +12,12 @@ public interface TweetingService {
      */
     public Tree<Tweet> addTweet(String content, Tree<Tweet> parent);
 
+    /**
+     * adds a new tweet to the tweet graph
+     *
+     * @param content content of the tweet to be added
+     * @param parentId  set this to the parent tweet ID if it's a reply, -1 if it's not a reply
+     */
     public Tree<Tweet> addTweet(String content, int parentId);
 
     /**
@@ -36,11 +42,10 @@ public interface TweetingService {
     public Tree<Tweet> dislikeTweet(Tweet tweet);
 
     /**
-     * retweets the tweet
+     * dislikes the tweet
      *
-     * @param tweetId tweet to be retweeted
+     * @param tweetId ID of the tweet to be retweeted
      */
-
     public Tree<Tweet> dislikeTweet(int tweetId);
 
     /**

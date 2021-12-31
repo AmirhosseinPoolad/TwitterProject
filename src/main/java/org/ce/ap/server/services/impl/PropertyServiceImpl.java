@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * singleton to hold and reuse properties
+ */
 public class PropertyServiceImpl implements PropertiesService {
 
     Properties properties;
@@ -29,6 +32,11 @@ public class PropertyServiceImpl implements PropertiesService {
         }
     }
 
+    /**
+     * gets property of key=name from properties file
+     * @param name key of property
+     * @return value of key
+     */
     @Override
     public String getProperty(String name) {
         return properties.getProperty(name);

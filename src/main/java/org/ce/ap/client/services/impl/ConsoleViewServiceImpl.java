@@ -13,6 +13,11 @@ import static java.time.format.DateTimeFormatter.ofLocalizedDateTime;
 
 public class ConsoleViewServiceImpl implements ConsoleViewService {
 
+    /**
+     * renders an arraylist of tweet trees
+     *
+     * @param tweetTree list of tweet trees to render
+     */
     @Override
     public void showTweetTree(ArrayList<Tree<Tweet>> tweetTree) {
         if (tweetTree == null)
@@ -46,6 +51,11 @@ public class ConsoleViewServiceImpl implements ConsoleViewService {
         }
     }
 
+    /**
+     * renders a list of users
+     *
+     * @param userList list of users
+     */
     @Override
     public void showUserList(ArrayList<String> userList) {
         if (userList == null)
@@ -55,13 +65,18 @@ public class ConsoleViewServiceImpl implements ConsoleViewService {
         }
     }
 
+    /**
+     * renders a user's information
+     *
+     * @param user requested user
+     */
     @Override
     public void showUserInfo(User user) {
         user.printInfo();
     }
 
     /**
-     * prints depth*4 spaces
+     * prints depth*4 dashes
      */
     private void printDepthWhiteSpace(int depth) {
         for (int i = 0; i < depth; i++)

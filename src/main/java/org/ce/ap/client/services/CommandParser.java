@@ -1,9 +1,9 @@
 package main.java.org.ce.ap.client.services;
 
-import main.java.org.ce.ap.server.jsonHandling.Request;
-
 public interface CommandParser {
+    /**
+     * handles input and controls the client
+     * @return 1 if we quit the program
+     */
     int handleInput();
-
-    Request parseString(String input);
 }

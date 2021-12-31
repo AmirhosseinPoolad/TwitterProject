@@ -5,6 +5,9 @@ import main.java.org.ce.ap.server.entity.Tweet;
 import main.java.org.ce.ap.server.jsonHandling.Result;
 import main.java.org.ce.ap.server.util.Tree;
 
+/**
+ * results containing a tweet
+ */
 public class TweetResult extends Result {
     private Tree<Tweet> topLevelTree;
 

@@ -5,6 +5,9 @@ import main.java.org.ce.ap.server.jsonHandling.Result;
 
 import java.util.ArrayList;
 
+/**
+ * results containing a list of users
+ */
 public class UserlistResult extends Result {
     ArrayList<String> users;
 

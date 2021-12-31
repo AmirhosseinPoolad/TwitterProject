@@ -18,13 +18,17 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-//TODO: Sanitize inputs
 public class CommandParserImpl implements CommandParser {
+    //console view service that handles rendering the timeline and profiles
     ConsoleViewService consoleViewService;
+    //connection service that handles connecting and i/o with server
     ConnectionService connectionService;
 
+    //status of menu state machine
     private MenuStatus menuStatus = MenuStatus.MAIN;
+    //scanner for user input
     private Scanner sc;
+    //current timeline, locally saved to do less i/o with server
     private ArrayList<Tree<Tweet>> tweetTree;
 
     public CommandParserImpl(OutputStream out, InputStream in) {
@@ -33,19 +37,20 @@ public class CommandParserImpl implements CommandParser {
         consoleViewService = new ConsoleViewServiceImpl();
     }
 
-    public MenuStatus getMenuStatus() {
-        return menuStatus;
-    }
-
+    /**
+     * handles input and controls the client
+     * @return 1 if we quit the program
+     */
     @Override
-    public int handleInput() throws IllegalArgumentException {
+    public int handleInput(){
         switch (menuStatus) {
             case MAIN: {
                 System.out.println("Enter 1 to Login, 2 to Register");
                 int input = sc.nextInt();
                 sc.nextLine(); //so that we discard the newline character
                 if (input != 1 && input != 2) {
-                    throw new IllegalArgumentException("Invalid Input");
+                    System.err.println("Invalid input. Try again.");
+                    break;
                 }
                 if (input == 2)
                     menuStatus = MenuStatus.REGISTER;
@@ -110,6 +115,7 @@ public class CommandParserImpl implements CommandParser {
                     case 8 -> menuStatus = MenuStatus.UNFOLLOW;
                     case 9 -> menuStatus = MenuStatus.REFRESH;
                     case 10 -> menuStatus = MenuStatus.LOGOFF;
+                    default -> menuStatus = MenuStatus.TIMELINE;
                 }
                 break;
 
@@ -124,7 +130,6 @@ public class CommandParserImpl implements CommandParser {
                 } catch (NumberFormatException e) {
                     ID = -1;
                 }
-                //TODO: ID doesn't exist error handling
                 Parameter param = new SendTweetParameter(tweetMsg, ID);
                 Request req = new Request("SendTweet", "Sends new tweet from logged in user", param);
                 Response serverResponse = connectionService.sendToServer(req);
@@ -139,7 +144,6 @@ public class CommandParserImpl implements CommandParser {
             }
             case LIKE: {
                 System.out.println("Write ID of tweet you want to like: ");
-                //TODO: ID doesn't exist error handling
                 String IDString = sc.nextLine();
                 int ID;
                 try {
@@ -157,14 +161,11 @@ public class CommandParserImpl implements CommandParser {
                 }
                 TweetResult res = (TweetResult) serverResponse.getResults();
                 tweetTree.set(tweetTree.indexOf(res.getTopLevelTree()), res.getTopLevelTree());
-                //TODO: Don't get all of the timeline again! use the server response to update timeline locally
-                //getTimeline();
                 menuStatus = MenuStatus.TIMELINE;
                 break;
             }
             case DISLIKE: {
                 System.out.println("Write ID of tweet you want to unlike: ");
-                //TODO: ID doesn't exist error handling
                 String IDString = sc.nextLine();
                 int ID;
                 try {
@@ -182,14 +183,11 @@ public class CommandParserImpl implements CommandParser {
                 }
                 TweetResult res = (TweetResult) serverResponse.getResults();
                 tweetTree.set(tweetTree.indexOf(res.getTopLevelTree()), res.getTopLevelTree());
-                //TODO: Don't get all of the timeline again! use the server response to update timeline locally
-                //getTimeline();
                 menuStatus = MenuStatus.TIMELINE;
                 break;
             }
             case RETWEET: {
                 System.out.println("Write ID of tweet you want to retweet: ");
-                //TODO: ID doesn't exist error handling
                 String IDString = sc.nextLine();
                 int ID;
                 try {
@@ -207,14 +205,12 @@ public class CommandParserImpl implements CommandParser {
                 }
                 TweetResult res = (TweetResult) serverResponse.getResults();
                 tweetTree.set(tweetTree.indexOf(res.getTopLevelTree()), res.getTopLevelTree());
-                //TODO: Don't get all of the timeline again! use the server response to update timeline locally
                 //getTimeline();
                 menuStatus = MenuStatus.TIMELINE;
                 break;
             }
             case UNRETWEET: {
                 System.out.println("Write ID of tweet you want to unretweet: ");
-                //TODO: ID doesn't exist error handling
                 String IDString = sc.nextLine();
                 int ID;
                 try {
@@ -232,15 +228,12 @@ public class CommandParserImpl implements CommandParser {
                 }
                 TweetResult res = (TweetResult) serverResponse.getResults();
                 tweetTree.set(tweetTree.indexOf(res.getTopLevelTree()), res.getTopLevelTree());
-                //TODO: Don't get all of the timeline again! use the server response to update timeline locally
-                //getTimeline();
                 menuStatus = MenuStatus.TIMELINE;
                 break;
             }
             case VIEW_PROFILE: {
                 System.out.println("Enter username of user you want to see");
                 String username = sc.nextLine();
-                //TODO: handle null or user doesn't exist error
                 Parameter param = new GetProfileParameter(username);
                 Request req = new Request("GetProfile", "Gets profile of specified user", param);
                 Response serverResponse = connectionService.sendToServer(req);
@@ -260,6 +253,11 @@ public class CommandParserImpl implements CommandParser {
             case LIST_FOLLOWERS: {
                 Request req = new Request("GetFollowers", "Gets followers of specified user", null);
                 Response serverResponse = connectionService.sendToServer(req);
+                if (serverResponse.getErrorCode() != 0) {
+                    System.err.println("Error, please try again");
+                    menuStatus = MenuStatus.TIMELINE;
+                    break;
+                }
                 UserlistResult res = (UserlistResult) serverResponse.getResults();
                 consoleViewService.showUserList(res.getUsers());
                 System.out.println("Press enter to go back to timeline");
@@ -270,6 +268,11 @@ public class CommandParserImpl implements CommandParser {
             case LIST_FOLLOWINGS: {
                 Request req = new Request("GetFollowings", "Gets followings of specified user", null);
                 Response serverResponse = connectionService.sendToServer(req);
+                if (serverResponse.getErrorCode() != 0) {
+                    System.err.println("Error, please try again");
+                    menuStatus = MenuStatus.TIMELINE;
+                    break;
+                }
                 UserlistResult res = (UserlistResult) serverResponse.getResults();
                 consoleViewService.showUserList(res.getUsers());
                 System.out.println("Press enter to go back to timeline");
@@ -283,7 +286,6 @@ public class CommandParserImpl implements CommandParser {
                 Parameter param = new GetProfileParameter(username);
                 Request req = new Request("Follow", "Follows specified user", param);
                 Response serverResponse = connectionService.sendToServer(req);
-                //TODO: Server side error handling
                 if (serverResponse.getErrorCode() != 0) {
                     System.out.println("Error: Could not follow user");
                 }
@@ -297,7 +299,6 @@ public class CommandParserImpl implements CommandParser {
                 Parameter param = new GetProfileParameter(username);
                 Request req = new Request("Unfollow", "Unfollows specified user", param);
                 Response serverResponse = connectionService.sendToServer(req);
-                //TODO: Server side error handling
                 if (serverResponse.getErrorCode() != 0) {
                     System.out.println("Error: Could not unfollow user");
                 }
@@ -317,11 +318,6 @@ public class CommandParserImpl implements CommandParser {
                 break;
         }
         return 0;
-    }
-
-    @Override
-    public Request parseString(String input) {
-        return null;
     }
 
     /**

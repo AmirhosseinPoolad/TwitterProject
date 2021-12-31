@@ -28,6 +28,12 @@ public interface AuthenticatorService {
      */
     public abstract User logIn(String username, String password);
 
-    public User fromUsername(String username);
+    /**
+     * gets User object from string username
+     *
+     * @param username username of User
+     * @return requested User
+     */
+    public User fromUsername(String username) throws IllegalArgumentException;
 
 }

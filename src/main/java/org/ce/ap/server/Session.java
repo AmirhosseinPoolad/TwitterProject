@@ -56,6 +56,8 @@ public class Session implements Runnable {
             String readString;
             while (true) {
                 int read = in.read(buffer);
+                if (read == -1)
+                    continue;
                 readString = new String(buffer, 0, read);
                 Request req = MapperSingleton.getObjectMapper().readValue(readString, Request.class);
                 switch (req.getMethod()) {
@@ -83,6 +85,9 @@ public class Session implements Runnable {
                         SignInParameter param = (SignInParameter) req.getParameterValues();
                         try {
                             boolean res = AuthenticatorServiceImpl.getInstance().fromUsername(param.getUsername()).isPasswordCorrect(param.getPassword());//signIn(param.getUsername(), param.getPassword());
+                            if (!res) {
+                                throw new IllegalArgumentException("Wrong password");
+                            }
                             signIn(param.getUsername(), param.getPassword());
                             Result result = new UserResult(user);
                             Response response = new Response(false, 0, result);

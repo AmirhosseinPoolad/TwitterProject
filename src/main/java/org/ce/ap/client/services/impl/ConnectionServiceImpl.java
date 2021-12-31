@@ -15,11 +15,20 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class ConnectionServiceImpl implements ConnectionService {
+    //server output stream
     OutputStream out;
+    //server input stream
     InputStream in;
+    //json object mapper for request/responses
     ObjectMapper mapper;
+    //buffer for input stream
     byte[] buffer = new byte[1 << 20]; //1 megabyte buffer
 
+    /**
+     * constructs a connection service
+     * @param out server output stream
+     * @param in server input stream
+     */
     public ConnectionServiceImpl(OutputStream out, InputStream in) {
         this.out = out;
         this.in = in;
@@ -28,6 +37,11 @@ public class ConnectionServiceImpl implements ConnectionService {
         //mapper.activateDefaultTyping(mapper.getPolymorphicTypeValidator(), ObjectMapper.DefaultTyping.NON_FINAL);
     }
 
+    /**
+     * sends request to server and returns response from server
+     * @param request request to send
+     * @return response from server
+     */
     @Override
     public Response sendToServer(Request request) {
         try {

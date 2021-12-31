@@ -11,15 +11,24 @@ import java.util.HashSet;
 import java.util.Objects;
 
 public class User {
+    //username
     private String username;
     @JsonProperty
+    //hashed password
     private String passwordHash;
+    //first name
     private String firstName;
+    //last name
     private String lastName;
+    //biography
     private String biography;
+    //birthday date
     private LocalDate birthdayDate;
+    //sign up date
     private LocalDate signUpDate;
+    //following users
     private HashSet<String> followings;
+    //follower users
     private HashSet<String> followers;
 
     /**
@@ -126,6 +135,9 @@ public class User {
         return signUpDate;
     }
 
+    /**
+     * prints user info (for clientside rendering)
+     */
     public void printInfo() {
         System.out.println("@" + username);
         System.out.println(firstName + " " + lastName);
@@ -134,22 +146,43 @@ public class User {
         System.out.println(followers.size() + " Followers, " + followings.size() + " Followings");
     }
 
+    /**
+     * checks if this is following username
+     * @param username username to check
+     * @return true if following
+     */
     public boolean isFollowing(String username) {
         return followings.contains(username);
     }
 
+    /**
+     * adds username to following list. do not use, meant for observer service only.
+     * @param username username to be added
+     */
     public void addFollowing(String username) {
         followings.add(username);
     }
 
+    /**
+     * removes username to following list. do not use, meant for observer service only.
+     * @param username username to be added
+     */
     public void removeFollowing(String username) {
         followings.remove(username);
     }
 
+    /**
+     * adds username to follower list. do not use, meant for observer service only.
+     * @param username username to be added
+     */
     public void addFollower(String username) {
         followers.add(username);
     }
 
+    /**
+     * removes username to follower list. do not use, meant for observer service only.
+     * @param username username to be added
+     */
     public void removeFollower(String username) {
         followers.remove(username);
     }
