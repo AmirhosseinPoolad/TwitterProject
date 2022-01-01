@@ -46,8 +46,12 @@ public class ObserverServiceImpl extends Observer implements ObserverService {
      */
     @Override
     public void update(Tree<Tweet> tweet) {
-        if (tweet.getParent() == null)
+        if (tweet.getParent() == null) {
+            if (!followersMap.containsKey(tweet.getData().getPoster().toLowerCase())) {
+                followersMap.put(tweet.getData().getPoster().toLowerCase(), new ArrayList<Tree<Tweet>>());
+            }
             followersMap.get(tweet.getData().getPoster().toLowerCase()).add(tweet);
+        }
     }
 
     /**
