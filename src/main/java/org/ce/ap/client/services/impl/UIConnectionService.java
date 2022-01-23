@@ -1,15 +1,13 @@
 package main.java.org.ce.ap.client.services.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
-import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import main.java.org.ce.ap.client.services.CommandParser;
 import main.java.org.ce.ap.client.services.ConnectionService;
+import main.java.org.ce.ap.server.entity.User;
 import main.java.org.ce.ap.server.jsonHandling.MapperSingleton;
 import main.java.org.ce.ap.server.jsonHandling.Request;
 import main.java.org.ce.ap.server.jsonHandling.Response;
+import main.java.org.ce.ap.server.services.impl.AuthenticatorServiceImpl;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -17,8 +15,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class ConnectionServiceImpl implements ConnectionService {
+/**
+ * Implementation of ConnectionService for UI application that is a singleton, connects to server itself and holds the socket.
+ */
+public class UIConnectionService implements ConnectionService {
     //client socket
     Socket clientSocket;
     //server output stream
@@ -30,18 +32,34 @@ public class ConnectionServiceImpl implements ConnectionService {
     //buffer for input stream
     byte[] buffer = new byte[1 << 20]; //1 megabyte buffer
 
+    private static UIConnectionService INSTANCE = null;
+
+    public static UIConnectionService getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new UIConnectionService();
+        }
+        return INSTANCE;
+    }
+
     /**
-     * constructs a connection service
-     *
-     * @param out server output stream
-     * @param in  server input stream
+     * conencts to the server and constructs a connection service
      */
-    public ConnectionServiceImpl(OutputStream out, InputStream in) {
-        this.out = out;
-        this.in = in;
-        mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        //mapper.activateDefaultTyping(mapper.getPolymorphicTypeValidator(), ObjectMapper.DefaultTyping.NON_FINAL);
+    private UIConnectionService() {
+        boolean isSuccessful = false;
+        int count = 0;
+        while (!isSuccessful && count < 10) {
+            try {
+                clientSocket = new Socket("127.0.0.1", Integer.parseInt(PropertiesServiceImpl.getInstance().getProperty("server.port")));
+                out = clientSocket.getOutputStream();
+                in = clientSocket.getInputStream();
+                mapper = new ObjectMapper();
+                mapper.registerModule(new JavaTimeModule());
+                isSuccessful = true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                count++;
+            }
+        }
     }
 
     /**

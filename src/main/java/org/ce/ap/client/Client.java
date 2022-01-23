@@ -24,7 +24,10 @@ public class Client extends Application {
             primaryStage.setTitle("TwT");
             primaryStage.setScene(loginScene);
             primaryStage.show();
+            //toggle dark theme
             loginScene.getStylesheets().add("/dark-theme.css");
+            //untoggle dark theme
+            //loginScene.getStylesheets().remove("/dark-theme.css");
         } catch (IOException e) {
             e.printStackTrace();
         }

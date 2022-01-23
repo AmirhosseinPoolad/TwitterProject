@@ -20,13 +20,12 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
      */
     protected ConcurrentHashMap<String, User> usersMap;
 
+    private static AuthenticatorServiceImpl INSTANCE = null;
+
     private AuthenticatorServiceImpl() {
         this.usersMap = new ConcurrentHashMap<String, User>();
         read();
     }
-
-    private static AuthenticatorServiceImpl INSTANCE = null;
-
     public static synchronized AuthenticatorServiceImpl getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new AuthenticatorServiceImpl();
