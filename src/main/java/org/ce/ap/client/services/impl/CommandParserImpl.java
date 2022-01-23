@@ -105,17 +105,17 @@ public class CommandParserImpl implements CommandParser {
                 int input = sc.nextInt();
                 sc.nextLine(); //to eat the newline in the input buffer
                 switch (input) {
-                    case 1 -> menuStatus = MenuStatus.SEND_TWEET;
-                    case 2 -> menuStatus = MenuStatus.LIKE;
-                    case 3 -> menuStatus = MenuStatus.DISLIKE;
-                    case 4 -> menuStatus = MenuStatus.RETWEET;
-                    case 5 -> menuStatus = MenuStatus.UNRETWEET;
-                    case 6 -> menuStatus = MenuStatus.VIEW_PROFILE;
-                    case 7 -> menuStatus = MenuStatus.FOLLOW;
-                    case 8 -> menuStatus = MenuStatus.UNFOLLOW;
-                    case 9 -> menuStatus = MenuStatus.REFRESH;
-                    case 10 -> menuStatus = MenuStatus.LOGOFF;
-                    default -> menuStatus = MenuStatus.TIMELINE;
+                    case 1 : menuStatus = MenuStatus.SEND_TWEET;break;
+                    case 2 : menuStatus = MenuStatus.LIKE;break;
+                    case 3 : menuStatus = MenuStatus.DISLIKE;break;
+                    case 4 : menuStatus = MenuStatus.RETWEET;break;
+                    case 5 : menuStatus = MenuStatus.UNRETWEET;break;
+                    case 6 : menuStatus = MenuStatus.VIEW_PROFILE;break;
+                    case 7 : menuStatus = MenuStatus.FOLLOW;break;
+                    case 8 : menuStatus = MenuStatus.UNFOLLOW;break;
+                    case 9 : menuStatus = MenuStatus.REFRESH;break;
+                    case 10 : menuStatus = MenuStatus.LOGOFF;break;
+                    default : menuStatus = MenuStatus.TIMELINE;break;
                 }
                 break;
 

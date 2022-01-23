@@ -61,7 +61,7 @@ public class Session implements Runnable {
                 readString = new String(buffer, 0, read);
                 Request req = MapperSingleton.getObjectMapper().readValue(readString, Request.class);
                 switch (req.getMethod()) {
-                    case "Register" -> {
+                    case "Register" : {
                         RegisterParameter param = (RegisterParameter) req.getParameterValues();
                         try {
                             User res = AuthenticatorServiceImpl.getInstance().signUp(param.getUsername(), param.getPassword(),
@@ -80,8 +80,8 @@ public class Session implements Runnable {
                             sendResponse(response);
                             loggingService.log("ERROR: COULD NOT REGISTER USER " + param.getUsername());
                         }
-                    }
-                    case "SignIn" -> {
+                    }break;
+                    case "SignIn" : {
                         SignInParameter param = (SignInParameter) req.getParameterValues();
                         try {
                             boolean res = AuthenticatorServiceImpl.getInstance().fromUsername(param.getUsername()).isPasswordCorrect(param.getPassword());//signIn(param.getUsername(), param.getPassword());
@@ -102,8 +102,8 @@ public class Session implements Runnable {
                             sendResponse(response);
                             loggingService.log("ERROR: COULD NOT SIGN IN USER " + param.getUsername());
                         }
-                    }
-                    case "Quit" -> {
+                    }break;
+                    case "Quit" : {
                         Result result = new EmptyResult();
                         Response response = new Response(false, 0, result);
                         sendResponse(response);
@@ -129,14 +129,14 @@ public class Session implements Runnable {
                 readString = new String(buffer, 0, read);
                 Request req = MapperSingleton.getObjectMapper().readValue(readString, Request.class);
                 switch (req.getMethod()) {
-                    case "Quit" -> {
+                    case "Quit" : {
                         Result result = new EmptyResult();
                         Response response = new Response(false, 0, result);
                         sendResponse(response);
                         loggingService.log(Thread.currentThread().getName() + " Quit");
                         return;
                     }
-                    case "SendTweet" -> {
+                    case "SendTweet" : {
                         SendTweetParameter param = (SendTweetParameter) req.getParameterValues();
                         try {
                             int parentID = param.getParentId();
@@ -156,8 +156,8 @@ public class Session implements Runnable {
                             loggingService.log("ERROR: User " + user.getUsername() + " could not tweet. " + e.getLocalizedMessage());
                             e.printStackTrace();
                         }
-                    }
-                    case "LikeTweet" -> {
+                    }break;
+                    case "LikeTweet" : {
                         LikeTweetParameter param = (LikeTweetParameter) req.getParameterValues();
                         try {
                             Tree<Tweet> tweetTree = tweetingService.likeTweet(param.getTweetId());
@@ -176,8 +176,8 @@ public class Session implements Runnable {
                             loggingService.log("ERROR: User " + user.getUsername() + " could not like tweet ID = " + param.getTweetId() + ". " + e.getLocalizedMessage());
                             e.printStackTrace();
                         }
-                    }
-                    case "DislikeTweet" -> {
+                    }break;
+                    case "DislikeTweet" : {
                         LikeTweetParameter param = (LikeTweetParameter) req.getParameterValues();
                         try {
                             Tree<Tweet> tweetTree = tweetingService.dislikeTweet(param.getTweetId());
@@ -196,8 +196,8 @@ public class Session implements Runnable {
                             loggingService.log("ERROR: User " + user.getUsername() + " could not dislike tweet ID = " + param.getTweetId() + ". " + e.getLocalizedMessage());
                             e.printStackTrace();
                         }
-                    }
-                    case "RetweetTweet" -> {
+                    }break;
+                    case "RetweetTweet" : {
                         LikeTweetParameter param = (LikeTweetParameter) req.getParameterValues();
                         try {
                             Tree<Tweet> tweetTree = tweetingService.retweetTweet(param.getTweetId());
@@ -216,8 +216,8 @@ public class Session implements Runnable {
                             loggingService.log("ERROR: User " + user.getUsername() + " could not retweet tweet ID = " + param.getTweetId() + ". " + e.getLocalizedMessage());
                             e.printStackTrace();
                         }
-                    }
-                    case "UnretweetTweet" -> {
+                    }break;
+                    case "UnretweetTweet" : {
                         LikeTweetParameter param = (LikeTweetParameter) req.getParameterValues();
                         try {
                             Tree<Tweet> tweetTree = tweetingService.unretweetTweet(param.getTweetId());
@@ -236,8 +236,8 @@ public class Session implements Runnable {
                             loggingService.log("ERROR: User " + user.getUsername() + " could not unretweet tweet ID = " + param.getTweetId() + ". " + e.getLocalizedMessage());
                             e.printStackTrace();
                         }
-                    }
-                    case "GetProfile" -> {
+                    }break;
+                    case "GetProfile" : {
                         GetProfileParameter param = (GetProfileParameter) req.getParameterValues();
                         try {
 
@@ -253,15 +253,15 @@ public class Session implements Runnable {
                             loggingService.log("ERROR: User " + user.getUsername() + " could not get profile username = " + param.getUsername() + ". " + e.getLocalizedMessage());
                             e.printStackTrace();
                         }
-                    }
-                    case "GetTimeline" -> {
+                    }break;
+                    case "GetTimeline" : {
                         ArrayList<Tree<Tweet>> tweets = timelineService.getTimeline();
                         Result result = new GetTimelineResult(tweets);
                         Response response = new Response(false, 0, result);
                         sendResponse(response);
                         loggingService.log("User " + user.getUsername() + " requested timeline");
-                    }
-                    case "Follow" -> {
+                    }break;
+                    case "Follow" : {
                         GetProfileParameter param = (GetProfileParameter) req.getParameterValues();
                         try {
 
@@ -279,8 +279,8 @@ public class Session implements Runnable {
                             loggingService.log("ERROR: User " + user.getUsername() + " could not follow username = " + param.getUsername() + ". " + e.getLocalizedMessage());
                             e.printStackTrace();
                         }
-                    }
-                    case "Unfollow" -> {
+                    }break;
+                    case "Unfollow" : {
                         GetProfileParameter param = (GetProfileParameter) req.getParameterValues();
                         try {
                             User user1 = AuthenticatorServiceImpl.getInstance().fromUsername(param.getUsername());
@@ -297,19 +297,19 @@ public class Session implements Runnable {
                             loggingService.log("ERROR: User " + user.getUsername() + " could not unfollow username = " + param.getUsername() + ". " + e.getLocalizedMessage());
                             e.printStackTrace();
                         }
-                    }
-                    case "GetFollowers" -> {
+                    }break;
+                    case "GetFollowers" : {
                         Result result = new UserlistResult(user.getFollowers());
                         Response response = new Response(false, 0, result);
                         sendResponse(response);
                         loggingService.log("User " + user.getUsername() + " requested their followers");
-                    }
-                    case "GetFollowings" -> {
+                    }break;
+                    case "GetFollowings" : {
                         Result result = new UserlistResult(user.getFollowings());
                         Response response = new Response(false, 0, result);
                         sendResponse(response);
                         loggingService.log("User " + user.getUsername() + " requested their followings");
-                    }
+                    }break;
                 }
             }
         } catch (IOException e) {

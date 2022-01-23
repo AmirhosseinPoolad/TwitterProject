@@ -44,7 +44,7 @@ public class Tree<T> implements Serializable {
      * @return Tree with data if found, null if not found.
      */
     public Tree<T> get(T data) {
-        TreeIterator it = new TreeIterator(this);
+        TreeIterator<T> it = new TreeIterator<>(this);
         while (it.hasNext()) {
             Tree<T> next = it.nextTree();
             if (next.getData().equals(data))
