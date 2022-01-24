@@ -1,11 +1,7 @@
 package main.java.org.ce.ap.client.controllers;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import main.java.org.ce.ap.client.Client;
 import main.java.org.ce.ap.client.services.ConnectionService;
 import main.java.org.ce.ap.client.services.impl.PropertiesServiceImpl;
 import main.java.org.ce.ap.client.services.impl.SceneHandlerImpl;
@@ -77,8 +73,7 @@ public class LoginController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            //TODO: GO TO TIMELINE
+            SceneHandlerImpl.getInstance().changeScene("/timeline-page.fxml");
         }
     }
 

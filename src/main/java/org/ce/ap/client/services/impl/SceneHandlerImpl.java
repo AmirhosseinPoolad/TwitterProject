@@ -16,6 +16,7 @@ public class SceneHandlerImpl implements SceneHandler {
     Scene currentScene;
     FXMLLoader fxmlLoader;
     boolean isDark;
+    boolean isFullScreen = false;
 
     private static SceneHandlerImpl INSTANCE = null;
 
@@ -48,8 +49,8 @@ public class SceneHandlerImpl implements SceneHandler {
     public void changeScene(String fxml) {
         try {
             Parent blah = FXMLLoader.load(getClass().getResource(fxml));
-            Scene scene = new Scene(blah);
-            primaryStage.setScene(scene);
+            currentScene = new Scene(blah);
+            primaryStage.setScene(currentScene);
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -62,5 +63,13 @@ public class SceneHandlerImpl implements SceneHandler {
             currentScene.getStylesheets().remove("/dark-theme.css");
         else
             currentScene.getStylesheets().add("/dark-theme.css");
+
+        isDark = !isDark;
+    }
+
+    @Override
+    public void toggleFullScreen() {
+        primaryStage.setFullScreen(!isFullScreen);
+        isFullScreen = !isFullScreen;
     }
 }

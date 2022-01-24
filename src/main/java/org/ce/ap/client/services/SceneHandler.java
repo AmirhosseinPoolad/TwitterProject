@@ -4,4 +4,6 @@ public interface SceneHandler {
     public void changeScene(String fxml);
 
     public void toggleDarkTheme();
+
+    public void toggleFullScreen();
 }

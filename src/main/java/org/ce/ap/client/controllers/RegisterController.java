@@ -3,6 +3,7 @@ package main.java.org.ce.ap.client.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import main.java.org.ce.ap.client.MenuStatus;
+import main.java.org.ce.ap.client.services.impl.SceneHandlerImpl;
 import main.java.org.ce.ap.client.services.impl.UIConnectionService;
 import main.java.org.ce.ap.server.jsonHandling.Request;
 import main.java.org.ce.ap.server.jsonHandling.Response;
@@ -46,7 +47,7 @@ public class RegisterController {
             System.err.println("Error, please try again");
         } else {
             System.out.println("Succesfully registered.");
-            //TODO: go to timeline
+            SceneHandlerImpl.getInstance().changeScene("/timeline-page.fxml");
         }
     }
 }
