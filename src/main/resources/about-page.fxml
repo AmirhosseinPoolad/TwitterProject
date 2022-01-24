@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="165.0" prefWidth="248.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Made By Amirhossein Poolad" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email: Amir.Poolad@aut.ac.ir" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Student ID: 9833016" />
+   </children>
+</VBox>

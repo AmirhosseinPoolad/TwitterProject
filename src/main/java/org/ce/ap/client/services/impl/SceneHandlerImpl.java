@@ -58,6 +58,20 @@ public class SceneHandlerImpl implements SceneHandler {
     }
 
     @Override
+    public void newWindow(String fxml, String title) {
+        try {
+            FXMLLoader fLoader = new FXMLLoader(getClass().getResource(fxml));
+            Scene scene = new Scene(fLoader.load());
+            Stage newStage = new Stage();
+            newStage.setTitle(title);
+            newStage.setScene(scene);
+            newStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void toggleDarkTheme() {
         if (isDark)
             currentScene.getStylesheets().remove("/dark-theme.css");

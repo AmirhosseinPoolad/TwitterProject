@@ -10,6 +10,7 @@ public class TimelineController {
 
     @FXML
     void onAbout(ActionEvent event) {
+        SceneHandlerImpl.getInstance().newWindow("/about-page.fxml","About");
         //TODO: ABOUT PAGE
     }
 
