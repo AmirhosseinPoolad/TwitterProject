@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import main.java.org.ce.ap.client.services.impl.SceneHandlerImpl;
 
 import java.io.IOException;
 
@@ -16,8 +17,8 @@ public class Client extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
-        try {
+        SceneHandlerImpl.getInstance(primaryStage);
+        /*try {
             FXMLLoader fxmlLoader = new FXMLLoader(Client.class.getResource("/login-page.fxml"));
             Scene loginScene = null;
             loginScene = new Scene(fxmlLoader.load(), 400, 600);
@@ -30,7 +31,7 @@ public class Client extends Application {
             //loginScene.getStylesheets().remove("/dark-theme.css");
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
     }
 }

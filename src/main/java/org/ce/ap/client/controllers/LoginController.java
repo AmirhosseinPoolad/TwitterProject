@@ -1,9 +1,14 @@
-package main.java.org.ce.ap.client;
+package main.java.org.ce.ap.client.controllers;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import main.java.org.ce.ap.client.Client;
 import main.java.org.ce.ap.client.services.ConnectionService;
 import main.java.org.ce.ap.client.services.impl.PropertiesServiceImpl;
+import main.java.org.ce.ap.client.services.impl.SceneHandlerImpl;
 import main.java.org.ce.ap.client.services.impl.UIConnectionService;
 import main.java.org.ce.ap.server.jsonHandling.Request;
 import main.java.org.ce.ap.server.jsonHandling.Response;
@@ -75,5 +80,11 @@ public class LoginController {
 
             //TODO: GO TO TIMELINE
         }
+    }
+
+    @FXML
+    protected void onRegister() {
+        //change scene to register-page.fxml
+        SceneHandlerImpl.getInstance().changeScene("/register-page.fxml");
     }
 }
