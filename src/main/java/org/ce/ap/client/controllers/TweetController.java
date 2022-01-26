@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import main.java.org.ce.ap.client.MenuStatus;
+import main.java.org.ce.ap.client.services.impl.PropertiesServiceImpl;
 import main.java.org.ce.ap.client.services.impl.SceneHandlerImpl;
 import main.java.org.ce.ap.client.services.impl.UIConnectionService;
 import main.java.org.ce.ap.server.entity.Tweet;
@@ -95,7 +96,7 @@ public class TweetController extends ListCell<Tree<Tweet>> {
 
     @FXML
     void onReply(ActionEvent event) {
-        SceneHandlerImpl.getInstance().newWindow("/new-tweet-page.fxml", "New Tweet", tweet.getTweetId());
+        SceneHandlerImpl.getInstance().newWindow(PropertiesServiceImpl.getInstance().getProperty("client.new.tweet.page"), "New Tweet", tweet.getTweetId());
     }
 
     @FXML
@@ -149,7 +150,8 @@ public class TweetController extends ListCell<Tree<Tweet>> {
             setGraphic(null); // don't display anything
         } else {
             if (mLLoader == null) {
-                mLLoader = new FXMLLoader(getClass().getResource("/tweet.fxml"));
+                String fxml = PropertiesServiceImpl.getInstance().getProperty("client.tweet.fxml");
+                mLLoader = new FXMLLoader(getClass().getResource(fxml));
                 mLLoader.setController(this);
                 try {
                     mLLoader.load();
@@ -171,6 +173,7 @@ public class TweetController extends ListCell<Tree<Tweet>> {
     }
 
     void openProfile() {
-        SceneHandlerImpl.getInstance().newWindow("/profile-page.fxml", "Profile Page", tweet.getPoster());
+        String fxml = PropertiesServiceImpl.getInstance().getProperty("client.profile.page");
+        SceneHandlerImpl.getInstance().newWindow(fxml, "Profile Page", tweet.getPoster());
     }
 }

@@ -61,7 +61,8 @@ public class LoginController {
                     out.newLine();
                     out.write(password);
                 }
-                SceneHandlerImpl.getInstance().changeScene("/timeline-page.fxml", ((UserResult) serverResponse.getResults()).getUser());
+                String fxml = PropertiesServiceImpl.getInstance().getProperty("client.timeline.page");
+                SceneHandlerImpl.getInstance().changeScene(fxml, ((UserResult) serverResponse.getResults()).getUser());
                 ;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -72,6 +73,7 @@ public class LoginController {
 
     @FXML
     protected void onRegister() {
-        SceneHandlerImpl.getInstance().changeScene("/register-page.fxml");
+        String fxml = PropertiesServiceImpl.getInstance().getProperty("client.register.page");
+        SceneHandlerImpl.getInstance().changeScene(fxml);
     }
 }

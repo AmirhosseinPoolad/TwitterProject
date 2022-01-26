@@ -11,7 +11,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
-import main.java.org.ce.ap.client.MenuStatus;
 import main.java.org.ce.ap.client.services.impl.PropertiesServiceImpl;
 import main.java.org.ce.ap.client.services.impl.SceneHandlerImpl;
 import main.java.org.ce.ap.client.services.impl.UIConnectionService;
@@ -76,7 +75,8 @@ public class TimelineController implements DataGetter {
     @FXML
     void onLogOut(ActionEvent event) {
         UIConnectionService.getInstance().destroyInstance();
-        SceneHandlerImpl.getInstance().changeScene("/login-page.fxml");
+        String fxml = PropertiesServiceImpl.getInstance().getProperty("client.login.page");
+        SceneHandlerImpl.getInstance().changeScene(fxml);
         String path = PropertiesServiceImpl.getInstance().getProperty("client.saved.file");
         try (BufferedWriter out = new BufferedWriter(new FileWriter(path))) {
             out.write(String.valueOf(false));
@@ -87,13 +87,14 @@ public class TimelineController implements DataGetter {
 
     @FXML
     void onNewTweet(ActionEvent event) {
-        SceneHandlerImpl.getInstance().newWindow("/new-tweet-page.fxml", "New Tweet");
+        String fxml = PropertiesServiceImpl.getInstance().getProperty("client.new.tweet.page");
+        SceneHandlerImpl.getInstance().newWindow(fxml, "New Tweet");
     }
 
     @FXML
     void onOptions(ActionEvent event) {
         //TODO: OPTIONS PAGE
-        //TODO: System Tray??????
+        //TODO: System Tray
     }
 
     @FXML
@@ -103,7 +104,8 @@ public class TimelineController implements DataGetter {
 
     @FXML
     void onViewProfile(ActionEvent event) {
-        SceneHandlerImpl.getInstance().newWindow("/profile-page.fxml", "Profile Page", user.getUsername());
+        String fxml = PropertiesServiceImpl.getInstance().getProperty("client.profile.page");
+        SceneHandlerImpl.getInstance().newWindow(fxml, "Profile Page", user.getUsername());
     }
 
     /**
@@ -135,7 +137,8 @@ public class TimelineController implements DataGetter {
 
     @FXML
     void onSearch(ActionEvent event) {
-        SceneHandlerImpl.getInstance().newWindow("/profile-page.fxml", "Profile Page", searchField.getText());
+        String fxml = PropertiesServiceImpl.getInstance().getProperty("client.profile.page");
+        SceneHandlerImpl.getInstance().newWindow(fxml, "Profile Page", searchField.getText());
     }
 
     @Override

@@ -26,6 +26,7 @@ public class SceneHandlerImpl implements SceneHandler {
     Scene currentScene;
     //is dark mode on
     boolean isDark = false;
+    private final String darkModePath;
     //is fullscreen
     boolean isFullScreen = false;
 
@@ -50,6 +51,7 @@ public class SceneHandlerImpl implements SceneHandler {
     private SceneHandlerImpl(Stage primaryStage) {
         this.primaryStage = primaryStage;
         String path = PropertiesServiceImpl.getInstance().getProperty("client.saved.file");
+        darkModePath = PropertiesServiceImpl.getInstance().getProperty("client.dark.css");
         try (BufferedReader in = new BufferedReader(new FileReader(path))) {
             boolean rememberMe = Boolean.parseBoolean(in.readLine());
             if (rememberMe) {
@@ -62,10 +64,12 @@ public class SceneHandlerImpl implements SceneHandler {
                 if (serverResponse.getErrorCode() != 0) {
                     System.err.println("Error, please try again");
                 } else {
-                    changeScene("/timeline-page.fxml", ((UserResult) serverResponse.getResults()).getUser());
+                    String fxml = PropertiesServiceImpl.getInstance().getProperty("client.timeline.page");
+                    changeScene(fxml, ((UserResult) serverResponse.getResults()).getUser());
                 }
             } else {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/login-page.fxml"));
+                String fxml = PropertiesServiceImpl.getInstance().getProperty("client.login.page");
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxml));
                 currentScene = new Scene(fxmlLoader.load(), 400, 600);
                 this.primaryStage.setTitle("TwT");
                 this.primaryStage.setScene(currentScene);
@@ -88,7 +92,7 @@ public class SceneHandlerImpl implements SceneHandler {
             currentScene = new Scene(root);
             primaryStage.setScene(currentScene);
             if (isDark)
-                currentScene.getStylesheets().add("/dark-theme.css");
+                currentScene.getStylesheets().add(darkModePath);
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -109,7 +113,7 @@ public class SceneHandlerImpl implements SceneHandler {
             controller.getData(data);
             currentScene = new Scene(root);
             if (isDark)
-                currentScene.getStylesheets().add("/dark-theme.css");
+                currentScene.getStylesheets().add(darkModePath);
             primaryStage.setScene(currentScene);
             primaryStage.show();
         } catch (IOException e) {
@@ -131,7 +135,7 @@ public class SceneHandlerImpl implements SceneHandler {
             newStage.setTitle(title);
             newStage.setScene(scene);
             if (isDark)
-                scene.getStylesheets().add("/dark-theme.css");
+                scene.getStylesheets().add(darkModePath);
             newStage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -155,7 +159,7 @@ public class SceneHandlerImpl implements SceneHandler {
             newStage.setTitle(title);
             newStage.setScene(scene);
             if (isDark)
-                scene.getStylesheets().add("/dark-theme.css");
+                scene.getStylesheets().add(darkModePath);
             newStage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -168,9 +172,9 @@ public class SceneHandlerImpl implements SceneHandler {
     @Override
     public void toggleDarkTheme() {
         if (isDark)
-            currentScene.getStylesheets().remove("/dark-theme.css");
+            currentScene.getStylesheets().remove(darkModePath);
         else
-            currentScene.getStylesheets().add("/dark-theme.css");
+            currentScene.getStylesheets().add(darkModePath);
         isDark = !isDark;
     }
 
