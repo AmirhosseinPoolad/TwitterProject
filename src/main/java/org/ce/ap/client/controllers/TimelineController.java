@@ -2,8 +2,13 @@ package main.java.org.ce.ap.client.controllers;
 
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.util.Callback;
 import main.java.org.ce.ap.client.MenuStatus;
 import main.java.org.ce.ap.client.services.impl.SceneHandlerImpl;
 import main.java.org.ce.ap.client.services.impl.UIConnectionService;
@@ -18,6 +23,29 @@ import java.util.ArrayList;
 public class TimelineController {
 
     private ArrayList<Tree<Tweet>> tweetGraph;
+
+    @FXML
+    private ListView<Tweet> tweetListView;
+
+    private final ObservableList<Tweet> tweets = FXCollections.observableArrayList();
+
+    @FXML
+    void initialize() {
+        getTimeline();
+        for (Tree<Tweet> parentTree : tweetGraph) {
+            Tweet tweet = parentTree.getData();
+            tweets.add(tweet);
+        }
+        tweetListView.setItems(tweets);
+        tweetListView.setCellFactory(
+                new Callback<ListView<Tweet>, ListCell<Tweet>>() {
+                    @Override
+                    public ListCell<Tweet> call(ListView<Tweet> listView) {
+                        return new TweetController();
+                    }
+                }
+        );
+    }
 
     @FXML
     void onAbout(ActionEvent event) {
@@ -71,7 +99,6 @@ public class TimelineController {
         //TODO: PROFILE PAGE
     }
 
-    //TODO
     private void getTimeline() {
         Request req = new Request("GetTimeline", "Get all of the timeline from the server", null);
         Response serverResponse = UIConnectionService.getInstance().sendToServer(req);
@@ -81,7 +108,6 @@ public class TimelineController {
         } else {
             GetTimelineResult res = (GetTimelineResult) serverResponse.getResults();
             this.tweetGraph = res.getTimeline();
-            //TODO: DO THE LIST STUFF
         }
     }
 

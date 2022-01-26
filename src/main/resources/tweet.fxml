@@ -10,31 +10,31 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="box" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="147.0" prefWidth="600.0" spacing="15.0">
          <children>
             <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="username" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="date" />
+            <Text fx:id="usernameText" strokeType="OUTSIDE" strokeWidth="0.0" text="username" />
+            <Text fx:id="dateText" strokeType="OUTSIDE" strokeWidth="0.0" text="date" />
             <MenuBar>
               <menus>
                 <Menu mnemonicParsing="false" text=". . .">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Like" />
-                        <MenuItem mnemonicParsing="false" text="Retweet" />
-                        <MenuItem mnemonicParsing="false" text="View Profile" />
-                        <MenuItem mnemonicParsing="false" text="Reply" />
+                    <MenuItem mnemonicParsing="false" onAction="#onLike" text="Like" />
+                        <MenuItem mnemonicParsing="false" onAction="#onRetweet" text="Retweet" />
+                        <MenuItem mnemonicParsing="false" onAction="#onViewProfile" text="View Profile" />
+                        <MenuItem mnemonicParsing="false" onAction="#onReply" text="Reply" />
                   </items>
                 </Menu>
               </menus>
             </MenuBar>
          </children>
       </HBox>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="tweet" wrappingWidth="94.35546875" />
+      <Text fx:id="tweetContentText" strokeType="OUTSIDE" strokeWidth="0.0" text="tweet" wrappingWidth="94.35546875" />
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
-            <ListView prefHeight="200.0" prefWidth="200.0" />
+            <ListView fx:id="repliesListView" prefHeight="100.0" prefWidth="589.0" />
          </children>
          <VBox.margin>
             <Insets left="50.0" />

@@ -47,7 +47,7 @@
                   <Button mnemonicParsing="false" onAction="#onViewProfile" text="View Profile" />
                </children>
             </VBox>
-            <ListView prefHeight="200.0" prefWidth="407.0" />
+            <ListView fx:id="tweetListView" prefHeight="200.0" prefWidth="407.0" />
          </items>
       </SplitPane>
    </children>
