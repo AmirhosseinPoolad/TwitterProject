@@ -11,7 +11,7 @@ import main.java.org.ce.ap.server.jsonHandling.Request;
 import main.java.org.ce.ap.server.jsonHandling.Response;
 import main.java.org.ce.ap.server.jsonHandling.impl.parameter.SendTweetParameter;
 
-public class NewTweetController implements DataGetter{
+public class NewTweetController implements DataGetter {
 
     @FXML
     private TextArea tweetContentArea;
@@ -27,8 +27,10 @@ public class NewTweetController implements DataGetter{
         if (serverResponse.getErrorCode() != 0) {
             System.err.println("Error: " + serverResponse.getErrorCode());
         } else {
-            SceneHandlerImpl.getInstance().changeScene("/timeline-page.fxml");
+            Stage stage = (Stage) tweetContentArea.getScene().getWindow();
+            stage.close();
         }
+
     }
 
     @FXML
@@ -37,6 +39,11 @@ public class NewTweetController implements DataGetter{
         stage.close();
     }
 
+    /**
+     * get data from another class
+     *
+     * @param data data is the parent TweetID in form of an integer.
+     */
     public void getData(Object data) {
         this.tweetID = (Integer) data;
     }

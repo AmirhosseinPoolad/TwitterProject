@@ -57,6 +57,25 @@
                      </accelerator></MenuItem>
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Quick">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#onRefresh" text="Refresh">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="R" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                  </MenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#onNewTweet" text="New Tweet">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                  </MenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#onViewProfile" text="View Profile">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="V" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                  </MenuItem>
+              </items>
+            </Menu>
         </menus>
       </MenuBar>
       <SplitPane dividerPositions="0.2308" prefHeight="400.0" prefWidth="600.0" VBox.vgrow="ALWAYS">

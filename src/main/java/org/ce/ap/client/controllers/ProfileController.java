@@ -55,6 +55,9 @@ public class ProfileController implements DataGetter {
 
     }
 
+    /**
+     * gets the timeline from the server and shows it
+     */
     private void getProfile() {
         Parameter param = new GetProfileParameter(username);
         Request req = new Request("GetProfile", "Gets profile of specified user", param);
@@ -86,6 +89,11 @@ public class ProfileController implements DataGetter {
         );
     }
 
+    /**
+     * get data from another class
+     *
+     * @param data data is a string that is the username of the profile being currently viewed
+     */
     @Override
     public void getData(Object data) {
         username = (String) data;

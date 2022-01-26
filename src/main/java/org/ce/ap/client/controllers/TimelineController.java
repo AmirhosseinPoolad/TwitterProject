@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import main.java.org.ce.ap.client.MenuStatus;
+import main.java.org.ce.ap.client.services.impl.PropertiesServiceImpl;
 import main.java.org.ce.ap.client.services.impl.SceneHandlerImpl;
 import main.java.org.ce.ap.client.services.impl.UIConnectionService;
 import main.java.org.ce.ap.server.entity.Tweet;
@@ -21,11 +22,16 @@ import main.java.org.ce.ap.server.jsonHandling.Response;
 import main.java.org.ce.ap.server.jsonHandling.impl.result.GetTimelineResult;
 import main.java.org.ce.ap.server.util.Tree;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class TimelineController implements DataGetter {
 
+    //graph of tweets and replies
     private ArrayList<Tree<Tweet>> tweetGraph;
+    //current logged in user
     private User user;
     @FXML
     private Text notFoundText;
@@ -71,6 +77,12 @@ public class TimelineController implements DataGetter {
     void onLogOut(ActionEvent event) {
         UIConnectionService.getInstance().destroyInstance();
         SceneHandlerImpl.getInstance().changeScene("/login-page.fxml");
+        String path = PropertiesServiceImpl.getInstance().getProperty("client.saved.file");
+        try (BufferedWriter out = new BufferedWriter(new FileWriter(path))) {
+            out.write(String.valueOf(false));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -86,7 +98,6 @@ public class TimelineController implements DataGetter {
 
     @FXML
     void onRefresh(ActionEvent event) {
-        //clearTimeline();
         getTimeline();
     }
 
@@ -95,6 +106,9 @@ public class TimelineController implements DataGetter {
         SceneHandlerImpl.getInstance().newWindow("/profile-page.fxml", "Profile Page", user.getUsername());
     }
 
+    /**
+     * gets the timeline from server and shows it
+     */
     private void getTimeline() {
         Request req = new Request("GetTimeline", "Get all of the timeline from the server", null);
         Response serverResponse = UIConnectionService.getInstance().sendToServer(req);
@@ -122,10 +136,6 @@ public class TimelineController implements DataGetter {
     @FXML
     void onSearch(ActionEvent event) {
         SceneHandlerImpl.getInstance().newWindow("/profile-page.fxml", "Profile Page", searchField.getText());
-    }
-
-    private void clearTimeline() {
-        tweets.clear();
     }
 
     @Override

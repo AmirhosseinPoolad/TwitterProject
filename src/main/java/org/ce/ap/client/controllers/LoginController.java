@@ -13,6 +13,9 @@ import main.java.org.ce.ap.server.jsonHandling.impl.result.UserResult;
 
 import java.io.*;
 
+/**
+ * login page controller
+ */
 public class LoginController {
     //connection service that handles connecting and i/o with server
     private ConnectionService connectionService;
@@ -37,6 +40,9 @@ public class LoginController {
 
     }
 
+    /**
+     * logs in with username and passwords and saves the remember me status if login was successful
+     */
     private void login(String username, String password, boolean rememberMe) {
         SignInParameter param = new SignInParameter(username, password);
         Request req = new Request("SignIn", "Logins to account", param);

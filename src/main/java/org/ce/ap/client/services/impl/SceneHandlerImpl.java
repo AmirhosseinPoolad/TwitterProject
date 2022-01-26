@@ -6,7 +6,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import main.java.org.ce.ap.client.controllers.DataGetter;
-import main.java.org.ce.ap.client.controllers.NewTweetController;
 import main.java.org.ce.ap.client.services.SceneHandler;
 import main.java.org.ce.ap.server.jsonHandling.Request;
 import main.java.org.ce.ap.server.jsonHandling.Response;
@@ -17,12 +16,20 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * handles creating and changing scenes and transitions between them
+ */
 public class SceneHandlerImpl implements SceneHandler {
+    //primary stage of the application
     Stage primaryStage;
+    //current scene of the application
     Scene currentScene;
+    //is dark mode on
     boolean isDark = false;
+    //is fullscreen
     boolean isFullScreen = false;
 
+    //singleton stuff
     private static SceneHandlerImpl INSTANCE = null;
 
     public static SceneHandlerImpl getInstance() {
@@ -36,6 +43,10 @@ public class SceneHandlerImpl implements SceneHandler {
         return INSTANCE;
     }
 
+    /**
+     * constructor that loads the login page of if remember me is on goes to the timeline itself.
+     * @param primaryStage primary stage of the application
+     */
     private SceneHandlerImpl(Stage primaryStage) {
         this.primaryStage = primaryStage;
         String path = PropertiesServiceImpl.getInstance().getProperty("client.saved.file");
@@ -65,6 +76,10 @@ public class SceneHandlerImpl implements SceneHandler {
         }
     }
 
+    /**
+     * changes scene to fxml file
+     * @param fxml address of fxml file
+     */
     @Override
     public void changeScene(String fxml) {
         try {
@@ -80,6 +95,11 @@ public class SceneHandlerImpl implements SceneHandler {
         }
     }
 
+    /**
+     * changes scene to fxml file and passes the data to it.
+     * @param fxml address of fxml file
+     * @param data data to be passed
+     */
     @Override
     public void changeScene(String fxml, Object data) {
         try {
@@ -97,6 +117,11 @@ public class SceneHandlerImpl implements SceneHandler {
         }
     }
 
+    /**
+     * opens new window with fxml file and title
+     * @param fxml address of fxml file
+     * @param title title of new window
+     */
     @Override
     public void newWindow(String fxml, String title) {
         try {
@@ -105,7 +130,7 @@ public class SceneHandlerImpl implements SceneHandler {
             Stage newStage = new Stage();
             newStage.setTitle(title);
             newStage.setScene(scene);
-            if (!isDark)
+            if (isDark)
                 scene.getStylesheets().add("/dark-theme.css");
             newStage.show();
         } catch (IOException e) {
@@ -113,6 +138,12 @@ public class SceneHandlerImpl implements SceneHandler {
         }
     }
 
+    /**
+     * opens new window with fxml file and title and passes data to it
+     * @param fxml address of fxml file
+     * @param title title of new window
+     * @param data data to be passed
+     */
     @Override
     public void newWindow(String fxml, String title, Object data) {
         try {
@@ -131,6 +162,9 @@ public class SceneHandlerImpl implements SceneHandler {
         }
     }
 
+    /**
+     * toggles dark theme
+     */
     @Override
     public void toggleDarkTheme() {
         if (isDark)
@@ -140,6 +174,9 @@ public class SceneHandlerImpl implements SceneHandler {
         isDark = !isDark;
     }
 
+    /**
+     * toggles fullscreen
+     */
     @Override
     public void toggleFullScreen() {
         primaryStage.setFullScreen(!isFullScreen);

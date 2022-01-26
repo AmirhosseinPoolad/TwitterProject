@@ -62,6 +62,9 @@ public class UIConnectionService implements ConnectionService {
         }
     }
 
+    /**
+     * destroys the instance, allowing a new one to be constructed
+     */
     public void destroyInstance() {
         try {
             clientSocket.close();
