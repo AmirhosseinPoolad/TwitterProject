@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+//TODO: PERSISTENT DARK MODE
 public class SceneHandlerImpl implements SceneHandler {
     Stage primaryStage;
     Scene currentScene;

@@ -10,11 +10,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox fx:id="box" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="box" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox alignment="CENTER_LEFT" prefHeight="147.0" prefWidth="600.0" spacing="15.0">
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="600.0" spacing="15.0">
          <children>
-            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
             <Text fx:id="usernameText" strokeType="OUTSIDE" strokeWidth="0.0" text="username" />
             <Text fx:id="dateText" strokeType="OUTSIDE" strokeWidth="0.0" text="date" />
             <MenuBar>
@@ -40,5 +40,14 @@
             <Insets left="50.0" />
          </VBox.margin>
       </HBox>
+      <HBox prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+         <children>
+            <Text fx:id="likesText" strokeType="OUTSIDE" strokeWidth="0.0" text="likes" />
+            <Text fx:id="retweetsText" strokeType="OUTSIDE" strokeWidth="0.0" text="retweets" />
+         </children>
+      </HBox>
    </children>
+   <padding>
+      <Insets left="20.0" />
+   </padding>
 </VBox>

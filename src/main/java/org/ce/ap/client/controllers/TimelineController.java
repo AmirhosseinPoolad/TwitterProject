@@ -25,26 +25,13 @@ public class TimelineController {
     private ArrayList<Tree<Tweet>> tweetGraph;
 
     @FXML
-    private ListView<Tweet> tweetListView;
+    private ListView<Tree<Tweet>> tweetListView;
 
-    private final ObservableList<Tweet> tweets = FXCollections.observableArrayList();
+    private final ObservableList<Tree<Tweet>> tweets = FXCollections.observableArrayList();
 
     @FXML
     void initialize() {
         getTimeline();
-        for (Tree<Tweet> parentTree : tweetGraph) {
-            Tweet tweet = parentTree.getData();
-            tweets.add(tweet);
-        }
-        tweetListView.setItems(tweets);
-        tweetListView.setCellFactory(
-                new Callback<ListView<Tweet>, ListCell<Tweet>>() {
-                    @Override
-                    public ListCell<Tweet> call(ListView<Tweet> listView) {
-                        return new TweetController();
-                    }
-                }
-        );
     }
 
     @FXML
@@ -81,17 +68,18 @@ public class TimelineController {
 
     @FXML
     void onNewTweet(ActionEvent event) {
-        //TODO: NEW TWEET PAGE
+        SceneHandlerImpl.getInstance().newWindow("/new-tweet-page.fxml", "New Tweet");
     }
 
     @FXML
     void onOptions(ActionEvent event) {
         //TODO: OPTIONS PAGE
+        //TODO: System Tray??????
     }
 
     @FXML
     void onRefresh(ActionEvent event) {
-        //TODO: THE TIMELINE ITSELF. JEEZE.
+        getTimeline();
     }
 
     @FXML
@@ -105,10 +93,22 @@ public class TimelineController {
         if (serverResponse.getErrorCode() != 0) {
             System.err.println("Error, please try again");
             return;
-        } else {
-            GetTimelineResult res = (GetTimelineResult) serverResponse.getResults();
-            this.tweetGraph = res.getTimeline();
         }
+        GetTimelineResult res = (GetTimelineResult) serverResponse.getResults();
+        this.tweetGraph = res.getTimeline();
+        for (Tree<Tweet> parentTree : tweetGraph) {
+            tweets.add(parentTree);
+        }
+        tweetListView.getItems().clear();
+        tweetListView.setItems(tweets);
+        tweetListView.setCellFactory(
+                new Callback<ListView<Tree<Tweet>>, ListCell<Tree<Tweet>>>() {
+                    @Override
+                    public ListCell<Tree<Tweet>> call(ListView<Tree<Tweet>> listView) {
+                        return new TweetController();
+                    }
+                }
+        );
     }
 
 }
