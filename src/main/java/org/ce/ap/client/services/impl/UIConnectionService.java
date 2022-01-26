@@ -62,6 +62,15 @@ public class UIConnectionService implements ConnectionService {
         }
     }
 
+    public void destroyInstance() {
+        try {
+            clientSocket.close();
+            INSTANCE = null;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * sends request to server and returns response from server
      *

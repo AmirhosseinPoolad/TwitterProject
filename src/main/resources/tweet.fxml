@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="CENTER_LEFT" prefHeight="147.0" prefWidth="600.0" spacing="15.0">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="username" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="date" />
+            <MenuBar>
+              <menus>
+                <Menu mnemonicParsing="false" text=". . .">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Like" />
+                        <MenuItem mnemonicParsing="false" text="Retweet" />
+                        <MenuItem mnemonicParsing="false" text="View Profile" />
+                        <MenuItem mnemonicParsing="false" text="Reply" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+         </children>
+      </HBox>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="tweet" wrappingWidth="94.35546875" />
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <ListView prefHeight="200.0" prefWidth="200.0" />
+         </children>
+         <VBox.margin>
+            <Insets left="50.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+</VBox>
