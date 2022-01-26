@@ -48,7 +48,8 @@ public class TimelineController implements DataGetter {
 
     @FXML
     void onAbout(ActionEvent event) {
-        SceneHandlerImpl.getInstance().newWindow("/about-page.fxml", "About");
+        String fxml = PropertiesServiceImpl.getInstance().getProperty("client.about.page");
+        SceneHandlerImpl.getInstance().newWindow(fxml, "About");
     }
 
     @FXML
@@ -69,7 +70,8 @@ public class TimelineController implements DataGetter {
 
     @FXML
     void onHelp(ActionEvent event) {
-        //TODO: HELP PAGE
+        String fxml = PropertiesServiceImpl.getInstance().getProperty("client.help.page");
+        SceneHandlerImpl.getInstance().newWindow(fxml, "Help");
     }
 
     @FXML
