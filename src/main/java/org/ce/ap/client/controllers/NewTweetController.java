@@ -3,7 +3,7 @@ package main.java.org.ce.ap.client.controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
-import main.java.org.ce.ap.client.MenuStatus;
+import javafx.stage.Stage;
 import main.java.org.ce.ap.client.services.impl.SceneHandlerImpl;
 import main.java.org.ce.ap.client.services.impl.UIConnectionService;
 import main.java.org.ce.ap.server.jsonHandling.Parameter;
@@ -11,7 +11,7 @@ import main.java.org.ce.ap.server.jsonHandling.Request;
 import main.java.org.ce.ap.server.jsonHandling.Response;
 import main.java.org.ce.ap.server.jsonHandling.impl.parameter.SendTweetParameter;
 
-public class NewTweetController {
+public class NewTweetController implements DataGetter{
 
     @FXML
     private TextArea tweetContentArea;
@@ -31,7 +31,13 @@ public class NewTweetController {
         }
     }
 
-    public void setTweetID(int tweetID) {
-        this.tweetID = tweetID;
+    @FXML
+    void onBack(ActionEvent event) {
+        Stage stage = (Stage) tweetContentArea.getScene().getWindow();
+        stage.close();
+    }
+
+    public void getData(Object data) {
+        this.tweetID = (Integer) data;
     }
 }

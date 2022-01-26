@@ -8,6 +8,7 @@ import main.java.org.ce.ap.client.services.impl.UIConnectionService;
 import main.java.org.ce.ap.server.jsonHandling.Request;
 import main.java.org.ce.ap.server.jsonHandling.Response;
 import main.java.org.ce.ap.server.jsonHandling.impl.parameter.RegisterParameter;
+import main.java.org.ce.ap.server.jsonHandling.impl.result.UserResult;
 
 import java.time.LocalDate;
 
@@ -47,7 +48,7 @@ public class RegisterController {
             System.err.println("Error, please try again");
         } else {
             System.out.println("Succesfully registered.");
-            SceneHandlerImpl.getInstance().changeScene("/timeline-page.fxml");
+            SceneHandlerImpl.getInstance().changeScene("/timeline-page.fxml", ((UserResult) serverResponse.getResults()).getUser());;
         }
     }
 }

@@ -8,11 +8,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 import main.java.org.ce.ap.client.MenuStatus;
 import main.java.org.ce.ap.client.services.impl.SceneHandlerImpl;
 import main.java.org.ce.ap.client.services.impl.UIConnectionService;
 import main.java.org.ce.ap.server.entity.Tweet;
+import main.java.org.ce.ap.server.entity.User;
 import main.java.org.ce.ap.server.jsonHandling.Request;
 import main.java.org.ce.ap.server.jsonHandling.Response;
 import main.java.org.ce.ap.server.jsonHandling.impl.result.GetTimelineResult;
@@ -20,10 +23,14 @@ import main.java.org.ce.ap.server.util.Tree;
 
 import java.util.ArrayList;
 
-public class TimelineController {
+public class TimelineController implements DataGetter {
 
     private ArrayList<Tree<Tweet>> tweetGraph;
-
+    private User user;
+    @FXML
+    private Text notFoundText;
+    @FXML
+    private TextField searchField;
     @FXML
     private ListView<Tree<Tweet>> tweetListView;
 
@@ -79,12 +86,13 @@ public class TimelineController {
 
     @FXML
     void onRefresh(ActionEvent event) {
+        //clearTimeline();
         getTimeline();
     }
 
     @FXML
     void onViewProfile(ActionEvent event) {
-        //TODO: PROFILE PAGE
+        SceneHandlerImpl.getInstance().newWindow("/profile-page.fxml", "Profile Page", user.getUsername());
     }
 
     private void getTimeline() {
@@ -96,10 +104,10 @@ public class TimelineController {
         }
         GetTimelineResult res = (GetTimelineResult) serverResponse.getResults();
         this.tweetGraph = res.getTimeline();
+        tweets.clear();
         for (Tree<Tweet> parentTree : tweetGraph) {
             tweets.add(parentTree);
         }
-        tweetListView.getItems().clear();
         tweetListView.setItems(tweets);
         tweetListView.setCellFactory(
                 new Callback<ListView<Tree<Tweet>>, ListCell<Tree<Tweet>>>() {
@@ -111,4 +119,17 @@ public class TimelineController {
         );
     }
 
+    @FXML
+    void onSearch(ActionEvent event) {
+        SceneHandlerImpl.getInstance().newWindow("/profile-page.fxml", "Profile Page", searchField.getText());
+    }
+
+    private void clearTimeline() {
+        tweets.clear();
+    }
+
+    @Override
+    public void getData(Object data) {
+        user = (User) data;
+    }
 }

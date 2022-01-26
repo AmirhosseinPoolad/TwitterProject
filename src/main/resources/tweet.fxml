@@ -10,19 +10,21 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox fx:id="box" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="box" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="250.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="600.0" spacing="15.0">
+      <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="85.0" prefWidth="580.0" spacing="15.0" VBox.vgrow="NEVER">
          <children>
-            <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
-            <Text fx:id="usernameText" strokeType="OUTSIDE" strokeWidth="0.0" text="username" />
+            <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+            <Text fx:id="usernameText" onMouseClicked="#onUsernameClick" strokeType="OUTSIDE" strokeWidth="0.0" text="username" />
             <Text fx:id="dateText" strokeType="OUTSIDE" strokeWidth="0.0" text="date" />
             <MenuBar>
               <menus>
                 <Menu mnemonicParsing="false" text=". . .">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#onLike" text="Like" />
+                        <MenuItem mnemonicParsing="false" onAction="#onUnlike" text="Unlike" />
                         <MenuItem mnemonicParsing="false" onAction="#onRetweet" text="Retweet" />
+                        <MenuItem mnemonicParsing="false" onAction="#onUnretweet" text="Unretweet" />
                         <MenuItem mnemonicParsing="false" onAction="#onViewProfile" text="View Profile" />
                         <MenuItem mnemonicParsing="false" onAction="#onReply" text="Reply" />
                   </items>
@@ -31,16 +33,16 @@
             </MenuBar>
          </children>
       </HBox>
-      <Text fx:id="tweetContentText" strokeType="OUTSIDE" strokeWidth="0.0" text="tweet" wrappingWidth="94.35546875" />
-      <HBox prefHeight="100.0" prefWidth="200.0">
+      <Text fx:id="tweetContentText" strokeType="OUTSIDE" strokeWidth="0.0" text="tweet" wrappingWidth="437.35546875" />
+      <HBox prefHeight="184.0" prefWidth="530.0">
          <children>
-            <ListView fx:id="repliesListView" prefHeight="100.0" prefWidth="589.0" />
+            <ListView fx:id="repliesListView" prefHeight="105.0" prefWidth="530.0" HBox.hgrow="ALWAYS" />
          </children>
          <VBox.margin>
             <Insets left="50.0" />
          </VBox.margin>
       </HBox>
-      <HBox prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+      <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="32.0" prefWidth="580.0" spacing="50.0">
          <children>
             <Text fx:id="likesText" strokeType="OUTSIDE" strokeWidth="0.0" text="likes" />
             <Text fx:id="retweetsText" strokeType="OUTSIDE" strokeWidth="0.0" text="retweets" />
@@ -48,6 +50,6 @@
       </HBox>
    </children>
    <padding>
-      <Insets left="20.0" />
+      <Insets left="20.0" right="20.0" />
    </padding>
 </VBox>

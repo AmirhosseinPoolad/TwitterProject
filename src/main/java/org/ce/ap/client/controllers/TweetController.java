@@ -1,5 +1,6 @@
 package main.java.org.ce.ap.client.controllers;
 
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,10 +9,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import main.java.org.ce.ap.client.MenuStatus;
+import main.java.org.ce.ap.client.services.impl.SceneHandlerImpl;
 import main.java.org.ce.ap.client.services.impl.UIConnectionService;
 import main.java.org.ce.ap.server.entity.Tweet;
 import main.java.org.ce.ap.server.jsonHandling.Parameter;
@@ -23,9 +26,11 @@ import main.java.org.ce.ap.server.util.Tree;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
 
 public class TweetController extends ListCell<Tree<Tweet>> {
 
+    private static final int LIST_CELL_HEIGHT = 250;
     @FXML
     private VBox box;
 
@@ -54,11 +59,8 @@ public class TweetController extends ListCell<Tree<Tweet>> {
     private Tweet tweet;
     private Tree<Tweet> tweetTree;
 
-
     private void showReplies() {
-        for (Tree<Tweet> parentTree : tweetTree.getLeaves()) {
-            replies.add(parentTree);
-        }
+        replies.addAll(tweetTree.getLeaves());
         if (replies.size() != 0) {
             repliesListView.getItems().clear();
             repliesListView.setItems(replies);
@@ -71,6 +73,7 @@ public class TweetController extends ListCell<Tree<Tweet>> {
                     }
             );
         }
+        repliesListView.prefHeightProperty().bind(Bindings.size(replies).multiply(LIST_CELL_HEIGHT));
     }
 
     @FXML
@@ -86,8 +89,13 @@ public class TweetController extends ListCell<Tree<Tweet>> {
     }
 
     @FXML
+    void onUsernameClick(MouseEvent event) {
+        openProfile();
+    }
+
+    @FXML
     void onReply(ActionEvent event) {
-        //TODO
+        SceneHandlerImpl.getInstance().newWindow("/new-tweet-page.fxml", "New Tweet", tweet.getTweetId());
     }
 
     @FXML
@@ -103,8 +111,33 @@ public class TweetController extends ListCell<Tree<Tweet>> {
     }
 
     @FXML
-    void onViewProfile(ActionEvent event) {
+    void onUnlike(ActionEvent event) {
+        Parameter param = new LikeTweetParameter(tweet.getTweetId());
+        Request req = new Request("DisikeTweet", "Unlikes tweet with given ID", param);
+        Response serverResponse = UIConnectionService.getInstance().sendToServer(req);
+        if (serverResponse.getErrorCode() != 0) {
+            System.err.println("Error: " + serverResponse.getErrorCode());
+        } else {
+            likesText.setText((tweet.getLikedUsers().size()) + " likes");
+        }
 
+    }
+
+    @FXML
+    void onUnretweet(ActionEvent event) {
+        Parameter param = new LikeTweetParameter(tweet.getTweetId());
+        Request req = new Request("UnretweetTweet", "Retweets tweet with given ID", param);
+        Response serverResponse = UIConnectionService.getInstance().sendToServer(req);
+        if (serverResponse.getErrorCode() != 0) {
+            System.err.println("Error: " + serverResponse.getErrorCode());
+        } else {
+            retweetsText.setText((tweet.getLikedUsers().size()) + " retweets");
+        }
+    }
+
+    @FXML
+    void onViewProfile(ActionEvent event) {
+        openProfile();
     }
 
 
@@ -135,5 +168,9 @@ public class TweetController extends ListCell<Tree<Tweet>> {
             setGraphic(box); // attach custom layout to ListView cell
             showReplies();
         }
+    }
+
+    void openProfile() {
+        SceneHandlerImpl.getInstance().newWindow("/profile-page.fxml", "Profile Page", tweet.getPoster());
     }
 }

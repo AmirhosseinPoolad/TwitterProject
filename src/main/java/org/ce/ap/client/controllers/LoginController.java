@@ -9,6 +9,7 @@ import main.java.org.ce.ap.client.services.impl.UIConnectionService;
 import main.java.org.ce.ap.server.jsonHandling.Request;
 import main.java.org.ce.ap.server.jsonHandling.Response;
 import main.java.org.ce.ap.server.jsonHandling.impl.parameter.SignInParameter;
+import main.java.org.ce.ap.server.jsonHandling.impl.result.UserResult;
 
 import java.io.*;
 
@@ -54,7 +55,8 @@ public class LoginController {
                     out.newLine();
                     out.write(password);
                 }
-                SceneHandlerImpl.getInstance().changeScene("/timeline-page.fxml");
+                SceneHandlerImpl.getInstance().changeScene("/timeline-page.fxml", ((UserResult) serverResponse.getResults()).getUser());
+                ;
             } catch (IOException e) {
                 e.printStackTrace();
             }

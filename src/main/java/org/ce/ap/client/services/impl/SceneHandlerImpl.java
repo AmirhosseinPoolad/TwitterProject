@@ -5,21 +5,22 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import main.java.org.ce.ap.client.controllers.DataGetter;
 import main.java.org.ce.ap.client.controllers.NewTweetController;
 import main.java.org.ce.ap.client.services.SceneHandler;
 import main.java.org.ce.ap.server.jsonHandling.Request;
 import main.java.org.ce.ap.server.jsonHandling.Response;
 import main.java.org.ce.ap.server.jsonHandling.impl.parameter.SignInParameter;
+import main.java.org.ce.ap.server.jsonHandling.impl.result.UserResult;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-//TODO: PERSISTENT DARK MODE
 public class SceneHandlerImpl implements SceneHandler {
     Stage primaryStage;
     Scene currentScene;
-    boolean isDark;
+    boolean isDark = false;
     boolean isFullScreen = false;
 
     private static SceneHandlerImpl INSTANCE = null;
@@ -50,7 +51,7 @@ public class SceneHandlerImpl implements SceneHandler {
                 if (serverResponse.getErrorCode() != 0) {
                     System.err.println("Error, please try again");
                 } else {
-                    changeScene("/timeline-page.fxml");
+                    changeScene("/timeline-page.fxml", ((UserResult) serverResponse.getResults()).getUser());
                 }
             } else {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/login-page.fxml"));
@@ -71,6 +72,8 @@ public class SceneHandlerImpl implements SceneHandler {
             Parent root = fxmlLoader.load();
             currentScene = new Scene(root);
             primaryStage.setScene(currentScene);
+            if (isDark)
+                currentScene.getStylesheets().add("/dark-theme.css");
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -78,13 +81,15 @@ public class SceneHandlerImpl implements SceneHandler {
     }
 
     @Override
-    public void changeScene(String fxml, int data) {
+    public void changeScene(String fxml, Object data) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxml));
             Parent root = fxmlLoader.load();
-            NewTweetController controller = fxmlLoader.<NewTweetController>getController();
-            controller.setTweetID(data);
+            DataGetter controller = fxmlLoader.getController();
+            controller.getData(data);
             currentScene = new Scene(root);
+            if (isDark)
+                currentScene.getStylesheets().add("/dark-theme.css");
             primaryStage.setScene(currentScene);
             primaryStage.show();
         } catch (IOException e) {
@@ -100,6 +105,26 @@ public class SceneHandlerImpl implements SceneHandler {
             Stage newStage = new Stage();
             newStage.setTitle(title);
             newStage.setScene(scene);
+            if (!isDark)
+                scene.getStylesheets().add("/dark-theme.css");
+            newStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void newWindow(String fxml, String title, Object data) {
+        try {
+            FXMLLoader fLoader = new FXMLLoader(getClass().getResource(fxml));
+            Scene scene = new Scene(fLoader.load());
+            DataGetter controller = fLoader.getController();
+            controller.getData(data);
+            Stage newStage = new Stage();
+            newStage.setTitle(title);
+            newStage.setScene(scene);
+            if (isDark)
+                scene.getStylesheets().add("/dark-theme.css");
             newStage.show();
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.org.ce.ap.client.controllers.ProfileController">
+   <children>
+      <HBox prefHeight="79.0" prefWidth="600.0" spacing="20.0">
+         <children>
+            <Text fx:id="usernameText" strokeType="OUTSIDE" strokeWidth="0.0" text="username" />
+            <Text fx:id="bioText" strokeType="OUTSIDE" strokeWidth="0.0" text="biography" wrappingWidth="359.98828125" HBox.hgrow="ALWAYS" />
+            <Button fx:id="followButton" mnemonicParsing="false" onAction="#onFollow" prefHeight="25.0" prefWidth="93.0" text="Follow" />
+         </children>
+         <VBox.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </VBox.margin>
+      </HBox>
+      <ListView fx:id="tweetListView" maxWidth="1.7976931348623157E308" prefHeight="315.0" prefWidth="600.0">
+         <padding>
+            <Insets bottom="10.0" />
+         </padding>
+      </ListView>
+   </children>
+</VBox>

@@ -7,8 +7,11 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
 <VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.org.ce.ap.client.controllers.TimelineController">
    <children>
@@ -67,9 +70,20 @@
                   </Button>
                   <Button mnemonicParsing="false" onAction="#onRefresh" text="Refresh Timeline" />
                   <Button mnemonicParsing="false" onAction="#onViewProfile" text="View Profile" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Search User:" />
+                  <HBox prefHeight="28.0" prefWidth="118.0">
+                     <children>
+                        <TextField fx:id="searchField" prefHeight="25.0" prefWidth="90.0" />
+                        <Button mnemonicParsing="false" onAction="#onSearch" prefHeight="25.0" prefWidth="37.0" text="OK" />
+                     </children>
+                  </HBox>
+                  <Text fx:id="notFoundText" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" />
                </children>
             </VBox>
-            <ListView fx:id="tweetListView" prefHeight="200.0" prefWidth="407.0" />
+            <ListView fx:id="tweetListView" maxWidth="1.7976931348623157E308" prefHeight="373.0" prefWidth="480.0">
+               <padding>
+                  <Insets bottom="10.0" />
+               </padding></ListView>
          </items>
       </SplitPane>
    </children>
